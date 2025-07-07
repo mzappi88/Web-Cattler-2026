@@ -174,8 +174,8 @@ export default function CattlerFeatures() {
 
       <div className="w-0.5 h-15 bg-gray-300 mx-auto"></div>
 
-      <section className="py-15 bg-gray-50">
-        <h2 className="font-bold text-4xl font-bold text-center mb-10 text-gray-800">{t("whyChooseCattler")}</h2>
+      <section className="py-15 bg-gray-50 py-16">
+        <h2 className="font-bold text-4xl font-bold text-center mb-10 text-gray-800 mt-5">{t("whyChooseCattler")}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto px-5 py-8">
           <div className="bg-white rounded-lg p-8 text-center shadow-md transition-transform hover:-translate-y-1">
             <Info className="w-12 h-12 mx-auto mb-5 text-[#15B674]" />
@@ -196,6 +196,26 @@ export default function CattlerFeatures() {
             <Users className="w-12 h-12 mx-auto mb-5 text-[#15B674]" />
             <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">{t("multiUserAccess")}</h3>
             <p className="text-base leading-relaxed text-gray-600">{t("multiUserAccessDesc")}</p>
+          </div>
+        </div>
+        {/* Pricing CTA Component */}
+        <div className="mt-16 bg-gradient-to-r from-[#15B674] to-[#12a066] rounded-2xl p-8 text-center text-white shadow-xl">
+          <div className="max-w-3xl mx-auto">
+            <h3 className="font-bold text-3xl mb-4">{t("pricingCtaTitle")}</h3>
+            <p className="text-lg mb-8 opacity-90">{t("pricingCtaSubtitle")}</p>
+            <button
+              onClick={() => {
+                if (window.top) {
+                  window.top.location.href = "https://www.cattler.farm/pricing"
+                }
+              }}
+              className="bg-white text-[#15B674] font-bold text-lg py-4 px-8 rounded-full hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center gap-3"
+            >
+              <span>{t("viewPlansAndPrices")}</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
           </div>
         </div>
       </section>

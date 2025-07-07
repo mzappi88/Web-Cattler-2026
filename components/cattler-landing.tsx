@@ -48,7 +48,7 @@ export default function CattlerLanding() {
   }, [scriptLoaded, version])
 
   return (
-    <div className="bg-gradient-to-b from-[#f0f1f7] to-[#d1d3e2] flex flex-col items-center justify-center">
+    <div className="bg-gradient-to-b from-[#f0f1f7] to-[#d1d3e2] flex flex-col items-center justify-center px-0">
       {/* Country Selector - Fixed Position */}
       <div className="fixed top-4 right-4 z-50">
         <CountrySelector selectedCountry={selectedCountry} onCountryChange={setSelectedCountry} t={t} />
@@ -91,7 +91,7 @@ export default function CattlerLanding() {
       <div className="container mx-auto px-4 py-4 flex flex-col items-center justify-center">
         <h1 className="text-4xl font-bold text-[#121334] text-center my-5">{t("mainTitle")}</h1>
       </div>
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto py-4 px-9">
         <div className="flex flex-col md:flex-row md:justify-between gap-12">
           <div className="md:w-1/2 flex-1">
             <p className="text-[25px] text-[#121334] mb-6 text-center">{t("mainSubtitle")}</p>

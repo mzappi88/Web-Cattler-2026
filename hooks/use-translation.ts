@@ -146,6 +146,12 @@ const translations = {
     "countries.BR": "Brazil",
     "countries.MX": "Mexico",
     "countries.OT": "Other",
+
+    // Pricing CTA
+    pricingCtaTitle: "Ready to Get Started?",
+    pricingCtaSubtitle:
+      "Choose the perfect plan for your operation. From small ranches to large feedlots, we have a solution that fits your needs and budget.",
+    viewPlansAndPrices: "View Plans & Prices",
   },
   es: {
     // Hero Section
@@ -276,6 +282,12 @@ const translations = {
     "countries.BR": "Brasil",
     "countries.MX": "México",
     "countries.OT": "Otro",
+
+    // Pricing CTA
+    pricingCtaTitle: "¿Listo para Comenzar?",
+    pricingCtaSubtitle:
+      "Elige el plan perfecto para tu operación. Desde pequeños ranchos hasta grandes feedlots, tenemos una solución que se adapta a tus necesidades y presupuesto.",
+    viewPlansAndPrices: "Ver Planes y Precios",
   },
   pt: {
     // Hero Section
@@ -407,6 +419,12 @@ const translations = {
     "countries.BR": "Brasil",
     "countries.MX": "México",
     "countries.OT": "Outro",
+
+    // Pricing CTA
+    pricingCtaTitle: "Pronto para Começar?",
+    pricingCtaSubtitle:
+      "Escolha o plano perfeito para sua operação. De pequenas fazendas a grandes confinamentos, temos uma solução que se adapta às suas necessidades e orçamento.",
+    viewPlansAndPrices: "Ver Planos e Preços",
   },
 }
 
