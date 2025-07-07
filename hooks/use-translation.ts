@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT"
 
@@ -310,30 +310,53 @@ const translations = {
 
 export function useTranslation() {
   const [selectedCountry, setSelectedCountry] = useState<Country>("US")
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    // Try to detect country from browser or localStorage
+    setIsClient(true)
+    // Try to detect country from localStorage only on client
     const savedCountry = localStorage.getItem("cattler-country") as Country
-    if (savedCountry) {
+    if (savedCountry && Object.keys(countryLanguageMap).includes(savedCountry)) {
+      console.log("Loading saved country:", savedCountry)
       setSelectedCountry(savedCountry)
     }
   }, [])
 
-  useEffect(() => {
-    // Save country selection
-    localStorage.setItem("cattler-country", selectedCountry)
-  }, [selectedCountry])
+  const handleCountryChange = useCallback(
+    (country: Country) => {
+      console.log("Country changed to:", country)
+      setSelectedCountry(country)
+      if (isClient) {
+        localStorage.setItem("cattler-country", country)
+      }
+    },
+    [isClient],
+  )
 
   const language = countryLanguageMap[selectedCountry]
 
-  const t = (key: string): string => {
-    return translations[language][key as keyof (typeof translations)[typeof language]] || key
-  }
+  const t = useCallback(
+    (key: string): string => {
+      const translation = translations[language]?.[key as keyof (typeof translations)[typeof language]]
+      if (!translation) {
+        console.warn(`Translation missing for key: ${key} in language: ${language}`)
+        return key
+      }
+      return translation
+    },
+    [language],
+  )
+
+  // Debug logging
+  useEffect(() => {
+    console.log("useTranslation - Country:", selectedCountry, "Language:", language, "IsClient:", isClient)
+  }, [selectedCountry, language, isClient])
 
   return {
     selectedCountry,
-    setSelectedCountry,
+    setSelectedCountry: handleCountryChange,
     language,
     t,
+    isClient,
   }
 }

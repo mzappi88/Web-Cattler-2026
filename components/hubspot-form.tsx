@@ -22,9 +22,7 @@ const HubSpotForm: React.FC = () => {
     document.body.appendChild(script)
 
     return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script)
-      }
+      document.body.removeChild(script)
     }
   }, [])
 
@@ -53,7 +51,9 @@ const HubSpotForm: React.FC = () => {
           <ThankYouContent />
         ) : (
           <>
-            <h1 className="text-4xl font-bold mb-6 text-white text-center">Request a Demo</h1>
+            <h1 style={{ color: "white" }} className="text-4xl font-bold mb-6 text-white text-center">
+              Request a Demo
+            </h1>
             <div id="hubspotForm" className="bg-white p-8 rounded-lg shadow-lg" />
           </>
         )}
