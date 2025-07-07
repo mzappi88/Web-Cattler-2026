@@ -6,7 +6,8 @@ import { useTranslation } from "@/hooks/use-translation";
 import { useEffect, useState } from "react";
 
 export default function CattlerFeatures() {
-  const { selectedCountry, language, t } = useTranslation();
+  const { selectedCountry, setSelectedCountry, language, t } = useTranslation();
+  const [version, setVersion] = useState<Version>("cattler-features");
   const [mounted, setMounted] = useState(false);
 
   // Debug logging
@@ -19,7 +20,6 @@ export default function CattlerFeatures() {
     );
     console.log("CattlerFeatures - Sample translation:", t("feedingTitle"));
   }, [selectedCountry, language, t]);
-
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -101,6 +101,7 @@ export default function CattlerFeatures() {
             {t("bulletMultipleIntegrations")}
           </span>
         </div>
+
         <div className="flex items-center font-bold text-lg text-gray-800 my-2.5 mx-5 transition-transform hover:-translate-y-1">
           <span className="mr-4">
             <svg
@@ -124,6 +125,7 @@ export default function CattlerFeatures() {
             {t("bulletAllDataOnePlace")}
           </span>
         </div>
+
         <div className="flex items-center font-bold text-lg text-gray-800 my-2.5 mx-5 transition-transform hover:-translate-y-1">
           <span className="mr-4">
             <svg
