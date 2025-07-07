@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 
 export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT"
 
@@ -102,6 +102,40 @@ const translations = {
       "Join hundreds of satisfied cattlemen and feedlot operators who have transformed their operations with Cattler.",
     requestDemo: "Request Free Demo",
 
+    // Testimonials
+    testimonialsTitle: "What Our Customers Say",
+    watchVideo: "Watch Video",
+    testimonials: [
+      {
+        id: "1",
+        name: "Tim",
+        location: "Hulk, Kansas",
+        quote:
+          "Cattler is great! I love it all the time. It has completely transformed how we manage our cattle operation and made everything so much more efficient.",
+        image:
+          "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/104CMT20240408LIMBAL.jpg-s9CtaxVQ4IkYrzBwKALTN6aPJAv0RH.jpeg",
+        videoUrl: "https://youtu.be/NhVJQT8Yw98",
+      },
+      {
+        id: "2",
+        name: "Sarah Johnson",
+        location: "Texas Ranch",
+        quote:
+          "The real-time tracking and automated reporting have saved us countless hours. Cattler is an essential tool for modern ranching.",
+        image: "/placeholder-user.jpg",
+        videoUrl: "https://youtube.com/watch?v=example2",
+      },
+      {
+        id: "3",
+        name: "Mike Rodriguez",
+        location: "Colorado Feedlot",
+        quote:
+          "Since implementing Cattler, our feed efficiency has improved by 15% and our record-keeping is flawless. Highly recommend!",
+        image: "/placeholder-user.jpg",
+        videoUrl: "https://youtube.com/watch?v=example3",
+      },
+    ],
+
     // Countries
     "countries.US": "United States",
     "countries.CA": "Canada",
@@ -197,6 +231,40 @@ const translations = {
     ctaSubtitle:
       "Únete a cientos de ganaderos y operadores de engorde satisfechos que han transformado sus operaciones con Cattler.",
     requestDemo: "Solicitar Demo Gratuita",
+
+    // Testimonials
+    testimonialsTitle: "Lo Que Dicen Nuestros Clientes",
+    watchVideo: "Ver Video",
+    testimonials: [
+      {
+        id: "1",
+        name: "Carlos Mendoza",
+        location: "Córdoba, Argentina",
+        quote:
+          "Cattler es increíble! Lo uso todo el tiempo. Ha transformado completamente cómo manejamos nuestra operación ganadera y ha hecho todo mucho más eficiente.",
+        image:
+          "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/104CMT20240408LIMBAL.jpg-s9CtaxVQ4IkYrzBwKALTN6aPJAv0RH.jpeg",
+        videoUrl: "https://youtu.be/lNY3g69e_lE",
+      },
+      {
+        id: "2",
+        name: "María González",
+        location: "Estancia La Pampa",
+        quote:
+          "El seguimiento en tiempo real y los reportes automatizados nos han ahorrado incontables horas. Cattler es una herramienta esencial para la ganadería moderna.",
+        image: "/placeholder-user.jpg",
+        videoUrl: "https://youtube.com/watch?v=example2",
+      },
+      {
+        id: "3",
+        name: "Roberto Silva",
+        location: "Feedlot Uruguay",
+        quote:
+          "Desde que implementamos Cattler, nuestra eficiencia alimentaria mejoró un 15% y nuestros registros son impecables. ¡Altamente recomendado!",
+        image: "/placeholder-user.jpg",
+        videoUrl: "https://youtube.com/watch?v=example3",
+      },
+    ],
 
     // Countries
     "countries.US": "Estados Unidos",
@@ -295,6 +363,40 @@ const translations = {
       "Junte-se a centenas de pecuaristas e operadores de confinamento satisfeitos que transformaram suas operações com o Cattler.",
     requestDemo: "Solicitar Demonstração Gratuita",
 
+    // Testimonials
+    testimonialsTitle: "O Que Nossos Clientes Dizem",
+    watchVideo: "Assistir Vídeo",
+    testimonials: [
+      {
+        id: "1",
+        name: "João Silva",
+        location: "Fazenda Mato Grosso",
+        quote:
+          "O Cattler é incrível! Eu uso o tempo todo. Transformou completamente como gerenciamos nossa operação pecuária e tornou tudo muito mais eficiente.",
+        image:
+          "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/104CMT20240408LIMBAL.jpg-s9CtaxVQ4IkYrzBwKALTN6aPJAv0RH.jpeg",
+        videoUrl: "https://studio.youtube.com/video/JFxY4Oo92E8/edit",
+      },
+      {
+        id: "2",
+        name: "Ana Santos",
+        location: "Confinamento São Paulo",
+        quote:
+          "O rastreamento em tempo real e os relatórios automatizados nos pouparam inúmeras horas. O Cattler é uma ferramenta essencial para a pecuária moderna.",
+        image: "/placeholder-user.jpg",
+        videoUrl: "https://youtube.com/watch?v=example2",
+      },
+      {
+        id: "3",
+        name: "Pedro Oliveira",
+        location: "Fazenda Rio Grande",
+        quote:
+          "Desde que implementamos o Cattler, nossa eficiência alimentar melhorou 15% e nossos registros são impecáveis. Altamente recomendado!",
+        image: "/placeholder-user.jpg",
+        videoUrl: "https://youtube.com/watch?v=example3",
+      },
+    ],
+
     // Countries
     "countries.US": "Estados Unidos",
     "countries.CA": "Canadá",
@@ -310,53 +412,52 @@ const translations = {
 
 export function useTranslation() {
   const [selectedCountry, setSelectedCountry] = useState<Country>("US")
-  const [isClient, setIsClient] = useState(false)
+  const [isHydrated, setIsHydrated] = useState(false)
 
+  // Initialize from localStorage on mount
   useEffect(() => {
-    setIsClient(true)
-    // Try to detect country from localStorage only on client
     const savedCountry = localStorage.getItem("cattler-country") as Country
     if (savedCountry && Object.keys(countryLanguageMap).includes(savedCountry)) {
-      console.log("Loading saved country:", savedCountry)
       setSelectedCountry(savedCountry)
     }
+    setIsHydrated(true)
   }, [])
 
-  const handleCountryChange = useCallback(
-    (country: Country) => {
-      console.log("Country changed to:", country)
-      setSelectedCountry(country)
-      if (isClient) {
-        localStorage.setItem("cattler-country", country)
-      }
-    },
-    [isClient],
-  )
+  // Save to localStorage when country changes
+  useEffect(() => {
+    if (isHydrated) {
+      localStorage.setItem("cattler-country", selectedCountry)
+    }
+  }, [selectedCountry, isHydrated])
 
-  const language = countryLanguageMap[selectedCountry]
+  const handleCountryChange = useCallback((country: Country) => {
+    setSelectedCountry(country)
+  }, [])
 
+  // Memoize language to prevent unnecessary recalculations
+  const language = useMemo(() => countryLanguageMap[selectedCountry], [selectedCountry])
+
+  // Memoize current translations object
+  const currentTranslations = useMemo(() => translations[language], [language])
+
+  // Translation function that updates immediately when language changes
   const t = useCallback(
-    (key: string): string => {
-      const translation = translations[language]?.[key as keyof (typeof translations)[typeof language]]
-      if (!translation) {
+    (key: string): any => {
+      const translation = currentTranslations?.[key as keyof typeof currentTranslations]
+      if (translation === undefined) {
         console.warn(`Translation missing for key: ${key} in language: ${language}`)
         return key
       }
       return translation
     },
-    [language],
+    [currentTranslations, language],
   )
-
-  // Debug logging
-  useEffect(() => {
-    console.log("useTranslation - Country:", selectedCountry, "Language:", language, "IsClient:", isClient)
-  }, [selectedCountry, language, isClient])
 
   return {
     selectedCountry,
     setSelectedCountry: handleCountryChange,
     language,
     t,
-    isClient,
+    isHydrated,
   }
 }
