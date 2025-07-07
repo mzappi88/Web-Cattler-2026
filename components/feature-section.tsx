@@ -120,7 +120,7 @@ export function FeatureSection({
 
   return (
     <section
-      className={`flex flex-row items-center justify-between mb-15 gap-10 ${isReverse ? "flex-row-reverse" : ""} max-[768px]:flex-col max-[768px]:items-center`}
+      className={`flex flex-row items-center justify-between mb-15 gap-10 my-5 py-5 ${isReverse ? "flex-row-reverse" : ""} max-[768px]:flex-col max-[768px]:items-center`}
     >
       <ContentComponent />
       <VideoComponent />

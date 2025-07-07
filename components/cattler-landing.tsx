@@ -89,7 +89,7 @@ export default function CattlerLanding() {
       </div>
 
       <div className="container mx-auto px-4 py-4 flex flex-col items-center justify-center">
-        <h1 className="text-4xl font-bold text-[#121334] text-center">{t("mainTitle")}</h1>
+        <h1 className="text-4xl font-bold text-[#121334] text-center my-5">{t("mainTitle")}</h1>
       </div>
       <div className="container mx-auto px-4 py-4">
         <div className="flex flex-col md:flex-row md:justify-between gap-12">

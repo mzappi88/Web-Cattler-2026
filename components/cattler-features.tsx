@@ -220,7 +220,7 @@ export default function CattlerFeatures() {
         <h2 className="font-bold text-4xl font-bold text-center mb-10 text-gray-800">
           {t("whyChooseCattler")}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto px-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto px-5 py-8">
           <div className="bg-white rounded-lg p-8 text-center shadow-md transition-transform hover:-translate-y-1">
             <Info className="w-12 h-12 mx-auto mb-5 text-[#15B674]" />
             <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">
