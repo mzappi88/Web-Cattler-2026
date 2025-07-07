@@ -22,7 +22,7 @@ const translations = {
   en: {
     // Hero Section
     heroTitle: "The Complete Cattle Management Solution",
-    getStarted: "Get Started Today",
+    getStarted: "Get Started Now",
 
     // Main Content
     mainTitle: "Transform Your Cattle Operation",
