@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+
 import { useEffect, useState } from "react"
 import Script from "next/script"
 import { ClipboardList, TrendingUp, Activity, DollarSign } from "lucide-react"
@@ -12,7 +13,6 @@ declare global {
     hbspt: any
   }
 }
-
 export type Version = "landing" | "ads-a" | "ads-b"
 
 export default function CattlerLanding() {

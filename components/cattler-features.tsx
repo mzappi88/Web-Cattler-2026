@@ -3,9 +3,26 @@
 import { FeatureSection } from "./feature-section"
 import { Settings, Clock, Users, Info } from "lucide-react"
 import { useTranslation } from "@/hooks/use-translation"
+import { useEffect, useState } from "react"
 
 export default function CattlerFeatures() {
-  const { t } = useTranslation()
+  const { selectedCountry, language, t } = useTranslation()
+  const [mounted, setMounted] = useState(false)
+
+  // Debug logging
+  useEffect(() => {
+    console.log("CattlerFeatures - Country:", selectedCountry, "Language:", language)
+    console.log("CattlerFeatures - Sample translation:", t("feedingTitle"))
+  }, [selectedCountry, language, t])
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return null
+  }
 
   const navigateToDemo = () => {
     if (window.top) {
@@ -13,12 +30,43 @@ export default function CattlerFeatures() {
     }
   }
 
+  // Split the title to highlight the first part based on language
+  const getHighlightedTitle = () => {
+    const fullTitle = t("featuresMainTitle")
+    console.log("Full title from translation:", fullTitle)
+
+    if (language === "es") {
+      return (
+        <>
+          <span className="text-[#15B674]">Ahorra tiempo y dinero</span> con el software de gestión ganadera más
+          avanzado
+        </>
+      )
+    } else if (language === "pt") {
+      return (
+        <>
+          <span className="text-[#15B674]">Economize tempo e dinheiro</span> com o software de gestão de gado mais
+          avançado
+        </>
+      )
+    } else {
+      // English (default)
+      return (
+        <>
+          <span className="text-[#15B674]">Save time & money</span> with the most advanced Cattle Management Software
+        </>
+      )
+    }
+  }
+
   return (
     <main className="font-sans max-w-6xl mx-auto px-5 py-10 text-gray-800">
-      <h1 className="font-bold text-center mb-20 text-gray-800 text-4xl lg:text-5xl">
-        <span className="text-[#15B674]">{t("featuresMainTitle").split("Save time & money")[0]}</span>
-        {t("featuresMainTitle")}
-      </h1>
+      {/* Debug info - remove in production */}
+      <div className="mb-4 p-2 bg-yellow-100 text-xs">
+        Debug: Country={selectedCountry}, Language={language}, FeedingTitle={t("feedingTitle")}
+      </div>
+
+      <h1 className="font-bold text-center mb-20 text-gray-800 text-4xl lg:text-5xl">{getHighlightedTitle()}</h1>
 
       <div className="flex justify-around my-10 mb-20 flex-wrap bg-gray-50 rounded-xl p-8 shadow-md">
         <div className="flex items-center font-bold text-lg text-gray-800 my-2.5 mx-5 transition-transform hover:-translate-y-1">
