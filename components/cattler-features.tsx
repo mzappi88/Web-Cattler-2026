@@ -1,77 +1,92 @@
-"use client"
+"use client";
 
-import { FeatureSection } from "./feature-section"
-import { Settings, Clock, Users, Info } from "lucide-react"
-import { useTranslation } from "@/hooks/use-translation"
-import { useEffect, useState } from "react"
+import { FeatureSection } from "./feature-section";
+import { Settings, Clock, Users, Info } from "lucide-react";
+import { useTranslation } from "@/hooks/use-translation";
+import { useEffect, useState } from "react";
 
 export default function CattlerFeatures() {
-  const { selectedCountry, language, t } = useTranslation()
-  const [mounted, setMounted] = useState(false)
+  const { selectedCountry, language, t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
 
   // Debug logging
   useEffect(() => {
-    console.log("CattlerFeatures - Country:", selectedCountry, "Language:", language)
-    console.log("CattlerFeatures - Sample translation:", t("feedingTitle"))
-  }, [selectedCountry, language, t])
+    console.log(
+      "CattlerFeatures - Country:",
+      selectedCountry,
+      "Language:",
+      language
+    );
+    console.log("CattlerFeatures - Sample translation:", t("feedingTitle"));
+  }, [selectedCountry, language, t]);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
-    return null
+    return null;
   }
 
   const navigateToDemo = () => {
     if (window.top) {
-      window.top.location.href = "https://www.cattler.farm/demo-sale"
+      window.top.location.href = "https://www.cattler.farm/demo-sale";
     }
-  }
+  };
 
   // Split the title to highlight the first part based on language
   const getHighlightedTitle = () => {
-    const fullTitle = t("featuresMainTitle")
-    console.log("Full title from translation:", fullTitle)
+    const fullTitle = t("featuresMainTitle");
+    console.log("Full title from translation:", fullTitle);
 
     if (language === "es") {
       return (
         <>
-          <span className="text-[#15B674]">Ahorra tiempo y dinero</span> con el software de gestión ganadera más
-          avanzado
+          <span className="text-[#15B674]">Ahorra tiempo y dinero</span> con el
+          software de gestión ganadera más avanzado
         </>
-      )
+      );
     } else if (language === "pt") {
       return (
         <>
-          <span className="text-[#15B674]">Economize tempo e dinheiro</span> com o software de gestão de gado mais
-          avançado
+          <span className="text-[#15B674]">Economize tempo e dinheiro</span> com
+          o software de gestão de gado mais avançado
         </>
-      )
+      );
     } else {
       // English (default)
       return (
         <>
-          <span className="text-[#15B674]">Save time & money</span> with the most advanced Cattle Management Software
+          <span className="text-[#15B674]">Save time & money</span> with the
+          most advanced Cattle Management Software
         </>
-      )
+      );
     }
-  }
+  };
 
   return (
     <main className="font-sans max-w-6xl mx-auto px-5 py-10 text-gray-800">
       {/* Debug info - remove in production */}
       <div className="mb-4 p-2 bg-yellow-100 text-xs">
-        Debug: Country={selectedCountry}, Language={language}, FeedingTitle={t("feedingTitle")}
+        Debug: Country={selectedCountry}, Language={language}, FeedingTitle=
+        {t("feedingTitle")}
       </div>
 
-      <h1 className="font-bold text-center mb-20 text-gray-800 text-4xl lg:text-5xl">{getHighlightedTitle()}</h1>
+      <h1 className="font-bold text-center mb-20 text-gray-800 text-4xl lg:text-5xl">
+        {getHighlightedTitle()}
+      </h1>
 
       <div className="flex justify-around my-10 mb-20 flex-wrap bg-gray-50 rounded-xl p-8 shadow-md">
         <div className="flex items-center font-bold text-lg text-gray-800 my-2.5 mx-5 transition-transform hover:-translate-y-1">
           <span className="mr-4">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <circle cx="12" cy="12" r="11" stroke="#15B674" strokeWidth="2" />
               <path
                 d="M8 12L11 15L16 9"
@@ -82,11 +97,19 @@ export default function CattlerFeatures() {
               />
             </svg>
           </span>
-          <span className="font-medium leading-tight">{t("bulletMultipleIntegrations")}</span>
+          <span className="font-medium leading-tight">
+            {t("bulletMultipleIntegrations")}
+          </span>
         </div>
         <div className="flex items-center font-bold text-lg text-gray-800 my-2.5 mx-5 transition-transform hover:-translate-y-1">
           <span className="mr-4">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <circle cx="12" cy="12" r="11" stroke="#15B674" strokeWidth="2" />
               <path
                 d="M8 12L11 15L16 9"
@@ -97,11 +120,19 @@ export default function CattlerFeatures() {
               />
             </svg>
           </span>
-          <span className="font-medium leading-tight">{t("bulletAllDataOnePlace")}</span>
+          <span className="font-medium leading-tight">
+            {t("bulletAllDataOnePlace")}
+          </span>
         </div>
         <div className="flex items-center font-bold text-lg text-gray-800 my-2.5 mx-5 transition-transform hover:-translate-y-1">
           <span className="mr-4">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <circle cx="12" cy="12" r="11" stroke="#15B674" strokeWidth="2" />
               <path
                 d="M8 12L11 15L16 9"
@@ -112,7 +143,9 @@ export default function CattlerFeatures() {
               />
             </svg>
           </span>
-          <span className="font-medium leading-tight">{t("bulletUserFriendly")}</span>
+          <span className="font-medium leading-tight">
+            {t("bulletUserFriendly")}
+          </span>
         </div>
       </div>
 
@@ -182,27 +215,45 @@ export default function CattlerFeatures() {
       <div className="w-0.5 h-15 bg-gray-300 mx-auto"></div>
 
       <section className="py-15 bg-gray-50">
-        <h2 className="font-bold text-4xl font-bold text-center mb-10 text-gray-800">{t("whyChooseCattler")}</h2>
+        <h2 className="font-bold text-4xl font-bold text-center mb-10 text-gray-800">
+          {t("whyChooseCattler")}
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto px-5">
           <div className="bg-white rounded-lg p-8 text-center shadow-md transition-transform hover:-translate-y-1">
             <Info className="w-12 h-12 mx-auto mb-5 text-[#15B674]" />
-            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">{t("comprehensiveSolution")}</h3>
-            <p className="text-base leading-relaxed text-gray-600">{t("comprehensiveSolutionDesc")}</p>
+            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">
+              {t("comprehensiveSolution")}
+            </h3>
+            <p className="text-base leading-relaxed text-gray-600">
+              {t("comprehensiveSolutionDesc")}
+            </p>
           </div>
           <div className="bg-white rounded-lg p-8 text-center shadow-md transition-transform hover:-translate-y-1">
             <Settings className="w-12 h-12 mx-auto mb-5 text-[#15B674]" />
-            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">{t("customizable")}</h3>
-            <p className="text-base leading-relaxed text-gray-600">{t("customizableDesc")}</p>
+            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">
+              {t("customizable")}
+            </h3>
+            <p className="text-base leading-relaxed text-gray-600">
+              {t("customizableDesc")}
+            </p>
           </div>
           <div className="bg-white rounded-lg p-8 text-center shadow-md transition-transform hover:-translate-y-1">
             <Clock className="w-12 h-12 mx-auto mb-5 text-[#15B674]" />
-            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">{t("realTimeUpdates")}</h3>
-            <p className="text-base leading-relaxed text-gray-600">{t("realTimeUpdatesDesc")}</p>
+            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">
+              {t("realTimeUpdates")}
+            </h3>
+            <p className="text-base leading-relaxed text-gray-600">
+              {t("realTimeUpdatesDesc")}
+            </p>
           </div>
           <div className="bg-white rounded-lg p-8 text-center shadow-md transition-transform hover:-translate-y-1">
             <Users className="w-12 h-12 mx-auto mb-5 text-[#15B674]" />
-            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">{t("multiUserAccess")}</h3>
-            <p className="text-base leading-relaxed text-gray-600">{t("multiUserAccessDesc")}</p>
+            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">
+              {t("multiUserAccess")}
+            </h3>
+            <p className="text-base leading-relaxed text-gray-600">
+              {t("multiUserAccessDesc")}
+            </p>
           </div>
         </div>
       </section>
@@ -220,5 +271,5 @@ export default function CattlerFeatures() {
         </button>
       </section>
     </main>
-  )
+  );
 }
