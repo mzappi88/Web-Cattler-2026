@@ -14,6 +14,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Check, X, Calendar, CalendarDays, Plus, Users } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { usePricingTranslation } from "@/hooks/use-pricing-translation";
+import { CountrySelector } from "@/components/country-selector";
 
 interface Plan {
   id: string;
@@ -144,6 +146,8 @@ export const initialPricingState: PricingState = {
 
 export default function Component() {
   const router = useRouter();
+  const { t, formatPrice, selectedCountry, setSelectedCountry, isHydrated } =
+    usePricingTranslation();
   const [expandedFeatures, setExpandedFeatures] = useState<Set<string>>(
     new Set()
   );
@@ -158,10 +162,10 @@ export default function Component() {
 
   const [summerStartDate, setSummerStartDate] = useState("");
   const [summerEndDate, setSummerEndDate] = useState("");
-  const [summerPlan, setSummerPlan] = useState<string>("go"); // Default to Confinamento GO
+  const [summerPlan, setSummerPlan] = useState<string>("go");
 
   const calculateAnnualPrice = (monthlyPrice: number) => {
-    return Math.round(monthlyPrice * 12 * 0.9); // 10% discount on annual billing
+    return Math.round(monthlyPrice * 12 * 0.9);
   };
 
   const getActivePromotion = (
@@ -170,7 +174,6 @@ export default function Component() {
   ) => {
     if (!promotionalState.saleActive) return null;
 
-    // For annual billing, check annual discounts first
     if (
       billingType === "annual" &&
       promotionalState.discounts.annual[productId]?.isActive
@@ -181,7 +184,6 @@ export default function Component() {
       };
     }
 
-    // For monthly billing, check monthly discounts first
     if (
       billingType === "monthly" &&
       promotionalState.discounts.monthly[productId]?.isActive
@@ -192,7 +194,6 @@ export default function Component() {
       };
     }
 
-    // Check xMonthly promotions (can apply to both billing types)
     if (promotionalState.discounts.xMonthly[productId]?.isActive) {
       return {
         type: "xMonthly",
@@ -200,7 +201,6 @@ export default function Component() {
       };
     }
 
-    // Check freeMonths promotions (can apply to both billing types)
     if (promotionalState.discounts.freeMonths[productId]?.isActive) {
       return {
         type: "freeMonths",
@@ -221,11 +221,9 @@ export default function Component() {
     if (!promotion) return originalPrice;
 
     if (promotion.type === "freeMonths") {
-      // For free months, we don't change the displayed price but show the promotion
       return originalPrice;
     }
 
-    // Apply the discount
     const discountedPrice = Math.round(
       originalPrice * (1 - promotion.discountFactor)
     );
@@ -256,35 +254,34 @@ export default function Component() {
     }
   };
 
-  // Owner plans
-  const PEN_PRICE = 30; // R$ 30 per month per pen (cambiar de 50 a 30)
-  const USER_PRICE = 120; // R$ 120 per month per user (cambiar de 100 a 120)
+  const PEN_PRICE = 30;
+  const USER_PRICE = 120;
 
   const ownerPlans: Plan[] = [
     {
       id: "lite",
-      name: "CONFINAMENTO LITE",
+      name: t("planLite"),
       price: 1000,
       annualPrice: calculateAnnualPrice(1000),
-      description: "Solução básica para pequenas operações",
-      pens: "10 Currais",
-      users: "1 Usuário",
+      description: t("planLiteDesc"),
+      pens: `10 ${t("pens")}`,
+      users: `1 ${t("users")}`,
       keyFeatures: [
-        "Alimentação",
-        "Gestão de Gado",
-        "Inventário de Suprimentos",
-        "Manejo de Dietas",
+        t("feeding"),
+        t("cattleManagement"),
+        t("suppliesInventory"),
+        t("dietManagement"),
       ],
       popular: false,
     },
     {
       id: "go",
-      name: "CONFINAMENTO GO",
+      name: t("planGo"),
       price: 1500,
       annualPrice: calculateAnnualPrice(1500),
-      description: "Para produtores que buscam planejamento nutricional.",
-      pens: "25 Currais",
-      users: "2 Usuários",
+      description: t("planGoDesc"),
+      pens: `25 ${t("pens")}`,
+      users: `2 ${t("users")}`,
       keyFeatures: [
         "Tudo do LITE",
         "Protocolos de alimentação",
@@ -294,58 +291,62 @@ export default function Component() {
     },
     {
       id: "flex",
-      name: "CONFINAMENTO FLEX",
+      name: t("planFlex"),
       price: 1950,
       annualPrice: calculateAnnualPrice(1950),
-      description: "Para quem deseja gestão precisa no tronco.",
-      pens: "40 Currais",
-      users: "3 Usuários",
+      description: t("planFlexDesc"),
+      pens: `40 ${t("pens")}`,
+      users: `3 ${t("users")}`,
       keyFeatures: [
         "Tudo do GO",
-        "Tronco",
-        "Integração com Leitor de Brinco",
-        "Geração de Pré-mistura",
+        t("chute"),
+        t("tagReaderIntegration"),
+        t("premixGeneration"),
       ],
       popular: true,
     },
     {
       id: "pro",
-      name: "CONFINAMENTO PRO",
+      name: t("planPro"),
       price: 3700,
       annualPrice: calculateAnnualPrice(3700),
-      description:
-        "Para quem exige excelência em sanidade e análise do rebanho.",
-      pens: "80 Currais",
-      users: "5 Usuários",
+      description: t("planProDesc"),
+      pens: `80 ${t("pens")}`,
+      users: `5 ${t("users")}`,
       keyFeatures: [
         "Tudo do FLEX",
-        "Sanidade Animal",
-        "Analytics",
-        "Relatório de Valor de Mercado",
+        t("animalHealth"),
+        t("analytics"),
+        t("marketValueReport"),
       ],
       popular: false,
     },
   ];
 
-  // Owner features with expandable structure - MASTER REFERENCE
   const ownerFeatures: Feature[] = [
-    { name: "Currais Incluídos", lite: "10", go: "25", flex: "40", pro: "80" },
-    { name: "Usuários", lite: "1", go: "2", flex: "3", pro: "5" },
+    {
+      name: `${t("pens")} Incluídos`,
+      lite: "10",
+      go: "25",
+      flex: "40",
+      pro: "80",
+    },
+    { name: t("users"), lite: "1", go: "2", flex: "3", pro: "5" },
     {
       name: "Curral Extra",
-      lite: "+R$ 30",
-      go: "+R$ 30",
-      flex: "+R$ 30",
-      pro: "+R$ 30",
+      lite: `+${formatPrice(30)}`,
+      go: `+${formatPrice(30)}`,
+      flex: `+${formatPrice(30)}`,
+      pro: `+${formatPrice(30)}`,
     },
     {
       name: "Usuário Extra",
-      lite: "+R$ 120",
-      go: "+R$ 120",
-      flex: "+R$ 120",
-      pro: "+R$ 120",
+      lite: `+${formatPrice(120)}`,
+      go: `+${formatPrice(120)}`,
+      flex: `+${formatPrice(120)}`,
+      pro: `+${formatPrice(120)}`,
     },
-    { name: "Alimentação", lite: true, go: true, flex: true, pro: true },
+    { name: t("feeding"), lite: true, go: true, flex: true, pro: true },
     {
       name: "Mapa do Confinamento",
       lite: true,
@@ -353,9 +354,15 @@ export default function Component() {
       flex: true,
       pro: true,
     },
-    { name: "Gestão de Gado", lite: true, go: true, flex: true, pro: true },
     {
-      name: "Inventário de Suprimentos",
+      name: t("cattleManagement"),
+      lite: true,
+      go: true,
+      flex: true,
+      pro: true,
+    },
+    {
+      name: t("suppliesInventory"),
       lite: true,
       go: true,
       flex: true,
@@ -368,7 +375,7 @@ export default function Component() {
       flex: "Ilimitado",
       pro: "Ilimitado",
     },
-    { name: "Manejo de Dietas", lite: true, go: true, flex: true, pro: true },
+    { name: t("dietManagement"), lite: true, go: true, flex: true, pro: true },
     {
       name: "Quantidade de Dietas",
       lite: "Ilimitado",
@@ -379,8 +386,8 @@ export default function Component() {
     { name: "Recorredor", lite: true, go: true, flex: true, pro: true },
     { name: "Relatórios", lite: true, go: true, flex: true, pro: true },
     {
-      name: "Alimentação Avançada",
-      lite: "+R$ 600",
+      name: t("advancedFeeding"),
+      lite: `+${formatPrice(600)}`,
       go: true,
       flex: true,
       pro: true,
@@ -410,40 +417,39 @@ export default function Component() {
       ],
     },
     {
-      name: "Geração de Pré-misturas (Premixes)",
-      lite: "+R$ 150",
-      go: "+R$ 150",
+      name: t("premixGeneration"),
+      lite: `+${formatPrice(150)}`,
+      go: `+${formatPrice(150)}`,
       flex: true,
       pro: true,
     },
     {
-      name: "Sanidade Animal",
-      lite: "+R$ 400",
-      go: "+R$ 400",
-      flex: "+R$ 400",
+      name: t("animalHealth"),
+      lite: `+${formatPrice(400)}`,
+      go: `+${formatPrice(400)}`,
+      flex: `+${formatPrice(400)}`,
       pro: true,
     },
-    { name: "Tronco", lite: false, go: "+R$ 300", flex: true, pro: true },
     {
-      name: "Integração com Leitor de Brinco",
+      name: t("chute"),
       lite: false,
-      go: "+R$ 300",
+      go: `+${formatPrice(300)}`,
       flex: true,
       pro: true,
     },
     {
-      name: "Sanidade Animal",
-      lite: "+R$ 400",
-      go: "+R$ 400",
-      flex: "+R$ 400",
+      name: t("tagReaderIntegration"),
+      lite: false,
+      go: `+${formatPrice(300)}`,
+      flex: true,
       pro: true,
     },
     {
-      name: "Módulo Boitel",
-      lite: "+R$ 600",
-      go: "+R$ 600",
-      flex: "+R$ 600",
-      pro: "+R$ 600",
+      name: t("boitelModule"),
+      lite: `+${formatPrice(600)}`,
+      go: `+${formatPrice(600)}`,
+      flex: `+${formatPrice(600)}`,
+      pro: `+${formatPrice(600)}`,
       isAddOn: true,
       isBoitel: true,
       isExpandable: true,
@@ -470,11 +476,11 @@ export default function Component() {
           pro: false,
         },
         {
-          name: "Usuários de Clientes",
-          lite: "+R$ 120",
-          go: "+R$ 120",
-          flex: "+R$ 120",
-          pro: "+R$ 120",
+          name: t("clientUsers"),
+          lite: `+${formatPrice(120)}`,
+          go: `+${formatPrice(120)}`,
+          flex: `+${formatPrice(120)}`,
+          pro: `+${formatPrice(120)}`,
         },
       ],
     },
@@ -497,13 +503,11 @@ export default function Component() {
   const currentPlans = ownerPlans;
   const currentFeatures = ownerFeatures;
 
-  // Add-ons array - Updated with all available add-ons
   const addOns: AddOn[] = [
     {
       id: "boitel-addon",
-      name: "Módulo Boitel",
-      description:
-        "Gestão completa para operações de Boitel com múltiplos clientes",
+      name: t("boitelModule"),
+      description: t("boitelModuleDesc"),
       price: 600,
       availableFor: ["lite", "go", "flex", "pro"],
       includedIn: [],
@@ -511,8 +515,8 @@ export default function Component() {
     },
     {
       id: "usuarios-clientes",
-      name: "Usuários de Clientes",
-      description: "Usuários adicionais para clientes específicos",
+      name: t("clientUsers"),
+      description: t("clientUsersDesc"),
       price: 120,
       availableFor: ["lite", "go", "flex", "pro"],
       includedIn: [],
@@ -520,7 +524,7 @@ export default function Component() {
     },
     {
       id: "sanidade-animal",
-      name: "Sanidade Animal",
+      name: t("animalHealth"),
       description: "Gestão completa da saúde do rebanho",
       price: 400,
       availableFor: ["lite", "go", "flex"],
@@ -528,7 +532,7 @@ export default function Component() {
     },
     {
       id: "tronco",
-      name: "Tronco",
+      name: t("chute"),
       description: "Sistema completo de manejo no tronco",
       price: 300,
       availableFor: ["go"],
@@ -536,7 +540,7 @@ export default function Component() {
     },
     {
       id: "leitor-brinco",
-      name: "Integração com Leitor de Brinco",
+      name: t("tagReaderIntegration"),
       description: "Integração com sistemas de leitura de brincos eletrônicos",
       price: 300,
       availableFor: ["go"],
@@ -544,7 +548,7 @@ export default function Component() {
     },
     {
       id: "alimentacao-avancada",
-      name: "Alimentação Avançada",
+      name: t("advancedFeeding"),
       description: "Recursos avançados para gestão e otimização de alimentação",
       price: 600,
       availableFor: ["lite"],
@@ -552,7 +556,7 @@ export default function Component() {
     },
     {
       id: "pre-misturas",
-      name: "Geração de Pré-misturas",
+      name: t("premixGeneration"),
       description: "Sistema para geração e controle de pré-misturas",
       price: 150,
       availableFor: ["lite", "go"],
@@ -560,7 +564,7 @@ export default function Component() {
     },
     {
       id: "analytics",
-      name: "Analytics",
+      name: t("analytics"),
       description:
         "Análises avançadas e relatórios detalhados para otimização da operação",
       price: 300,
@@ -569,7 +573,7 @@ export default function Component() {
     },
     {
       id: "relatorio-mercado",
-      name: "Relatório de Valor de Mercado",
+      name: t("marketValueReport"),
       description: "Relatórios detalhados sobre valores de mercado do gado",
       price: 150,
       availableFor: ["go", "flex"],
@@ -632,7 +636,7 @@ export default function Component() {
         </div>
       );
     }
-    if (typeof value === "string" && value.startsWith("+R$")) {
+    if (typeof value === "string" && value.startsWith("+")) {
       return (
         <div className="flex flex-col items-center">
           <span className="text-sm font-roboto text-cattler-orange font-medium">
@@ -667,23 +671,19 @@ export default function Component() {
   };
 
   const handlePlanSelect = (plan: Plan) => {
-    // Navigate to checkout with plan ID and billing cycle
     router.push(`/pricing/checkout/${plan.id}?billing=${billingCycle}`);
   };
 
   const handleAddOnSelect = (addOn: AddOn) => {
-    // Don't allow selection of coming soon add-ons
     if (addOn.comingSoon) {
       return;
     }
 
-    // Add promotional state to addon before navigation
     const addonWithPromotion = {
       ...addOn,
       promotionalState: promotionalState,
     };
 
-    // Navigate to addon checkout with promotional data
     const addonData = encodeURIComponent(JSON.stringify(addonWithPromotion));
     router.push(`/pricing/addon/${addOn.id}?data=${addonData}`);
   };
@@ -692,10 +692,30 @@ export default function Component() {
     setBillingCycle((prev) => (prev === "monthly" ? "annual" : "monthly"));
   };
 
+  // Show loading state until hydrated
+  if (!isHydrated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cattler-green mx-auto mb-4"></div>
+          <p className="text-cattler-navy font-lato">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
+        {/* Country Selector */}
+        <div className="flex justify-end mb-4">
+          <CountrySelector
+            selectedCountry={selectedCountry}
+            onCountryChange={setSelectedCountry}
+          />
+        </div>
+
         {promotionalState.saleActive && (
           <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-center py-3 mb-8 rounded-lg shadow-lg">
             <div className="flex items-center justify-center gap-2">
@@ -711,16 +731,14 @@ export default function Component() {
         )}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-bold font-barlow text-cattler-navy mb-6">
-            Escolha Seu Plano de Confinamento
+            {t("pricingTitle")}
           </h1>
           <p className="text-xl font-lato text-cattler-navy/80 max-w-3xl mx-auto mb-8">
-            Soluções completas de gestão de confinamento projetadas para
-            otimizar suas operações. Da alimentação básica a análises avançadas.
+            {t("pricingSubtitle")}
           </p>
 
           {/* Billing Cycle Toggle */}
           <div className="flex flex-col items-center gap-6 mb-8">
-            {/* Billing Cycle Toggle */}
             <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full border-2 border-cattler-teal/30">
               <div className="flex items-center gap-2">
                 <Calendar
@@ -737,7 +755,7 @@ export default function Component() {
                       : "text-gray-500"
                   }`}
                 >
-                  Mensal
+                  {t("monthlyBilling")}
                 </span>
               </div>
               <Switch
@@ -759,7 +777,7 @@ export default function Component() {
                       : "text-gray-500"
                   }`}
                 >
-                  Anual (10% de desconto)
+                  {t("annualBilling")}
                 </span>
               </div>
             </div>
@@ -778,7 +796,7 @@ export default function Component() {
               >
                 {plan.popular && (
                   <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-cattler-green text-white font-lato font-bold">
-                    Mais Popular
+                    {t("mostPopular")}
                   </Badge>
                 )}
                 <CardHeader className="text-center">
@@ -815,14 +833,14 @@ export default function Component() {
                           {hasPromotion && (
                             <div className="flex items-center gap-2 mb-2">
                               <span className="text-lg line-through text-gray-400">
-                                R$ {originalPrice}
+                                {formatPrice(originalPrice)}
                               </span>
                               <Badge className="bg-red-500 text-white text-xs animate-pulse">
                                 {promotionalState.saleName}
                               </Badge>
                             </div>
                           )}
-                          <div>R$ {displayPrice}</div>
+                          <div>{formatPrice(displayPrice)}</div>
                         </div>
                       );
                     })()}
@@ -841,13 +859,15 @@ export default function Component() {
                     );
                   })()}
                   <div className="text-sm font-roboto text-cattler-navy/60">
-                    por mês
-                    {billingCycle === "annual" ? ", cobrado anualmente" : ""}
+                    {t("perMonth")}
+                    {billingCycle === "annual"
+                      ? `, cobrado ${t("annually")}`
+                      : ""}
                   </div>
                   {billingCycle === "annual" && (
                     <div className="mt-1 text-xs font-roboto text-cattler-orange font-medium">
-                      R$ {plan.annualPrice} por ano (Economize R${" "}
-                      {Math.round(plan.price * 12 * 0.1)})
+                      {formatPrice(plan.annualPrice!)} {t("perYear")} (Economize{" "}
+                      {formatPrice(Math.round(plan.price * 12 * 0.1))})
                     </div>
                   )}
                 </CardHeader>
@@ -855,7 +875,7 @@ export default function Component() {
                   <div className="space-y-3 mb-6">
                     <div className="flex justify-between">
                       <span className="text-sm font-medium font-lato text-cattler-navy">
-                        Currais:
+                        {t("pens")}:
                       </span>
                       <span className="text-sm font-roboto text-cattler-navy/80">
                         {plan.pens}
@@ -863,7 +883,7 @@ export default function Component() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm font-medium font-lato text-cattler-navy">
-                        Usuários:
+                        {t("users")}:
                       </span>
                       <span className="text-sm font-roboto text-cattler-navy/80">
                         {plan.users}
@@ -876,7 +896,6 @@ export default function Component() {
                     </h4>
                     <ul className="space-y-1">
                       {plan.keyFeatures.map((feature, idx) => {
-                        // Excluir las integraciones
                         if (
                           feature.toLowerCase().includes("integração") ||
                           feature.toLowerCase().includes("integrações")
@@ -905,14 +924,14 @@ export default function Component() {
                         : "bg-cattler-teal hover:bg-cattler-green text-white"
                     }`}
                   >
-                    Começar
+                    {t("getStarted")}
                   </Button>
                 </CardFooter>
               </Card>
             ))}
           </div>
 
-          {/* New Section: Do you do Boitel? */}
+          {/* Boitel Section */}
           <div className="text-center mt-12 mb-20 bg-gradient-to-r from-cattler-amber/10 via-cattler-orange/10 to-cattler-amber/10 rounded-2xl p-12 border-2 border-cattler-amber/30">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center justify-center mb-6">
@@ -937,15 +956,13 @@ export default function Component() {
                 <div className="max-w-md mx-auto">
                   <div className="bg-gradient-to-br from-cattler-amber/5 to-cattler-orange/5 rounded-lg p-4 border border-cattler-amber/30 flex flex-col">
                     <h4 className="font-bold font-lato text-cattler-amber mb-2">
-                      Módulo Boitel
+                      {t("boitelModule")}
                     </h4>
                     <p className="text-sm font-roboto text-cattler-navy/70 mb-3">
-                      Gestão completa para operações de Boitel com múltiplos
-                      clientes, controle de propriedade e faturamento
-                      especializado.
+                      {t("boitelModuleDesc")}
                     </p>
                     <div className="text-lg font-bold font-barlow text-cattler-green mb-4">
-                      +R$ 600/mês
+                      +{formatPrice(600)}/{t("perMonth")}
                     </div>
                     <Button
                       className="mt-auto bg-cattler-amber hover:bg-cattler-amber/90 text-white font-lato font-bold py-3 shadow-md hover:shadow-lg transition-all duration-300"
@@ -981,31 +998,31 @@ export default function Component() {
                       Recursos
                     </th>
                     <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-white">
-                      CONFINAMENTO LITE
+                      {t("planLite")}
                       <br />
                       <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        R$ 1.000
+                        {formatPrice(1000)}
                       </span>
                     </th>
                     <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-white">
-                      CONFINAMENTO GO
+                      {t("planGo")}
                       <br />
                       <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        R$ 1.500
+                        {formatPrice(1500)}
                       </span>
                     </th>
                     <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-cattler-light-teal/20">
-                      CONFINAMENTO FLEX
+                      {t("planFlex")}
                       <br />
                       <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        R$ 1.950
+                        {formatPrice(1950)}
                       </span>
                     </th>
                     <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-white">
-                      CONFINAMENTO PRO
+                      {t("planPro")}
                       <br />
                       <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        R$ 3.700
+                        {formatPrice(3700)}
                       </span>
                     </th>
                   </tr>
@@ -1176,14 +1193,13 @@ export default function Component() {
             </div>
           </div>
 
-          {/* Add-ons Section - Now Clickable */}
+          {/* Add-ons Section */}
           <div className="mt-16 bg-white rounded-lg shadow-xl border border-cattler-teal/20 p-8">
             <h3 className="text-2xl font-bold font-barlow text-cattler-navy text-center mb-6">
-              Complementos Disponíveis
+              {t("addOnsTitle")}
             </h3>
             <p className="text-center text-cattler-navy/70 font-roboto mb-8">
-              Clique no complemento para comprá-lo para seu plano de
-              Confinamento existente
+              {t("addOnsSubtitle")}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {addOns.map((addon, index) => {
@@ -1279,14 +1295,16 @@ export default function Component() {
                             {hasPromotion && (
                               <div className="flex items-center gap-1 mb-1">
                                 <span className="text-sm line-through text-gray-400">
-                                  +R$ {originalPrice}/mês
+                                  +{formatPrice(originalPrice)}/{t("perMonth")}
                                 </span>
                                 <Badge className="bg-red-500 text-white text-xs animate-pulse">
                                   {promotionalState.saleName}
                                 </Badge>
                               </div>
                             )}
-                            <div>+R$ {promotionalPrice}/mês</div>
+                            <div>
+                              +{formatPrice(promotionalPrice)}/{t("perMonth")}
+                            </div>
                             {(() => {
                               const promotionText = getPromotionBadgeText(
                                 addon.id,
@@ -1334,7 +1352,6 @@ export default function Component() {
                         </Badge>
                       </div>
 
-                      {/* Add included in plans information */}
                       {addon.includedIn && addon.includedIn.length > 0 && (
                         <div className="flex items-center justify-center gap-1 text-xs font-roboto">
                           <Badge className="bg-cattler-green text-white text-xs">

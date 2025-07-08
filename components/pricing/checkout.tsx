@@ -1,57 +1,66 @@
-"use client"
+"use client";
 
-import { useState, useCallback, useMemo, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { ArrowLeft, Check } from "lucide-react"
-import { Calendar, CalendarDays } from "lucide-react"
-import { Switch } from "@/components/ui/switch"
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { ArrowLeft, Check } from "lucide-react";
+import { Calendar, CalendarDays } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { usePricingTranslation } from "@/hooks/use-pricing-translation";
+import { CountrySelector } from "@/components/country-selector";
 
 interface Plan {
-  id: string
-  name: string
-  price: number
-  annualPrice?: number
-  description: string
-  pens: string
-  users: string
-  keyFeatures: string[]
-  popular: boolean
-  billingCycle?: "monthly" | "annual"
-  planType?: "owner" | "custom"
-  promotionalState?: any
+  id: string;
+  name: string;
+  price: number;
+  annualPrice?: number;
+  description: string;
+  pens: string;
+  users: string;
+  keyFeatures: string[];
+  popular: boolean;
+  billingCycle?: "monthly" | "annual";
+  planType?: "owner" | "custom";
+  promotionalState?: any;
 }
 
 interface AddOn {
-  id: string
-  name: string
-  description: string
-  price: number
-  availableFor: string[]
-  includedIn?: string[]
-  isBoitel?: boolean
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  availableFor: string[];
+  includedIn?: string[];
+  isBoitel?: boolean;
 }
 
 interface CheckoutProps {
-  selectedPlan: Plan
-  onBack: () => void
+  selectedPlan: Plan;
+  onBack: () => void;
 }
 
-// Move constants outside component to prevent recreation
-const PEN_PRICE = 30
-const USER_PRICE = 120
+const PEN_PRICE = 30;
+const USER_PRICE = 120;
 
 const ADD_ONS = [
   {
     id: "boitel-addon",
     name: "Módulo Boitel",
-    description: "Gestão completa para operações de Boitel com múltiplos clientes",
+    description:
+      "Gestão completa para operações de Boitel com múltiplos clientes",
     price: 600,
     availableFor: ["lite", "go", "flex", "pro"],
     includedIn: [],
@@ -109,7 +118,8 @@ const ADD_ONS = [
   {
     id: "analytics",
     name: "Analytics",
-    description: "Análises avançadas e relatórios detalhados para otimização da operação",
+    description:
+      "Análises avançadas e relatórios detalhados para otimização da operação",
     price: 300,
     availableFor: ["go", "flex"],
     includedIn: ["pro"],
@@ -122,49 +132,53 @@ const ADD_ONS = [
     availableFor: ["go", "flex"],
     includedIn: ["pro"],
   },
-]
+];
 
 export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
-  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([])
+  const { t, formatPrice, selectedCountry, setSelectedCountry, isHydrated } =
+    usePricingTranslation();
+  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     email: "",
     company: "",
     phone: "",
-  })
-  const [additionalPens, setAdditionalPens] = useState(0)
-  const [additionalUsers, setAdditionalUsers] = useState(0)
-  const [additionalClientUsers, setAdditionalClientUsers] = useState(0)
-  const [billingCycle, setBillingCycleState] = useState<"monthly" | "annual">(selectedPlan.billingCycle || "monthly")
-  const router = useRouter()
+  });
+  const [additionalPens, setAdditionalPens] = useState(0);
+  const [additionalUsers, setAdditionalUsers] = useState(0);
+  const [additionalClientUsers, setAdditionalClientUsers] = useState(0);
+  const [billingCycle, setBillingCycleState] = useState<"monthly" | "annual">(
+    selectedPlan.billingCycle || "monthly"
+  );
+  const router = useRouter();
 
-  const planType = selectedPlan.planType || "owner"
+  const planType = selectedPlan.planType || "owner";
 
-  // Load saved checkout data when component mounts
   useEffect(() => {
     try {
-      const savedCheckoutData = localStorage.getItem(`checkoutData_${selectedPlan.id}`)
+      const savedCheckoutData = localStorage.getItem(
+        `checkoutData_${selectedPlan.id}`
+      );
       if (savedCheckoutData) {
-        const data = JSON.parse(savedCheckoutData)
-        setSelectedAddOns(data.selectedAddOns || [])
-        setAdditionalPens(data.additionalPens || 0)
-        setAdditionalUsers(data.additionalUsers || 0)
-        setAdditionalClientUsers(data.additionalClientUsers || 0)
+        const data = JSON.parse(savedCheckoutData);
+        setSelectedAddOns(data.selectedAddOns || []);
+        setAdditionalPens(data.additionalPens || 0);
+        setAdditionalUsers(data.additionalUsers || 0);
+        setAdditionalClientUsers(data.additionalClientUsers || 0);
         setCustomerInfo(
           data.customerInfo || {
             name: "",
             email: "",
             company: "",
             phone: "",
-          },
-        )
+          }
+        );
       }
     } catch (error) {
-      console.error("Error loading saved checkout data:", error)
+      console.error("Error loading saved checkout data:", error);
     }
-  }, [selectedPlan.id])
+  }, [selectedPlan.id]);
 
-  // Save checkout data whenever it changes
   useEffect(() => {
     try {
       const checkoutData = {
@@ -174,112 +188,141 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
         additionalClientUsers,
         customerInfo,
         timestamp: Date.now(),
-      }
-      localStorage.setItem(`checkoutData_${selectedPlan.id}`, JSON.stringify(checkoutData))
+      };
+      localStorage.setItem(
+        `checkoutData_${selectedPlan.id}`,
+        JSON.stringify(checkoutData)
+      );
     } catch (error) {
-      console.error("Error saving checkout data:", error)
+      console.error("Error saving checkout data:", error);
     }
-  }, [selectedAddOns, additionalPens, additionalUsers, additionalClientUsers, customerInfo, selectedPlan.id])
+  }, [
+    selectedAddOns,
+    additionalPens,
+    additionalUsers,
+    additionalClientUsers,
+    customerInfo,
+    selectedPlan.id,
+  ]);
 
-  // Cleanup old data (older than 1 hour)
   useEffect(() => {
     try {
-      const keys = Object.keys(localStorage)
-      const oneHour = 60 * 60 * 1000
-      const now = Date.now()
+      const keys = Object.keys(localStorage);
+      const oneHour = 60 * 60 * 1000;
+      const now = Date.now();
 
       keys.forEach((key) => {
         if (key.startsWith("checkoutData_")) {
           try {
-            const data = JSON.parse(localStorage.getItem(key) || "{}")
+            const data = JSON.parse(localStorage.getItem(key) || "{}");
             if (data.timestamp && now - data.timestamp > oneHour) {
-              localStorage.removeItem(key)
+              localStorage.removeItem(key);
             }
           } catch (error) {
-            localStorage.removeItem(key)
+            localStorage.removeItem(key);
           }
         }
-      })
+      });
     } catch (error) {
-      console.error("Error cleaning up old data:", error)
+      console.error("Error cleaning up old data:", error);
     }
-  }, [])
+  }, []);
 
   const availableAddOns = useMemo(
     () =>
       ADD_ONS.filter(
         (addon) =>
           addon.availableFor.includes(selectedPlan.id) &&
-          (!addon.includedIn || !addon.includedIn.includes(selectedPlan.id)),
+          (!addon.includedIn || !addon.includedIn.includes(selectedPlan.id))
       ),
-    [selectedPlan.id],
-  )
+    [selectedPlan.id]
+  );
 
   const includedAddOns = useMemo(
-    () => ADD_ONS.filter((addon) => addon.includedIn?.includes(selectedPlan.id)),
-    [selectedPlan.id],
-  )
+    () =>
+      ADD_ONS.filter((addon) => addon.includedIn?.includes(selectedPlan.id)),
+    [selectedPlan.id]
+  );
 
   const handleAddOnToggle = useCallback((addOnId: string) => {
     setSelectedAddOns((prev) => {
       if (prev.includes(addOnId)) {
         if (addOnId === "usuarios-clientes") {
-          setAdditionalClientUsers(0)
+          setAdditionalClientUsers(0);
         }
-        return prev.filter((id) => id !== addOnId)
+        return prev.filter((id) => id !== addOnId);
       } else {
         if (addOnId === "usuarios-clientes") {
-          setAdditionalClientUsers(1)
+          setAdditionalClientUsers(1);
         }
-        return [...prev, addOnId]
+        return [...prev, addOnId];
       }
-    })
-  }, [])
+    });
+  }, []);
 
   const handleInputChange = useCallback((field: string, value: string) => {
-    setCustomerInfo((prev) => ({ ...prev, [field]: value }))
-  }, [])
+    setCustomerInfo((prev) => ({ ...prev, [field]: value }));
+  }, []);
 
   const calculateTotal = useMemo(() => {
-    const baseMonthlyPrice = selectedPlan.price
-    const basePrice = billingCycle === "annual" ? Math.round(baseMonthlyPrice * 12 * 0.9) : baseMonthlyPrice
+    const baseMonthlyPrice = selectedPlan.price;
+    const basePrice =
+      billingCycle === "annual"
+        ? Math.round(baseMonthlyPrice * 12 * 0.9)
+        : baseMonthlyPrice;
 
     const addOnTotal = selectedAddOns.reduce((total, addOnId) => {
-      const addOn = ADD_ONS.find((a) => a.id === addOnId)
-      if (!addOn) return total
+      const addOn = ADD_ONS.find((a) => a.id === addOnId);
+      if (!addOn) return total;
 
-      const addonMonthlyPrice = addOn.price
-      let addonPrice = billingCycle === "annual" ? Math.round(addonMonthlyPrice * 12 * 0.9) : addonMonthlyPrice
+      const addonMonthlyPrice = addOn.price;
+      let addonPrice =
+        billingCycle === "annual"
+          ? Math.round(addonMonthlyPrice * 12 * 0.9)
+          : addonMonthlyPrice;
 
       if (addOn.id === "usuarios-clientes" && additionalClientUsers > 0) {
-        addonPrice = addonPrice * additionalClientUsers
+        addonPrice = addonPrice * additionalClientUsers;
       }
 
-      return total + addonPrice
-    }, 0)
+      return total + addonPrice;
+    }, 0);
 
-    const pensMonthlyTotal = additionalPens * PEN_PRICE
-    const usersMonthlyTotal = additionalUsers * USER_PRICE
+    const pensMonthlyTotal = additionalPens * PEN_PRICE;
+    const usersMonthlyTotal = additionalUsers * USER_PRICE;
 
-    const pensTotal = billingCycle === "annual" ? Math.round(pensMonthlyTotal * 12 * 0.9) : pensMonthlyTotal
-    const usersTotal = billingCycle === "annual" ? Math.round(usersMonthlyTotal * 12 * 0.9) : usersMonthlyTotal
+    const pensTotal =
+      billingCycle === "annual"
+        ? Math.round(pensMonthlyTotal * 12 * 0.9)
+        : pensMonthlyTotal;
+    const usersTotal =
+      billingCycle === "annual"
+        ? Math.round(usersMonthlyTotal * 12 * 0.9)
+        : usersMonthlyTotal;
 
-    return basePrice + addOnTotal + pensTotal + usersTotal
-  }, [billingCycle, selectedPlan.price, selectedAddOns, additionalPens, additionalUsers, additionalClientUsers])
+    return basePrice + addOnTotal + pensTotal + usersTotal;
+  }, [
+    billingCycle,
+    selectedPlan.price,
+    selectedAddOns,
+    additionalPens,
+    additionalUsers,
+    additionalClientUsers,
+  ]);
 
   const isFormValid = useMemo(() => {
-    return customerInfo.name && customerInfo.email && customerInfo.company
-  }, [customerInfo])
+    return customerInfo.name && customerInfo.email && customerInfo.company;
+  }, [customerInfo]);
 
-  const formatPrice = useCallback(
+  const formatPriceWithCycle = useCallback(
     (price: number) => {
       if (billingCycle === "annual") {
-        return `R$ ${price} / ano`
+        return `${formatPrice(price)} / ${t("perYear")}`;
       }
-      return `R$ ${price} / mês`
+      return `${formatPrice(price)} / ${t("perMonth")}`;
     },
-    [billingCycle],
-  )
+    [billingCycle, formatPrice, t]
+  );
 
   const handleStartTrial = useCallback(() => {
     try {
@@ -293,13 +336,13 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
         additionalPens,
         additionalUsers,
         additionalClientUsers,
-      }
+      };
 
-      localStorage.setItem("paymentData", JSON.stringify(paymentData))
-      localStorage.removeItem(`checkoutData_${selectedPlan.id}`)
-      router.push("/pricing/payment")
+      localStorage.setItem("paymentData", JSON.stringify(paymentData));
+      localStorage.removeItem(`checkoutData_${selectedPlan.id}`);
+      router.push("/pricing/payment");
     } catch (error) {
-      console.error("Error saving payment data:", error)
+      console.error("Error saving payment data:", error);
     }
   }, [
     selectedPlan,
@@ -311,11 +354,30 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
     additionalClientUsers,
     billingCycle,
     router,
-  ])
+  ]);
+
+  if (!isHydrated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cattler-green mx-auto mb-4"></div>
+          <p className="text-cattler-navy font-lato">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20">
       <div className="container mx-auto px-4 py-8">
+        {/* Country Selector */}
+        <div className="flex justify-end mb-4">
+          <CountrySelector
+            selectedCountry={selectedCountry}
+            onCountryChange={setSelectedCountry}
+          />
+        </div>
+
         {/* Header */}
         <div className="mb-8">
           <Button
@@ -326,38 +388,62 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Voltar para Planos
           </Button>
-          <h1 className="text-3xl md:text-4xl font-bold font-barlow text-cattler-navy">Complete Seu Pedido</h1>
+          <h1 className="text-3xl md:text-4xl font-bold font-barlow text-cattler-navy">
+            {t("checkoutTitle")}
+          </h1>
           <p className="text-lg font-lato text-cattler-navy/80 mt-2">
-            Personalize seu plano {selectedPlan.name} com recursos adicionais
+            {t("checkoutSubtitle")} {selectedPlan.name}
           </p>
           <div className="mt-2 flex items-center">
-            <Badge className="bg-cattler-teal text-white">{planType === "owner" ? "Proprietário" : "Boitel"}</Badge>
-            <Badge className="ml-2 bg-cattler-navy text-white">Etapa 1 de 3</Badge>
+            <Badge className="bg-cattler-teal text-white">
+              {planType === "owner" ? "Proprietário" : "Boitel"}
+            </Badge>
+            <Badge className="ml-2 bg-cattler-navy text-white">
+              Etapa 1 de 3
+            </Badge>
           </div>
           <div className="mt-4 flex items-center justify-center">
             <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full border-2 border-cattler-teal/30">
               <div className="flex items-center gap-2">
                 <Calendar
-                  className={`h-5 w-5 ${billingCycle === "monthly" ? "text-cattler-green" : "text-gray-400"}`}
+                  className={`h-5 w-5 ${
+                    billingCycle === "monthly"
+                      ? "text-cattler-green"
+                      : "text-gray-400"
+                  }`}
                 />
                 <span
-                  className={`font-lato ${billingCycle === "monthly" ? "font-bold text-cattler-navy" : "text-gray-500"}`}
+                  className={`font-lato ${
+                    billingCycle === "monthly"
+                      ? "font-bold text-cattler-navy"
+                      : "text-gray-500"
+                  }`}
                 >
-                  Mensal
+                  {t("monthlyBilling")}
                 </span>
               </div>
               <Switch
                 checked={billingCycle === "annual"}
-                onCheckedChange={(checked) => setBillingCycleState(checked ? "annual" : "monthly")}
+                onCheckedChange={(checked) =>
+                  setBillingCycleState(checked ? "annual" : "monthly")
+                }
               />
               <div className="flex items-center gap-2">
                 <CalendarDays
-                  className={`h-5 w-5 ${billingCycle === "annual" ? "text-cattler-green" : "text-gray-400"}`}
+                  className={`h-5 w-5 ${
+                    billingCycle === "annual"
+                      ? "text-cattler-green"
+                      : "text-gray-400"
+                  }`}
                 />
                 <span
-                  className={`font-lato ${billingCycle === "annual" ? "font-bold text-cattler-navy" : "text-gray-500"}`}
+                  className={`font-lato ${
+                    billingCycle === "annual"
+                      ? "font-bold text-cattler-navy"
+                      : "text-gray-500"
+                  }`}
                 >
-                  Anual (10% de desconto)
+                  {t("annualBilling")}
                 </span>
               </div>
             </div>
@@ -372,7 +458,9 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-xl font-barlow text-cattler-navy">{selectedPlan.name}</CardTitle>
+                    <CardTitle className="text-xl font-barlow text-cattler-navy">
+                      {selectedPlan.name}
+                    </CardTitle>
                     <CardDescription className="font-roboto text-cattler-navy/70">
                       {selectedPlan.description}
                     </CardDescription>
@@ -380,15 +468,18 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                   <div className="text-right">
                     <div className="text-2xl font-bold font-barlow text-cattler-green">
                       {billingCycle === "monthly"
-                        ? `R$ ${selectedPlan.price}`
-                        : `R$ ${Math.round(selectedPlan.price * 0.9)}`}
+                        ? formatPrice(selectedPlan.price)
+                        : formatPrice(Math.round(selectedPlan.price * 0.9))}
                     </div>
                     <div className="text-sm font-roboto text-cattler-navy/60">
-                      por mês{billingCycle === "annual" && ", cobrado anualmente"}
+                      {t("perMonth")}
+                      {billingCycle === "annual" &&
+                        `, cobrado ${t("annually")}`}
                     </div>
                     {billingCycle === "annual" && (
                       <div className="text-xs font-roboto text-cattler-orange">
-                        R$ {Math.round(selectedPlan.price * 12 * 0.9)} total por ano
+                        {formatPrice(Math.round(selectedPlan.price * 12 * 0.9))}{" "}
+                        total {t("perYear")}
                       </div>
                     )}
                   </div>
@@ -397,17 +488,28 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
               <CardContent>
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
-                    <span className="text-sm font-lato font-medium text-cattler-navy">Currais:</span>
-                    <span className="text-sm font-roboto text-cattler-navy/80 ml-2">{selectedPlan.pens}</span>
+                    <span className="text-sm font-lato font-medium text-cattler-navy">
+                      {t("pens")}:
+                    </span>
+                    <span className="text-sm font-roboto text-cattler-navy/80 ml-2">
+                      {selectedPlan.pens}
+                    </span>
                   </div>
                   <div>
-                    <span className="text-sm font-lato font-medium text-cattler-navy">Usuários:</span>
-                    <span className="text-sm font-roboto text-cattler-navy/80 ml-2">{selectedPlan.users}</span>
+                    <span className="text-sm font-lato font-medium text-cattler-navy">
+                      {t("users")}:
+                    </span>
+                    <span className="text-sm font-roboto text-cattler-navy/80 ml-2">
+                      {selectedPlan.users}
+                    </span>
                   </div>
                 </div>
                 <div className="space-y-1">
                   {selectedPlan.keyFeatures.slice(0, 3).map((feature, idx) => (
-                    <div key={idx} className="flex items-center text-sm font-roboto text-cattler-navy/70">
+                    <div
+                      key={idx}
+                      className="flex items-center text-sm font-roboto text-cattler-navy/70"
+                    >
                       <Check className="h-4 w-4 text-cattler-green mr-2 flex-shrink-0" />
                       {feature}
                     </div>
@@ -425,7 +527,9 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
             {includedAddOns.length > 0 && (
               <Card className="bg-white border border-cattler-green/30">
                 <CardHeader>
-                  <CardTitle className="text-xl font-barlow text-cattler-navy">Complementos Incluídos</CardTitle>
+                  <CardTitle className="text-xl font-barlow text-cattler-navy">
+                    Complementos Incluídos
+                  </CardTitle>
                   <CardDescription className="font-roboto text-cattler-navy/70">
                     Recursos já incluídos no seu plano {selectedPlan.name}
                   </CardDescription>
@@ -440,13 +544,19 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                         <div className="flex items-center justify-between">
                           <div className="font-lato font-medium text-cattler-navy">
                             {addOn.name}
-                            <Badge className="ml-2 bg-cattler-green text-white text-xs">Incluído</Badge>
+                            <Badge className="ml-2 bg-cattler-green text-white text-xs">
+                              Incluído
+                            </Badge>
                           </div>
                           <div className="text-right">
-                            <span className="text-sm font-roboto text-cattler-green font-medium">Incluído</span>
+                            <span className="text-sm font-roboto text-cattler-green font-medium">
+                              Incluído
+                            </span>
                           </div>
                         </div>
-                        <p className="text-sm font-roboto text-cattler-navy/70 mt-1">{addOn.description}</p>
+                        <p className="text-sm font-roboto text-cattler-navy/70 mt-1">
+                          {addOn.description}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -457,32 +567,41 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
             {/* Additional Pens & Users */}
             <Card className="bg-white border border-cattler-teal/30">
               <CardHeader>
-                <CardTitle className="text-xl font-barlow text-cattler-navy">Capacidade Adicional</CardTitle>
+                <CardTitle className="text-xl font-barlow text-cattler-navy">
+                  Capacidade Adicional
+                </CardTitle>
                 <CardDescription className="font-roboto text-cattler-navy/70">
-                  Adicione mais currais e usuários ao seu plano
+                  {t("additionalPens")} e {t("additionalUsers")} ao seu plano
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Additional Pens */}
                 <div className="flex items-center justify-between p-4 rounded-lg border border-cattler-teal/20">
                   <div className="flex-1">
-                    <h4 className="font-lato font-medium text-cattler-navy">Currais Adicionais</h4>
+                    <h4 className="font-lato font-medium text-cattler-navy">
+                      {t("additionalPens")}
+                    </h4>
                     <p className="text-sm font-roboto text-cattler-navy/70">
-                      R$ {PEN_PRICE}/mês por curral
-                      {billingCycle === "annual" && " (10% de desconto anualmente)"}
+                      {formatPrice(PEN_PRICE)}/{t("perMonth")} por curral
+                      {billingCycle === "annual" &&
+                        " (10% de desconto anualmente)"}
                     </p>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setAdditionalPens(Math.max(0, additionalPens - 1))}
+                      onClick={() =>
+                        setAdditionalPens(Math.max(0, additionalPens - 1))
+                      }
                       disabled={additionalPens === 0}
                       className="h-8 w-8 p-0"
                     >
                       -
                     </Button>
-                    <span className="font-roboto font-medium text-cattler-navy w-8 text-center">{additionalPens}</span>
+                    <span className="font-roboto font-medium text-cattler-navy w-8 text-center">
+                      {additionalPens}
+                    </span>
                     <Button
                       variant="outline"
                       size="sm"
@@ -497,23 +616,30 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                 {/* Additional Users */}
                 <div className="flex items-center justify-between p-4 rounded-lg border border-cattler-teal/20">
                   <div className="flex-1">
-                    <h4 className="font-lato font-medium text-cattler-navy">Usuários Adicionais</h4>
+                    <h4 className="font-lato font-medium text-cattler-navy">
+                      {t("additionalUsers")}
+                    </h4>
                     <p className="text-sm font-roboto text-cattler-navy/70">
-                      R$ {USER_PRICE}/mês por usuário
-                      {billingCycle === "annual" && " (10% de desconto anualmente)"}
+                      {formatPrice(USER_PRICE)}/{t("perMonth")} por usuário
+                      {billingCycle === "annual" &&
+                        " (10% de desconto anualmente)"}
                     </p>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setAdditionalUsers(Math.max(0, additionalUsers - 1))}
+                      onClick={() =>
+                        setAdditionalUsers(Math.max(0, additionalUsers - 1))
+                      }
                       disabled={additionalUsers === 0}
                       className="h-8 w-8 p-0"
                     >
                       -
                     </Button>
-                    <span className="font-roboto font-medium text-cattler-navy w-8 text-center">{additionalUsers}</span>
+                    <span className="font-roboto font-medium text-cattler-navy w-8 text-center">
+                      {additionalUsers}
+                    </span>
                     <Button
                       variant="outline"
                       size="sm"
@@ -531,17 +657,24 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
             {availableAddOns.length > 0 && (
               <Card className="bg-white border border-cattler-teal/30">
                 <CardHeader>
-                  <CardTitle className="text-xl font-barlow text-cattler-navy">Complementos Disponíveis</CardTitle>
+                  <CardTitle className="text-xl font-barlow text-cattler-navy">
+                    Complementos Disponíveis
+                  </CardTitle>
                   <CardDescription className="font-roboto text-cattler-navy/70">
                     Aprimore seu plano com recursos adicionais
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {availableAddOns.map((addOn) => {
-                    const isSelected = selectedAddOns.includes(addOn.id)
+                    const isSelected = selectedAddOns.includes(addOn.id);
                     const originalAddonPrice =
-                      billingCycle === "annual" ? Math.round(addOn.price * 12 * 0.9) : addOn.price
-                    const priceLabel = billingCycle === "monthly" ? "/mês" : "/ano"
+                      billingCycle === "annual"
+                        ? Math.round(addOn.price * 12 * 0.9)
+                        : addOn.price;
+                    const priceLabel =
+                      billingCycle === "monthly"
+                        ? `/${t("perMonth")}`
+                        : `/${t("perYear")}`;
 
                     return (
                       <div
@@ -565,7 +698,9 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                             <Label
                               htmlFor={addOn.id}
                               className={`font-lato font-medium cursor-pointer ${
-                                addOn.isBoitel ? "text-cattler-amber" : "text-cattler-navy"
+                                addOn.isBoitel
+                                  ? "text-cattler-amber"
+                                  : "text-cattler-navy"
                               }`}
                             >
                               {addOn.name}
@@ -573,15 +708,19 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                             <div className="text-right">
                               <span
                                 className={`font-barlow font-bold ${
-                                  addOn.isBoitel ? "text-cattler-amber" : "text-cattler-navy"
+                                  addOn.isBoitel
+                                    ? "text-cattler-amber"
+                                    : "text-cattler-navy"
                                 }`}
                               >
-                                +R$ {originalAddonPrice}
+                                +{formatPrice(originalAddonPrice)}
                                 {priceLabel}
                               </span>
                             </div>
                           </div>
-                          <p className="text-sm font-roboto text-cattler-navy/70 mt-1">{addOn.description}</p>
+                          <p className="text-sm font-roboto text-cattler-navy/70 mt-1">
+                            {addOn.description}
+                          </p>
 
                           {/* Client Users Counter for usuarios-clientes */}
                           {addOn.id === "usuarios-clientes" && isSelected && (
@@ -589,8 +728,10 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                               <div className="flex items-center justify-between">
                                 <div className="flex-1">
                                   <span className="text-xs font-roboto text-cattler-navy/80">
-                                    R$ 120/mês por usuário de cliente
-                                    {billingCycle === "annual" && " (10% de desconto anualmente)"}
+                                    {formatPrice(120)}/{t("perMonth")} por
+                                    usuário de cliente
+                                    {billingCycle === "annual" &&
+                                      " (10% de desconto anualmente)"}
                                   </span>
                                 </div>
                                 <div className="flex items-center space-x-2">
@@ -598,9 +739,16 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                                     variant="outline"
                                     size="sm"
                                     onClick={() =>
-                                      setAdditionalClientUsers(Math.max(0, (additionalClientUsers || 0) - 1))
+                                      setAdditionalClientUsers(
+                                        Math.max(
+                                          0,
+                                          (additionalClientUsers || 0) - 1
+                                        )
+                                      )
                                     }
-                                    disabled={(additionalClientUsers || 0) === 0}
+                                    disabled={
+                                      (additionalClientUsers || 0) === 0
+                                    }
                                     className="h-6 w-6 p-0 text-xs"
                                   >
                                     -
@@ -611,7 +759,11 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                                   <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => setAdditionalClientUsers((additionalClientUsers || 0) + 1)}
+                                    onClick={() =>
+                                      setAdditionalClientUsers(
+                                        (additionalClientUsers || 0) + 1
+                                      )
+                                    }
                                     className="h-6 w-6 p-0 text-xs"
                                   >
                                     +
@@ -622,7 +774,7 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                           )}
                         </div>
                       </div>
-                    )
+                    );
                   })}
                 </CardContent>
               </Card>
@@ -634,51 +786,71 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
             {/* Customer Information */}
             <Card className="bg-white border border-cattler-teal/30">
               <CardHeader>
-                <CardTitle className="text-xl font-barlow text-cattler-navy">Informações de Contato</CardTitle>
+                <CardTitle className="text-xl font-barlow text-cattler-navy">
+                  {t("contactInfo")}
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="name" className="font-lato text-cattler-navy">
-                      Nome Completo *
+                    <Label
+                      htmlFor="name"
+                      className="font-lato text-cattler-navy"
+                    >
+                      {t("fullName")} *
                     </Label>
                     <Input
                       id="name"
                       value={customerInfo.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("name", e.target.value)
+                      }
                       className="mt-1"
                       placeholder="João Silva"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="email" className="font-lato text-cattler-navy">
-                      Endereço de Email *
+                    <Label
+                      htmlFor="email"
+                      className="font-lato text-cattler-navy"
+                    >
+                      {t("emailAddress")} *
                     </Label>
                     <Input
                       id="email"
                       type="email"
                       value={customerInfo.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
                       className="mt-1"
                       placeholder="joao@exemplo.com"
                     />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="company" className="font-lato text-cattler-navy">
-                    Nome da Empresa *
+                  <Label
+                    htmlFor="company"
+                    className="font-lato text-cattler-navy"
+                  >
+                    {t("companyName")} *
                   </Label>
                   <Input
                     id="company"
                     value={customerInfo.company}
-                    onChange={(e) => handleInputChange("company", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("company", e.target.value)
+                    }
                     className="mt-1"
                     placeholder="Fazenda São João"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="phone" className="font-lato text-cattler-navy">
-                    Número de Telefone
+                  <Label
+                    htmlFor="phone"
+                    className="font-lato text-cattler-navy"
+                  >
+                    {t("phoneNumber")}
                   </Label>
                   <Input
                     id="phone"
@@ -695,64 +867,97 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
             {/* Order Summary */}
             <Card className="bg-white border border-cattler-teal/30">
               <CardHeader>
-                <CardTitle className="text-xl font-barlow text-cattler-navy">Resumo do Pedido</CardTitle>
+                <CardTitle className="text-xl font-barlow text-cattler-navy">
+                  {t("orderSummary")}
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                  <span className="font-lato text-cattler-navy">{selectedPlan.name}</span>
+                  <span className="font-lato text-cattler-navy">
+                    {selectedPlan.name}
+                  </span>
                   <span className="font-roboto text-cattler-navy">
                     {billingCycle === "annual"
-                      ? `R$ ${Math.round(selectedPlan.price * 12 * 0.9)} / ano`
-                      : `R$ ${selectedPlan.price} / mês`}
+                      ? `${formatPrice(
+                          Math.round(selectedPlan.price * 12 * 0.9)
+                        )} / ${t("perYear")}`
+                      : `${formatPrice(selectedPlan.price)} / ${t("perMonth")}`}
                   </span>
                 </div>
 
                 {selectedAddOns.map((addOnId) => {
-                  const addOn = ADD_ONS.find((a) => a.id === addOnId)
-                  if (!addOn) return null
+                  const addOn = ADD_ONS.find((a) => a.id === addOnId);
+                  if (!addOn) return null;
 
-                  const addonPrice = billingCycle === "annual" ? Math.round(addOn.price * 12 * 0.9) : addOn.price
-                  let displayPrice = addonPrice
+                  const addonPrice =
+                    billingCycle === "annual"
+                      ? Math.round(addOn.price * 12 * 0.9)
+                      : addOn.price;
+                  let displayPrice = addonPrice;
 
-                  if (addOn.id === "usuarios-clientes" && additionalClientUsers > 0) {
-                    displayPrice = displayPrice * additionalClientUsers
+                  if (
+                    addOn.id === "usuarios-clientes" &&
+                    additionalClientUsers > 0
+                  ) {
+                    displayPrice = displayPrice * additionalClientUsers;
                   }
 
-                  const priceLabel = billingCycle === "monthly" ? "/mês" : "/ano"
+                  const priceLabel =
+                    billingCycle === "monthly"
+                      ? `/${t("perMonth")}`
+                      : `/${t("perYear")}`;
 
                   return (
                     <div key={addOnId} className="flex justify-between">
                       <span className="font-lato text-cattler-navy/80">
                         {addOn.name}
-                        {addOn.id === "usuarios-clientes" && additionalClientUsers > 0 && ` (${additionalClientUsers})`}
+                        {addOn.id === "usuarios-clientes" &&
+                          additionalClientUsers > 0 &&
+                          ` (${additionalClientUsers})`}
                       </span>
                       <span className="font-roboto text-cattler-navy/80">
-                        +R$ {displayPrice}
+                        +{formatPrice(displayPrice)}
                         {priceLabel}
                       </span>
                     </div>
-                  )
+                  );
                 })}
 
                 {(additionalPens > 0 || additionalUsers > 0) && (
                   <>
                     {additionalPens > 0 && (
                       <div className="flex justify-between">
-                        <span className="font-lato text-cattler-navy/80">Currais Adicionais ({additionalPens})</span>
+                        <span className="font-lato text-cattler-navy/80">
+                          {t("additionalPens")} ({additionalPens})
+                        </span>
                         <span className="font-roboto text-cattler-navy/80">
                           {billingCycle === "annual"
-                            ? `R$ ${Math.round(additionalPens * PEN_PRICE * 12 * 0.9)} / ano`
-                            : `R$ ${additionalPens * PEN_PRICE} / mês`}
+                            ? `${formatPrice(
+                                Math.round(
+                                  additionalPens * PEN_PRICE * 12 * 0.9
+                                )
+                              )} / ${t("perYear")}`
+                            : `${formatPrice(additionalPens * PEN_PRICE)} / ${t(
+                                "perMonth"
+                              )}`}
                         </span>
                       </div>
                     )}
                     {additionalUsers > 0 && (
                       <div className="flex justify-between">
-                        <span className="font-lato text-cattler-navy/80">Usuários Adicionais ({additionalUsers})</span>
+                        <span className="font-lato text-cattler-navy/80">
+                          {t("additionalUsers")} ({additionalUsers})
+                        </span>
                         <span className="font-roboto text-cattler-navy/80">
                           {billingCycle === "annual"
-                            ? `R$ ${Math.round(additionalUsers * USER_PRICE * 12 * 0.9)} / ano`
-                            : `R$ ${additionalUsers * USER_PRICE} / mês`}
+                            ? `${formatPrice(
+                                Math.round(
+                                  additionalUsers * USER_PRICE * 12 * 0.9
+                                )
+                              )} / ${t("perYear")}`
+                            : `${formatPrice(
+                                additionalUsers * USER_PRICE
+                              )} / ${t("perMonth")}`}
                         </span>
                       </div>
                     )}
@@ -761,13 +966,21 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
 
                 <Separator />
                 <div className="flex justify-between text-lg font-bold">
-                  <span className="font-lato text-cattler-navy">Total</span>
-                  <span className="font-barlow text-cattler-green">{formatPrice(calculateTotal)}</span>
+                  <span className="font-lato text-cattler-navy">
+                    {t("total")}
+                  </span>
+                  <span className="font-barlow text-cattler-green">
+                    {formatPriceWithCycle(calculateTotal)}
+                  </span>
                 </div>
 
                 {billingCycle === "annual" && (
                   <div className="text-center text-sm font-roboto text-cattler-orange">
-                    Você economiza R$ {Math.round(calculateTotal / 0.9 - calculateTotal)} com cobrança anual
+                    Você economiza{" "}
+                    {formatPrice(
+                      Math.round(calculateTotal / 0.9 - calculateTotal)
+                    )}{" "}
+                    com cobrança anual
                   </div>
                 )}
               </CardContent>
@@ -777,19 +990,23 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                   onClick={handleStartTrial}
                   disabled={!isFormValid}
                 >
-                  Continuar para Pagamento
+                  {t("continueToPayment")}
                 </Button>
               </CardFooter>
             </Card>
 
             {/* Additional Info */}
             <div className="text-center text-sm font-roboto text-cattler-navy/70">
-              <p>30 dias de teste gratuito • Não é necessário cartão de crédito</p>
-              <p className="mt-1">Cancele a qualquer momento durante o período de teste</p>
+              <p>
+                30 dias de teste gratuito • Não é necessário cartão de crédito
+              </p>
+              <p className="mt-1">
+                Cancele a qualquer momento durante o período de teste
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useState, useMemo } from "react"
-import PaymentPage from "../../../payment-page"
+import PaymentPage from "@/components/pricing/payment-page"
 
 export default function PaymentPageRoute() {
   const searchParams = useSearchParams()

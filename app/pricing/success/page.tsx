@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import PaymentSuccess from "../../../payment-success"
+import PaymentSuccess from "@/components/pricing/payment-success"
 
 export default function SuccessPage() {
   const router = useRouter()

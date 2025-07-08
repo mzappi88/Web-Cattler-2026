@@ -1,17 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { ChevronDown, Globe } from "lucide-react"
-import type { Country } from "@/hooks/use-translation"
+import { useState } from "react";
+import { ChevronDown, Globe } from "lucide-react";
+import { useTranslation } from "@/hooks/use-translation"; // 👈 asegurate de que esta ruta sea correcta
+import type { Country } from "@/hooks/use-translation";
 
 interface CountrySelectorProps {
-  selectedCountry: Country
-  onCountryChange: (country: Country) => void
-  t: (key: string) => string
+  selectedCountry: Country;
+  onCountryChange: (country: Country) => void;
 }
 
-export function CountrySelector({ selectedCountry, onCountryChange, t }: CountrySelectorProps) {
-  const [isOpen, setIsOpen] = useState(false)
+export function CountrySelector({
+  selectedCountry,
+  onCountryChange,
+}: CountrySelectorProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   const countries: { code: Country; flag: string }[] = [
     { code: "US", flag: "🇺🇸" },
@@ -23,9 +27,9 @@ export function CountrySelector({ selectedCountry, onCountryChange, t }: Country
     { code: "BR", flag: "🇧🇷" },
     { code: "MX", flag: "🇲🇽" },
     { code: "OT", flag: "🌍" },
-  ]
+  ];
 
-  const selectedCountryData = countries.find((c) => c.code === selectedCountry)
+  const selectedCountryData = countries.find((c) => c.code === selectedCountry);
 
   return (
     <div className="relative">
@@ -35,8 +39,14 @@ export function CountrySelector({ selectedCountry, onCountryChange, t }: Country
       >
         <Globe className="w-4 h-4 text-gray-500" />
         <span className="text-lg">{selectedCountryData?.flag}</span>
-        <span className="text-sm font-medium text-gray-700 flex-1 text-left">{t(`countries.${selectedCountry}`)}</span>
-        <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <span className="text-sm font-medium text-gray-700 flex-1 text-left">
+          {t(`countries.${selectedCountry}`)}
+        </span>
+        <ChevronDown
+          className={`w-4 h-4 text-gray-500 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
       </button>
 
       {isOpen && (
@@ -45,19 +55,23 @@ export function CountrySelector({ selectedCountry, onCountryChange, t }: Country
             <button
               key={country.code}
               onClick={() => {
-                onCountryChange(country.code)
-                setIsOpen(false)
+                onCountryChange(country.code);
+                setIsOpen(false);
               }}
               className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors ${
-                selectedCountry === country.code ? "bg-blue-50 text-blue-700" : "text-gray-700"
+                selectedCountry === country.code
+                  ? "bg-blue-50 text-blue-700"
+                  : "text-gray-700"
               }`}
             >
               <span className="text-lg">{country.flag}</span>
-              <span className="text-sm font-medium">{t(`countries.${country.code}`)}</span>
+              <span className="text-sm font-medium">
+                {t(`countries.${country.code}`)}
+              </span>
             </button>
           ))}
         </div>
       )}
     </div>
-  )
+  );
 }

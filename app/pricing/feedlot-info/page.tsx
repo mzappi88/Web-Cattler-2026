@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useState, useMemo } from "react"
-import FeedlotInfo from "../../../feedlot-info"
+import FeedlotInfo from "@/components/pricing/feedlot-info"
 
 export default function FeedlotInfoPage() {
   const searchParams = useSearchParams()

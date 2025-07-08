@@ -1,503 +1,473 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { ArrowLeft, MapPin, Building, Users, Loader2 } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ArrowLeft, Building2, MapPin, Users } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { usePricingTranslation } from "@/hooks/use-pricing-translation";
+import { CountrySelector } from "@/components/country-selector";
+import { Textarea } from "@/components/ui/textarea";
 
 interface FeedlotInfoProps {
-  paymentData: any
-  onBack: () => void
-  onComplete: (feedlotData: any) => void
+  paymentData: any;
+  onBack: () => void;
+  onComplete: (feedlotData: any) => void;
 }
 
-export default function FeedlotInfo({ paymentData, onBack, onComplete }: FeedlotInfoProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+export default function FeedlotInfo({
+  paymentData,
+  onBack,
+  onComplete,
+}: FeedlotInfoProps) {
+  const { t, formatPrice, selectedCountry, setSelectedCountry, isHydrated } =
+    usePricingTranslation();
   const [feedlotData, setFeedlotData] = useState({
-    // Location Information
-    feedyardName: "",
+    companyName: paymentData?.customerInfo?.company || "",
     address: "",
     city: "",
     state: "",
     zipCode: "",
-    country: "BR",
-
-    // Feedlot Information
+    country: "Brasil",
+    totalCapacity: "",
+    currentHeadCount: "",
+    operationType: "confinamento",
+    startDate: "",
+    previousFeedingSoftware: "",
     howDidYouHear: "",
-    previousSoftware: "",
-    feedlotCapacity: "",
     additionalNotes: "",
-  })
-
-  const howDidYouHearOptions = [
-    "Pesquisa Google",
-    "Redes Sociais",
-    "Conferência do Setor",
-    "Indicação de colega",
-    "Publicação especializada",
-    "Representante de vendas",
-    "Cliente existente",
-    "Outro",
-  ]
-
-  const previousSoftwareOptions = ["Performance Beef", "Nenhum software de alimentação", "Microtechnologies", "Outro"]
+  });
 
   const handleInputChange = (field: string, value: string) => {
-    setFeedlotData((prev) => ({ ...prev, [field]: value }))
-  }
+    setFeedlotData((prev) => ({ ...prev, [field]: value }));
+  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onComplete(feedlotData);
+  };
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+  const isFormValid =
+    feedlotData.companyName &&
+    feedlotData.address &&
+    feedlotData.city &&
+    feedlotData.state &&
+    feedlotData.totalCapacity &&
+    feedlotData.currentHeadCount &&
+    feedlotData.previousFeedingSoftware &&
+    feedlotData.howDidYouHear;
 
-    onComplete(feedlotData)
-    setIsSubmitting(false)
-  }
-
-  const isFormValid = () => {
+  if (!isHydrated) {
     return (
-      feedlotData.feedyardName &&
-      feedlotData.address &&
-      feedlotData.city &&
-      feedlotData.state &&
-      feedlotData.zipCode &&
-      feedlotData.howDidYouHear &&
-      feedlotData.previousSoftware &&
-      feedlotData.feedlotCapacity
-    )
+      <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cattler-green mx-auto mb-4"></div>
+          <p className="text-cattler-navy font-lato">Carregando...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20">
       <div className="container mx-auto px-4 py-8">
+        {/* Country Selector */}
+        <div className="flex justify-end mb-4">
+          <CountrySelector
+            selectedCountry={selectedCountry}
+            onCountryChange={setSelectedCountry}
+          />
+        </div>
+
         {/* Header */}
         <div className="mb-8">
           <Button
             variant="ghost"
             onClick={onBack}
             className="mb-4 text-cattler-navy hover:text-cattler-green font-lato"
-            disabled={isSubmitting}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Voltar para Pagamento
+            Voltar
           </Button>
           <h1 className="text-3xl md:text-4xl font-bold font-barlow text-cattler-navy">
-            Conte-nos Sobre Seu Confinamento
+            {t("feedlotInfoTitle")}
           </h1>
           <p className="text-lg font-lato text-cattler-navy/80 mt-2">
-            Ajude-nos a personalizar o FEEDER para sua operação específica
+            {t("feedlotInfoSubtitle")}
           </p>
-          <div className="mt-2 flex items-center">
-            <Badge className="bg-cattler-teal text-white">
-              {paymentData.planType === "owner" ? "Owner" : "Custom Feeder"}
-            </Badge>
-            <Badge className="ml-2 bg-cattler-green text-white">Etapa 3 de 3</Badge>
-          </div>
+          <Badge className="mt-2 bg-cattler-navy text-white">
+            Etapa 3 de 3
+          </Badge>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column - Form */}
-          <div className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Feedyard Location */}
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Form */}
+            <div className="lg:col-span-2">
               <Card className="bg-white border border-cattler-teal/30">
                 <CardHeader>
                   <CardTitle className="text-xl font-barlow text-cattler-navy flex items-center">
-                    <MapPin className="h-5 w-5 mr-2" />
-                    Localização do Confinamento
+                    <Building2 className="h-5 w-5 mr-2 text-cattler-teal" />
+                    Dados da Propriedade
                   </CardTitle>
                   <CardDescription className="font-roboto text-cattler-navy/70">
-                    Onde está localizado seu confinamento?
+                    Informações básicas sobre sua operação de confinamento
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="feedyardName" className="font-lato text-cattler-navy">
-                      Nome do Confinamento *
-                    </Label>
-                    <Input
-                      id="feedyardName"
-                      value={feedlotData.feedyardName}
-                      onChange={(e) => handleInputChange("feedyardName", e.target.value)}
-                      className="mt-1"
-                      placeholder="Fazenda São João"
-                      required
-                    />
-                  </div>
+                <CardContent>
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Company Information */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-lato font-medium text-cattler-navy flex items-center">
+                        <Building2 className="h-4 w-4 mr-2" />
+                        {t("companyInfo")}
+                      </h3>
 
-                  <div>
-                    <Label htmlFor="address" className="font-lato text-cattler-navy">
-                      Endereço *
-                    </Label>
-                    <Input
-                      id="address"
-                      value={feedlotData.address}
-                      onChange={(e) => handleInputChange("address", e.target.value)}
-                      className="mt-1"
-                      placeholder="Rua das Fazendas, 123"
-                      required
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="city" className="font-lato text-cattler-navy">
-                        Cidade *
-                      </Label>
-                      <Input
-                        id="city"
-                        value={feedlotData.city}
-                        onChange={(e) => handleInputChange("city", e.target.value)}
-                        className="mt-1"
-                        placeholder="Campo Grande"
-                        required
-                      />
+                      <div>
+                        <Label
+                          htmlFor="companyName"
+                          className="font-lato text-cattler-navy"
+                        >
+                          {t("companyName")} *
+                        </Label>
+                        <Input
+                          id="companyName"
+                          value={feedlotData.companyName}
+                          onChange={(e) =>
+                            handleInputChange("companyName", e.target.value)
+                          }
+                          className="mt-1"
+                          placeholder="Fazenda São João"
+                          required
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <Label htmlFor="state" className="font-lato text-cattler-navy">
-                        Estado *
-                      </Label>
-                      <select
-                        id="state"
-                        value={feedlotData.state}
-                        onChange={(e) => handleInputChange("state", e.target.value)}
-                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cattler-green"
-                        required
-                      >
-                        <option value="">Selecione o Estado</option>
-                        <option value="AC">Acre</option>
-                        <option value="AL">Alagoas</option>
-                        <option value="AP">Amapá</option>
-                        <option value="AM">Amazonas</option>
-                        <option value="BA">Bahia</option>
-                        <option value="CE">Ceará</option>
-                        <option value="DF">Distrito Federal</option>
-                        <option value="ES">Espírito Santo</option>
-                        <option value="GO">Goiás</option>
-                        <option value="MA">Maranhão</option>
-                        <option value="MT">Mato Grosso</option>
-                        <option value="MS">Mato Grosso do Sul</option>
-                        <option value="MG">Minas Gerais</option>
-                        <option value="PA">Pará</option>
-                        <option value="PB">Paraíba</option>
-                        <option value="PR">Paraná</option>
-                        <option value="PE">Pernambuco</option>
-                        <option value="PI">Piauí</option>
-                        <option value="RJ">Rio de Janeiro</option>
-                        <option value="RN">Rio Grande do Norte</option>
-                        <option value="RS">Rio Grande do Sul</option>
-                        <option value="RO">Rondônia</option>
-                        <option value="RR">Roraima</option>
-                        <option value="SC">Santa Catarina</option>
-                        <option value="SP">São Paulo</option>
-                        <option value="SE">Sergipe</option>
-                        <option value="TO">Tocantins</option>
-                      </select>
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="zipCode" className="font-lato text-cattler-navy">
-                        CEP *
-                      </Label>
-                      <Input
-                        id="zipCode"
-                        value={feedlotData.zipCode}
-                        onChange={(e) => handleInputChange("zipCode", e.target.value)}
-                        className="mt-1"
-                        placeholder="79000-000"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="country" className="font-lato text-cattler-navy">
-                        País *
-                      </Label>
-                      <select
-                        id="country"
-                        value={feedlotData.country}
-                        onChange={(e) => handleInputChange("country", e.target.value)}
-                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cattler-green"
-                        required
-                      >
-                        <option value="BR">Brasil</option>
-                        <option value="AR">Argentina</option>
-                        <option value="UY">Uruguai</option>
-                        <option value="PY">Paraguai</option>
-                        <option value="BO">Bolívia</option>
-                      </select>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                    {/* Location Information */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-lato font-medium text-cattler-navy flex items-center">
+                        <MapPin className="h-4 w-4 mr-2" />
+                        {t("location")}
+                      </h3>
 
-              {/* Feedlot Information */}
-              <Card className="bg-white border border-cattler-teal/30">
-                <CardHeader>
-                  <CardTitle className="text-xl font-barlow text-cattler-navy flex items-center">
-                    <Building className="h-5 w-5 mr-2" />
-                    Informações do Confinamento
-                  </CardTitle>
-                  <CardDescription className="font-roboto text-cattler-navy/70">
-                    Conte-nos mais sobre sua operação
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="howDidYouHear" className="font-lato text-cattler-navy">
-                      Como você ficou sabendo sobre nós? *
-                    </Label>
-                    <select
-                      id="howDidYouHear"
-                      value={feedlotData.howDidYouHear}
-                      onChange={(e) => handleInputChange("howDidYouHear", e.target.value)}
-                      className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cattler-green"
-                      required
-                    >
-                      <option value="">Selecione uma opção</option>
-                      {howDidYouHearOptions.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                      <div>
+                        <Label
+                          htmlFor="address"
+                          className="font-lato text-cattler-navy"
+                        >
+                          {t("address")} *
+                        </Label>
+                        <Input
+                          id="address"
+                          value={feedlotData.address}
+                          onChange={(e) =>
+                            handleInputChange("address", e.target.value)
+                          }
+                          className="mt-1"
+                          placeholder="Rua das Fazendas, 123"
+                          required
+                        />
+                      </div>
 
-                  <div>
-                    <Label htmlFor="previousSoftware" className="font-lato text-cattler-navy">
-                      Software de alimentação anterior? *
-                    </Label>
-                    <select
-                      id="previousSoftware"
-                      value={feedlotData.previousSoftware}
-                      onChange={(e) => handleInputChange("previousSoftware", e.target.value)}
-                      className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cattler-green"
-                      required
-                    >
-                      <option value="">Selecione uma opção</option>
-                      {previousSoftwareOptions.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="feedlotCapacity" className="font-lato text-cattler-navy">
-                      Capacidade do confinamento (número de cabeças) *
-                    </Label>
-                    <select
-                      id="feedlotCapacity"
-                      value={feedlotData.feedlotCapacity}
-                      onChange={(e) => handleInputChange("feedlotCapacity", e.target.value)}
-                      className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cattler-green"
-                      required
-                    >
-                      <option value="">Selecione a faixa de capacidade</option>
-                      <option value="1-500">1 - 500 cabeças</option>
-                      <option value="501-1000">501 - 1,000 cabeças</option>
-                      <option value="1001-2500">1,001 - 2,500 cabeças</option>
-                      <option value="2501-5000">2,501 - 5,000 cabeças</option>
-                      <option value="5001-10000">5,001 - 10,000 cabeças</option>
-                      <option value="10001-25000">10,001 - 25,000 cabeças</option>
-                      <option value="25001-50000">25,001 - 50,000 cabeças</option>
-                      <option value="50000+">50,000+ cabeças</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="additionalNotes" className="font-lato text-cattler-navy">
-                      Observações Adicionais (Opcional)
-                    </Label>
-                    <Textarea
-                      id="additionalNotes"
-                      value={feedlotData.additionalNotes}
-                      onChange={(e) => handleInputChange("additionalNotes", e.target.value)}
-                      className="mt-1"
-                      placeholder="Conte-nos qualquer outra coisa sobre sua operação que possa nos ajudar a atendê-lo melhor..."
-                      rows={3}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                className="w-full bg-cattler-orange hover:bg-cattler-orange/90 text-white font-lato font-bold py-3"
-                disabled={!isFormValid() || isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Configurando sua conta...
-                  </>
-                ) : (
-                  "Concluir Configuração"
-                )}
-              </Button>
-            </form>
-          </div>
-
-          {/* Right Column - Summary & Info */}
-          <div className="space-y-6">
-            {/* Account Summary */}
-            <Card className="bg-white border border-cattler-teal/30">
-              <CardHeader>
-                <CardTitle className="text-xl font-barlow text-cattler-navy">Resumo da Conta</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="bg-cattler-light-teal/10 p-4 rounded-lg">
-                  <h4 className="font-lato font-medium text-cattler-navy mb-2">Informações do Cliente</h4>
-                  <div className="space-y-1 text-sm font-roboto text-cattler-navy/80">
-                    <p>{paymentData.customerInfo.name}</p>
-                    <p>{paymentData.customerInfo.email}</p>
-                    <p>{paymentData.customerInfo.company}</p>
-                  </div>
-                </div>
-
-                <div className="bg-cattler-green/10 p-4 rounded-lg">
-                  <h4 className="font-lato font-medium text-cattler-navy mb-2">Plano Selecionado</h4>
-                  <div className="space-y-1 text-sm font-roboto text-cattler-navy/80">
-                    <p className="font-medium">{paymentData.plan.name}</p>
-                    <p>
-                      {paymentData.plan.pens} • {paymentData.plan.users}
-                    </p>
-
-                    {/* Show promotional info if applicable */}
-                    {paymentData.promotionalState?.saleActive && (
-                      <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded">
-                        <div className="flex items-center gap-1">
-                          <Badge className="bg-red-500 text-white text-xs animate-pulse">
-                            {paymentData.promotionalState.saleName}
-                          </Badge>
-                          <span className="text-xs text-red-700">Desconto aplicado!</span>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <Label
+                            htmlFor="city"
+                            className="font-lato text-cattler-navy"
+                          >
+                            {t("city")} *
+                          </Label>
+                          <Input
+                            id="city"
+                            value={feedlotData.city}
+                            onChange={(e) =>
+                              handleInputChange("city", e.target.value)
+                            }
+                            className="mt-1"
+                            placeholder="São Paulo"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label
+                            htmlFor="state"
+                            className="font-lato text-cattler-navy"
+                          >
+                            {t("state")} *
+                          </Label>
+                          <Input
+                            id="state"
+                            value={feedlotData.state}
+                            onChange={(e) =>
+                              handleInputChange("state", e.target.value)
+                            }
+                            className="mt-1"
+                            placeholder="SP"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label
+                            htmlFor="zipCode"
+                            className="font-lato text-cattler-navy"
+                          >
+                            {t("zipCode")}
+                          </Label>
+                          <Input
+                            id="zipCode"
+                            value={feedlotData.zipCode}
+                            onChange={(e) =>
+                              handleInputChange("zipCode", e.target.value)
+                            }
+                            className="mt-1"
+                            placeholder="01234-567"
+                          />
                         </div>
                       </div>
-                    )}
+                    </div>
 
-                    {/* Show selected add-ons */}
-                    {paymentData.addOns && paymentData.addOns.length > 0 && (
-                      <div className="mt-3 pt-2 border-t border-cattler-green/20">
-                        <p className="text-xs font-medium text-cattler-navy mb-1">Complementos:</p>
-                        {paymentData.addOns.map((addOnId, index) => {
-                          const addOns = [
-                            { id: "boitel-addon", name: "Módulo Boitel" },
-                            { id: "usuarios-clientes", name: "Usuários de Clientes" },
-                            { id: "sanidade-animal", name: "Sanidade Animal" },
-                            { id: "tronco", name: "Tronco" },
-                            { id: "leitor-brinco", name: "Integração com Leitor de Brinco" },
-                            { id: "alimentacao-avancada", name: "Alimentação Avançada" },
-                            { id: "pre-misturas", name: "Geração de Pré-misturas" },
-                            { id: "analytics", name: "Analytics" },
-                            { id: "relatorio-mercado", name: "Relatório de Valor de Mercado" },
-                          ]
-                          const addOn = addOns.find((a) => a.id === addOnId)
-                          if (!addOn) return null
+                    {/* Operation Information */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-lato font-medium text-cattler-navy flex items-center">
+                        <Users className="h-4 w-4 mr-2" />
+                        {t("operationInfo")}
+                      </h3>
 
-                          return (
-                            <p key={index} className="text-xs">
-                              • {addOn.name}
-                              {addOn.id === "usuarios-clientes" &&
-                                paymentData.additionalClientUsers > 0 &&
-                                ` (${paymentData.additionalClientUsers})`}
-                            </p>
-                          )
-                        })}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label
+                            htmlFor="totalCapacity"
+                            className="font-lato text-cattler-navy"
+                          >
+                            {t("totalCapacity")} *
+                          </Label>
+                          <Input
+                            id="totalCapacity"
+                            type="number"
+                            value={feedlotData.totalCapacity}
+                            onChange={(e) =>
+                              handleInputChange("totalCapacity", e.target.value)
+                            }
+                            className="mt-1"
+                            placeholder="1000"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label
+                            htmlFor="currentHeadCount"
+                            className="font-lato text-cattler-navy"
+                          >
+                            {t("currentHeadCount")} *
+                          </Label>
+                          <Input
+                            id="currentHeadCount"
+                            type="number"
+                            value={feedlotData.currentHeadCount}
+                            onChange={(e) =>
+                              handleInputChange(
+                                "currentHeadCount",
+                                e.target.value
+                              )
+                            }
+                            className="mt-1"
+                            placeholder="750"
+                            required
+                          />
+                        </div>
                       </div>
-                    )}
-                    {/* Mostrar usuarios y corrales adicionales */}
-                    {(paymentData.additionalPens > 0 || paymentData.additionalUsers > 0) && (
-                      <div className="mt-2 space-y-1">
-                        {paymentData.additionalPens > 0 && (
-                          <p className="text-xs">+{paymentData.additionalPens} currais adicionais</p>
-                        )}
-                        {paymentData.additionalUsers > 0 && (
-                          <p className="text-xs">+{paymentData.additionalUsers} usuários adicionais</p>
-                        )}
+
+                      <div>
+                        <Label
+                          htmlFor="startDate"
+                          className="font-lato text-cattler-navy"
+                        >
+                          {t("startDate")}
+                        </Label>
+                        <Input
+                          id="startDate"
+                          type="date"
+                          value={feedlotData.startDate}
+                          onChange={(e) =>
+                            handleInputChange("startDate", e.target.value)
+                          }
+                          className="mt-1"
+                        />
                       </div>
-                    )}
-                    <p className="text-cattler-green font-bold">
-                      R${paymentData.total}
-                      {paymentData.billingCycle === "monthly" ? "/mês" : "/ano"}
+                    </div>
+
+                    {/* Previous Software & How Did You Hear */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-lato font-medium text-cattler-navy flex items-center">
+                        <Building2 className="h-4 w-4 mr-2" />
+                        Informações Adicionais
+                      </h3>
+
+                      <div>
+                        <Label
+                          htmlFor="previousFeedingSoftware"
+                          className="font-lato text-cattler-navy"
+                        >
+                          {t("previousSoftware")} *
+                        </Label>
+                        <select
+                          id="previousFeedingSoftware"
+                          value={feedlotData.previousFeedingSoftware}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "previousFeedingSoftware",
+                              e.target.value
+                            )
+                          }
+                          className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cattler-green"
+                          required
+                        >
+                          <option value="">Selecione uma opção</option>
+                          <option value="No Feeding Software">
+                            {t("software.none")}
+                          </option>
+                          <option value="Performance Beef">
+                            {t("software.performanceBeef")}
+                          </option>
+                          <option value="Nutron">{t("software.nutron")}</option>
+                          <option value="Other">{t("software.other")}</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <Label
+                          htmlFor="howDidYouHear"
+                          className="font-lato text-cattler-navy"
+                        >
+                          {t("howDidYouHear")} *
+                        </Label>
+                        <select
+                          id="howDidYouHear"
+                          value={feedlotData.howDidYouHear}
+                          onChange={(e) =>
+                            handleInputChange("howDidYouHear", e.target.value)
+                          }
+                          className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cattler-green"
+                          required
+                        >
+                          <option value="">Selecione uma opção</option>
+                          <option value="Google Search">Pesquisa Google</option>
+                          <option value="Social Media">Redes Sociais</option>
+                          <option value="Industry Conference">
+                            Conferência do Setor
+                          </option>
+                          <option value="Colleague Referral">
+                            Indicação de Colega
+                          </option>
+                          <option value="Trade Publication">
+                            Publicação Especializada
+                          </option>
+                          <option value="Sales Representative">
+                            Representante de Vendas
+                          </option>
+                          <option value="Existing Customer">
+                            Cliente Existente
+                          </option>
+                          <option value="Other">Outro</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label
+                        htmlFor="additionalNotes"
+                        className="font-lato text-cattler-navy"
+                      >
+                        Observações Adicionais
+                      </Label>
+                      <Textarea
+                        id="additionalNotes"
+                        value={feedlotData.additionalNotes}
+                        onChange={(e) =>
+                          handleInputChange("additionalNotes", e.target.value)
+                        }
+                        className="mt-1"
+                        placeholder="Conte-nos mais sobre suas necessidades específicas..."
+                        rows={4}
+                      />
+                    </div>
+
+                    <div className="pt-6">
+                      <Button
+                        type="submit"
+                        disabled={!isFormValid}
+                        className="w-full bg-cattler-orange hover:bg-cattler-orange/90 text-white font-lato font-bold py-3"
+                      >
+                        Finalizar Configuração
+                      </Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Summary */}
+            <div className="lg:col-span-1">
+              <Card className="bg-white border border-cattler-green/30 sticky top-8">
+                <CardHeader>
+                  <CardTitle className="text-lg font-barlow text-cattler-navy">
+                    Resumo do Pedido
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h4 className="font-lato font-medium text-cattler-navy">
+                      {paymentData?.plan?.name}
+                    </h4>
+                    <p className="text-sm font-roboto text-cattler-navy/70">
+                      {paymentData?.plan?.description}
+                    </p>
+                    <p className="text-lg font-bold font-barlow text-cattler-green mt-2">
+                      R$ {paymentData?.total} /{" "}
+                      {paymentData?.billingCycle === "annual" ? "ano" : "mês"}
                     </p>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
 
-            {/* What's Next */}
-            <Card className="bg-white border border-cattler-teal/30">
-              <CardHeader>
-                <CardTitle className="text-xl font-barlow text-cattler-navy flex items-center">
-                  <Users className="h-5 w-5 mr-2" />O Que Acontece Depois?
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-cattler-green rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-white font-bold text-xs">1</span>
-                    </div>
+                  {paymentData?.addOns?.length > 0 && (
                     <div>
-                      <h4 className="font-lato font-medium text-cattler-navy text-sm">Configuração da Conta</h4>
-                      <p className="text-xs font-roboto text-cattler-navy/70">
-                        Criaremos sua conta FEEDER com a configuração do seu plano
-                      </p>
+                      <h5 className="font-lato font-medium text-cattler-navy text-sm mb-2">
+                        Complementos:
+                      </h5>
+                      {paymentData.addOns.map(
+                        (addonId: string, index: number) => (
+                          <p
+                            key={index}
+                            className="text-sm font-roboto text-cattler-navy/70"
+                          >
+                            • {addonId}
+                          </p>
+                        )
+                      )}
                     </div>
-                  </div>
+                  )}
 
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-cattler-teal rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-white font-bold text-xs">2</span>
-                    </div>
-                    <div>
-                      <h4 className="font-lato font-medium text-cattler-navy text-sm">Email de Boas-vindas</h4>
-                      <p className="text-xs font-roboto text-cattler-navy/70">
-                        Credenciais de login e guia de início enviados para seu email
-                      </p>
-                    </div>
+                  <div className="pt-4 border-t border-cattler-teal/20">
+                    <p className="text-sm font-roboto text-cattler-navy/70">
+                      Após finalizar, você receberá acesso imediato ao sistema e
+                      instruções de configuração.
+                    </p>
                   </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-cattler-navy rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-white font-bold text-xs">3</span>
-                    </div>
-                    <div>
-                      <h4 className="font-lato font-medium text-cattler-navy text-sm">Ligação de Integração</h4>
-                      <p className="text-xs font-roboto text-cattler-navy/70">
-                        Nossa equipe agendará uma ligação para ajudá-lo a começar
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Support Info */}
-            <Alert className="border-cattler-green/30 bg-cattler-green/5">
-              <AlertDescription className="text-cattler-navy">
-                <strong>Precisa de ajuda?</strong> Nossa equipe de suporte está disponível de segunda a sexta, das 8h às
-                18h (horário central).
-                <br />
-                Email: support@cattler.com | Telefone: +1 (555) 123-4567
-              </AlertDescription>
-            </Alert>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
