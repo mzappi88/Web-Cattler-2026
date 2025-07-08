@@ -39,7 +39,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <img src="/placeholder-logo.svg" alt="Cattler" className="h-10" />
+            <img src="/Cattler-black.png" alt="Cattler" className="h-10" />
           </Link>
 
           {/* Desktop Navigation */}

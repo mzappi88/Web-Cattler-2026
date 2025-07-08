@@ -32,7 +32,7 @@ export default function Footer() {
           {/* Company Info */}
           <div>
             <img
-              src="/placeholder-logo.svg"
+              src="/Cattler-black.png"
               alt="Cattler"
               className="h-10 mb-6 invert"
             />
