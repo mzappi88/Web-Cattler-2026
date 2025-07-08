@@ -20,6 +20,27 @@ const countryLanguageMap: Record<Country, Language> = {
 
 const translations = {
   en: {
+    // Navigation
+    "navigation.home": "Home",
+    "navigation.pricing": "Pricing",
+    "navigation.aboutUs": "About Us",
+    "navigation.login": "Log In",
+    "navigation.requestDemo": "Request Free Demo",
+    "navigation.getStarted": "Get Started",
+    "navigation.callUs": "Call us",
+
+    // Footer
+    "footer.company": "Company",
+    "footer.aboutCattler": "About Cattler",
+    "footer.careers": "Careers",
+    "footer.termsConditions": "Terms & Conditions",
+    "footer.privacyPolicy": "Privacy Policy",
+    "footer.termsOfService": "Terms of Service",
+    "footer.contact": "Contact",
+    "footer.contactUs": "Contact Us",
+    "footer.allRightsReserved": "All rights reserved",
+    "footer.companyDescription": "Leading cattle management platform for modern ranchers and feedlot operators.",
+
     // Hero Section
     heroTitle: "The Complete Cattle Management Solution",
     getStarted: "Get Started Now",
@@ -154,6 +175,28 @@ const translations = {
     viewPlansAndPrices: "View Plans & Prices",
   },
   es: {
+    // Navigation
+    "navigation.home": "Inicio",
+    "navigation.pricing": "Precios",
+    "navigation.aboutUs": "Sobre Nosotros",
+    "navigation.login": "Iniciar Sesión",
+    "navigation.requestDemo": "Solicitar Demo Gratuita",
+    "navigation.getStarted": "Comenzar",
+    "navigation.callUs": "Llámanos",
+
+    // Footer
+    "footer.company": "Empresa",
+    "footer.aboutCattler": "Sobre Cattler",
+    "footer.careers": "Carreras",
+    "footer.termsConditions": "Términos y Condiciones",
+    "footer.privacyPolicy": "Política de Privacidad",
+    "footer.termsOfService": "Términos de Servicio",
+    "footer.contact": "Contacto",
+    "footer.contactUs": "Contáctenos",
+    "footer.allRightsReserved": "Todos los derechos reservados",
+    "footer.companyDescription":
+      "Plataforma líder de gestión ganadera para ganaderos y operadores de feedlot modernos.",
+
     // Hero Section
     heroTitle: "La Solución Completa de Gestión Ganadera",
     getStarted: "Comenzar Hoy",
@@ -290,6 +333,28 @@ const translations = {
     viewPlansAndPrices: "Ver Planes y Precios",
   },
   pt: {
+    // Navigation
+    "navigation.home": "Início",
+    "navigation.pricing": "Preços",
+    "navigation.aboutUs": "Sobre Nós",
+    "navigation.login": "Entrar",
+    "navigation.requestDemo": "Solicitar Demo Gratuita",
+    "navigation.getStarted": "Começar Agora",
+    "navigation.callUs": "Ligue para nós",
+
+    // Footer
+    "footer.company": "Empresa",
+    "footer.aboutCattler": "Sobre a Cattler",
+    "footer.careers": "Carreiras",
+    "footer.termsConditions": "Termos e Condições",
+    "footer.privacyPolicy": "Política de Privacidade",
+    "footer.termsOfService": "Termos de Serviço",
+    "footer.contact": "Contato",
+    "footer.contactUs": "Entre em Contato",
+    "footer.allRightsReserved": "Todos os direitos reservados",
+    "footer.companyDescription":
+      "Plataforma líder de gestão de gado para pecuaristas e operadores de confinamento modernos.",
+
     // Hero Section
     heroTitle: "A Solução Completa de Gestão de Gado",
     getStarted: "Comece Hoje",
