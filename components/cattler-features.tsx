@@ -5,14 +5,14 @@ import { Settings, Clock, Users, Info } from "lucide-react"
 import { useTranslation } from "@/hooks/use-translation"
 import { useMemo } from "react"
 import TestimonialsCarousel from "./testimonials-carousel"
+import { useRouter } from "next/navigation"
 
 export default function CattlerFeatures() {
   const { selectedCountry, setSelectedCountry, language, t, isHydrated } = useTranslation()
+  const router = useRouter()
 
   const navigateToDemo = () => {
-    if (window.top) {
-      window.top.location.href = "https://www.cattler.farm/demo-sale"
-    }
+    router.push("/demo")
   }
 
   // Memoize the highlighted title to ensure it updates when language changes
@@ -204,11 +204,7 @@ export default function CattlerFeatures() {
             <h3 className="font-bold text-3xl mb-4">{t("pricingCtaTitle")}</h3>
             <p className="text-lg mb-8 opacity-90">{t("pricingCtaSubtitle")}</p>
             <button
-              onClick={() => {
-                if (window.top) {
-                  window.top.location.href = "https://www.cattler.farm/pricing"
-                }
-              }}
+              onClick={() => router.push("/pricing")}
               className="bg-white text-[#15B674] font-bold text-lg py-4 px-8 rounded-full hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center gap-3"
             >
               <span>{t("viewPlansAndPrices")}</span>

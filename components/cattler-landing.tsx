@@ -7,6 +7,7 @@ import Script from "next/script"
 import { ClipboardList, TrendingUp, Activity, DollarSign } from "lucide-react"
 import { useTranslation } from "@/hooks/use-translation"
 import { CountrySelector } from "./country-selector"
+import { useRouter } from "next/navigation"
 
 declare global {
   interface Window {
@@ -18,6 +19,7 @@ export type Version = "landing" | "ads-a" | "ads-b"
 export default function CattlerLanding() {
   const { selectedCountry, setSelectedCountry, language, t } = useTranslation()
   const [version, setVersion] = useState<Version>("landing")
+  const router = useRouter()
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -79,9 +81,7 @@ export default function CattlerLanding() {
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
           <button
             className="bg-[#f25f24] hover:bg-[#d14d1a] text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-            onClick={() => {
-              document.getElementById("hubspot-form-container")?.scrollIntoView({ behavior: "smooth" })
-            }}
+            onClick={() => router.push("/pricing")}
           >
             {t("getStarted")}
           </button>
