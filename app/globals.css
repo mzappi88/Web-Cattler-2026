@@ -92,3 +92,110 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Infinite scroll animations */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-33.333%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Base carousel animation classes */
+.animate-scroll-left {
+  animation: scroll-left var(--scroll-duration, 30s) linear infinite;
+}
+
+.animate-scroll-right {
+  animation: scroll-right var(--scroll-duration, 30s) linear infinite;
+}
+
+/* Pause animation on hover */
+.carousel-container:hover .animate-scroll-left,
+.carousel-container:hover .animate-scroll-right {
+  animation-play-state: paused;
+}
+
+/* Speed variations */
+.scroll-slow {
+  --scroll-duration: 45s;
+}
+
+.scroll-normal {
+  --scroll-duration: 30s;
+}
+
+.scroll-fast {
+  --scroll-duration: 15s;
+}
+
+/* Responsive speed adjustments */
+@media (max-width: 1024px) {
+  .animate-scroll-left,
+  .animate-scroll-right {
+    --scroll-duration: 25s;
+  }
+}
+
+@media (max-width: 768px) {
+  .animate-scroll-left,
+  .animate-scroll-right {
+    --scroll-duration: 20s;
+  }
+}
+
+@media (max-width: 480px) {
+  .animate-scroll-left,
+  .animate-scroll-right {
+    --scroll-duration: 15s;
+  }
+}
+
+/* Smooth fade edges */
+.carousel-fade-left {
+  background: linear-gradient(to right, var(--background) 0%, transparent 100%);
+}
+
+.carousel-fade-right {
+  background: linear-gradient(to left, var(--background) 0%, transparent 100%);
+}
+
+/* Logo hover effects */
+.logo-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-item:hover {
+  transform: scale(1.1);
+  filter: grayscale(0%) brightness(1.1);
+}
+
+.logo-item img {
+  transition: all 0.3s ease;
+  filter: grayscale(70%) opacity(0.7);
+}
+
+.logo-item:hover img {
+  filter: grayscale(0%) opacity(1);
+}
+
+/* Control buttons */
+.carousel-controls {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-container:hover .carousel-controls {
+  opacity: 1;
+}
