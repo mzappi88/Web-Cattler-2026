@@ -1,11 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  partnerLogos,
-  type PartnerLogo,
-  type CountryLogos,
-} from "@/hooks/use-partner-logos";
+import { type PartnerLogo } from "@/hooks/use-partner-logos";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,7 +21,7 @@ export default function LogoManagement() {
   const [selectedCountry, setSelectedCountry] = useState<string>("US");
   const [editingLogo, setEditingLogo] = useState<PartnerLogo | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
-  const [logoData, setLogoData] = useState<CountryLogos>(partnerLogos);
+  const [logoData, setLogoData] = useState<CountryLogos>(PartnerLogo);
 
   const [formData, setFormData] = useState({
     name: "",

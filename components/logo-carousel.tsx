@@ -2,10 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "@/hooks/use-translation";
-import {
-  getLogosForCountry,
-  type PartnerLogo,
-} from "@/hooks/use-partner-logos";
+import { usePartnerLogos } from "@/hooks/use-partner-logos";
 
 export interface CarouselSettings {
   speed: "slow" | "normal" | "fast";
@@ -16,7 +13,7 @@ export interface CarouselSettings {
 
 export default function LogoCarousel() {
   const { selectedCountry, isHydrated } = useTranslation();
-  const [logos, setLogos] = useState<PartnerLogo[]>([]);
+  const logos = usePartnerLogos();
   const [isPlaying, setIsPlaying] = useState(true);
   const [settings, setSettings] = useState<CarouselSettings>({
     speed: "normal",
@@ -27,13 +24,6 @@ export default function LogoCarousel() {
 
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (isHydrated) {
-      const countryLogos = getLogosForCountry(selectedCountry);
-      // Duplicate logos for infinite scroll effect
-      setLogos([...countryLogos, ...countryLogos, ...countryLogos]);
-    }
-  }, [selectedCountry, isHydrated]);
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
   };
