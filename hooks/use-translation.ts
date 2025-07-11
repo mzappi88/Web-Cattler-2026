@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react"
 
-export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT"
+
+export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT-EN" | "OT-ES"
 
 type Language = "en" | "es" | "pt"
 
@@ -15,7 +16,8 @@ const countryLanguageMap: Record<Country, Language> = {
   BO: "es",
   BR: "pt",
   MX: "es",
-  OT: "en",
+  "OT-EN":"en",
+  "OT-ES": "es",
 }
 
 const translations = {

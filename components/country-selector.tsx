@@ -15,7 +15,8 @@ const countryOptions: Record<Country, { flag: string; language: string }> = {
   BO: { flag: "🇧🇴", language: "es" },
   BR: { flag: "🇧🇷", language: "pt" },
   MX: { flag: "🇲🇽", language: "es" },
-  OT: { flag: "🌍", language: "en" },
+  "OT-EN": { flag: "🌍", language: "en" },
+  "OT-ES": { flag: "🌍", language: "es" },
 };
 
 const langNames = {

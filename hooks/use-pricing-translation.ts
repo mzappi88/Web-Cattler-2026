@@ -1,8 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
+import { useTranslation } from "@/hooks/TranslationProvider";
 
-export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT"
+
+export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT-EN" | "OT-ES"
 
 type Language = "en" | "es" | "pt"
 
@@ -15,7 +17,8 @@ const countryLanguageMap: Record<Country, Language> = {
   BO: "es",
   BR: "pt",
   MX: "es",
-  OT: "en",
+  "OT-EN": "en",
+  "OT-ES": "es",
 }
 
 const countryCurrencyMap: Record<Country, string> = {
@@ -27,7 +30,8 @@ const countryCurrencyMap: Record<Country, string> = {
   BO: "$",
   BR: "R$",
   MX: "$",
-  OT: "$",
+  "OT-EN": "$",
+  "OT-ES": "$",
 }
 
 const pricingTranslations = {
@@ -81,8 +85,8 @@ const pricingTranslations = {
     // Add-ons
     addOnsTitle: "Available Add-ons",
     addOnsSubtitle: "Click on an add-on to purchase it for your existing Feedlot plan",
-    boitelModule: "Boitel Module",
-    boitelModuleDesc: "Complete management for Boitel operations with multiple clients",
+    customFeederModule: "customFeeder Module",
+    customFeederModuleDesc: "Complete management for customFeeder operations with multiple clients",
     clientUsers: "Client Users",
     clientUsersDesc: "Additional users for specific clients",
 
@@ -221,8 +225,8 @@ const pricingTranslations = {
     // Add-ons
     addOnsTitle: "Complementos Disponibles",
     addOnsSubtitle: "Haz clic en un complemento para comprarlo para tu plan de Confinamiento existente",
-    boitelModule: "Módulo Boitel",
-    boitelModuleDesc: "Gestión completa para operaciones de Boitel con múltiples clientes",
+    customFeederModule: "Módulo customFeeder",
+    customFeederModuleDesc: "Gestión completa para operaciones de customFeeder con múltiples clientes",
     clientUsers: "Usuarios de Clientes",
     clientUsersDesc: "Usuarios adicionales para clientes específicos",
 
@@ -361,8 +365,8 @@ const pricingTranslations = {
     // Add-ons
     addOnsTitle: "Complementos Disponíveis",
     addOnsSubtitle: "Clique no complemento para comprá-lo para seu plano de Confinamento existente",
-    boitelModule: "Módulo Boitel",
-    boitelModuleDesc: "Gestão completa para operações de Boitel com múltiplos clientes",
+    customFeederModule: "Módulo customFeeder",
+    customFeederModuleDesc: "Gestão completa para operações de customFeeder com múltiplos clientes",
     clientUsers: "Usuários de Clientes",
     clientUsersDesc: "Usuários adicionais para clientes específicos",
 
@@ -498,12 +502,15 @@ export function usePricingTranslation() {
   )
 
   // Format price with currency
-  const formatPrice = useCallback(
-    (price: number) => {
-      return `${currency}${price.toLocaleString()}`
-    },
-    [currency],
-  )
+const formatPrice = useCallback(
+  (price: number) => {
+    if (selectedCountry === "AR") {
+      return `${price.toLocaleString()} ${currency}`;
+    }
+    return `${currency}${price.toLocaleString()}`;
+  },
+  [currency, selectedCountry],
+);
 
   return {
     selectedCountry,

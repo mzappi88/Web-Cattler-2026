@@ -7,14 +7,14 @@ import AddOnCheckout from "@/components/pricing/addon-checkout";
 // Move add-ons data outside component to prevent recreation on every render
 const ADD_ONS = [
   {
-    id: "boitel-addon",
-    name: "Módulo Boitel",
+    id: "customFeeder-addon",
+    name: "Módulo customFeeder",
     description:
-      "Gestão completa para operações de Boitel com múltiplos clientes",
+      "Gestão completa para operações de customFeeder com múltiplos clientes",
     price: 600,
     availableFor: ["lite", "go", "flex", "pro"],
     includedIn: [],
-    isBoitel: true,
+    isCustomFeeder: true,
   },
   {
     id: "usuarios-clientes",
@@ -23,10 +23,10 @@ const ADD_ONS = [
     price: 120,
     availableFor: ["lite", "go", "flex", "pro"],
     includedIn: [],
-    isBoitel: true,
+    isCustomFeeder: true,
   },
   {
-    id: "sanidade-animal",
+    id: "animal-health",
     name: "Sanidade Animal",
     description: "Gestão completa da saúde do rebanho",
     price: 400,

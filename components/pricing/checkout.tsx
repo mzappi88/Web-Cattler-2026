@@ -44,7 +44,7 @@ interface AddOn {
   price: number;
   availableFor: string[];
   includedIn?: string[];
-  isBoitel?: boolean;
+  isCustomFeeder?: boolean;
 }
 
 interface CheckoutProps {
@@ -57,14 +57,14 @@ const USER_PRICE = 120;
 
 const ADD_ONS = [
   {
-    id: "boitel-addon",
-    name: "Módulo Boitel",
+    id: "customFeeder-addon",
+    name: "Módulo customFeeder",
     description:
-      "Gestão completa para operações de Boitel com múltiplos clientes",
+      "Gestão completa para operações de customFeeder com múltiplos clientes",
     price: 600,
     availableFor: ["lite", "go", "flex", "pro"],
     includedIn: [],
-    isBoitel: true,
+    isCustomFeeder: true,
   },
   {
     id: "usuarios-clientes",
@@ -73,10 +73,10 @@ const ADD_ONS = [
     price: 120,
     availableFor: ["lite", "go", "flex", "pro"],
     includedIn: [],
-    isBoitel: true,
+    isCustomFeeder: true,
   },
   {
-    id: "sanidade-animal",
+    id: "animal-health",
     name: "Sanidade Animal",
     description: "Gestão completa da saúde do rebanho",
     price: 400,
@@ -396,7 +396,7 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
           </p>
           <div className="mt-2 flex items-center">
             <Badge className="bg-cattler-teal text-white">
-              {planType === "owner" ? "Proprietário" : "Boitel"}
+              {planType === "owner" ? "Proprietário" : "customFeeder"}
             </Badge>
             <Badge className="ml-2 bg-cattler-navy text-white">
               Etapa 1 de 3
@@ -681,7 +681,7 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                         key={addOn.id}
                         className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-all ${
                           isSelected
-                            ? addOn.isBoitel
+                            ? addOn.isCustomFeeder
                               ? "border-cattler-amber bg-cattler-amber/5"
                               : "border-cattler-teal bg-cattler-teal/5"
                             : "border-gray-200 hover:border-cattler-teal/50"
@@ -698,7 +698,7 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                             <Label
                               htmlFor={addOn.id}
                               className={`font-lato font-medium cursor-pointer ${
-                                addOn.isBoitel
+                                addOn.isCustomFeeder
                                   ? "text-cattler-amber"
                                   : "text-cattler-navy"
                               }`}
@@ -708,7 +708,7 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                             <div className="text-right">
                               <span
                                 className={`font-barlow font-bold ${
-                                  addOn.isBoitel
+                                  addOn.isCustomFeeder
                                     ? "text-cattler-amber"
                                     : "text-cattler-navy"
                                 }`}
