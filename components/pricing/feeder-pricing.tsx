@@ -1298,7 +1298,7 @@ export default function Component() {
         "Manejo de Haciendad y Mapa de Corrales",
         "Manejo de Inventarios",
       ],
-      popular: false,
+      popular: true,
     },
     {
       id: "BO-Core",
@@ -1315,7 +1315,7 @@ export default function Component() {
         "Trabajo de manga completo y conexión con lectores caravanas electrónicas",
         "Protocolos de alimentación",
       ],
-      popular: true,
+      popular: false,
     },
     {
       id: "BO-Max",
