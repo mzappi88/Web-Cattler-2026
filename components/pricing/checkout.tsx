@@ -3,6 +3,12 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { getVisibleAddOns } from "@/data/owner-addons";
+import {
+  getExtraUserPrice,
+  getExtraPenPrice,
+  getClientUsersPrice,
+} from "@/data/owner-plans";
 import {
   Card,
   CardContent,
@@ -21,118 +27,23 @@ import { Calendar, CalendarDays } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { usePricingTranslation } from "@/hooks/use-pricing-translation";
 import { CountrySelector } from "@/components/country-selector";
-
-interface Plan {
-  id: string;
-  name: string;
-  price: number;
-  annualPrice?: number;
-  description: string;
-  pens: string;
-  users: string;
-  keyFeatures: string[];
-  popular: boolean;
-  billingCycle?: "monthly" | "annual";
-  planType?: "owner" | "custom";
-  promotionalState?: any;
-}
-
-interface AddOn {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  availableFor: string[];
-  includedIn?: string[];
-  isCustomFeeder?: boolean;
-}
+import type { Plan, AddOn } from "@/types/pricing";
 
 interface CheckoutProps {
   selectedPlan: Plan;
   onBack: () => void;
 }
 
-const PEN_PRICE = 30;
-const USER_PRICE = 120;
+// Get dynamic prices based on selected country
+const getPenPrice = (selectedCountry: string) =>
+  getExtraPenPrice(selectedCountry);
+const getUserPrice = (selectedCountry: string) =>
+  getExtraUserPrice(selectedCountry);
 
-const ADD_ONS = [
-  {
-    id: "customFeeder-addon",
-    name: "Módulo customFeeder",
-    description:
-      "Gestão completa para operações de customFeeder com múltiplos clientes",
-    price: 600,
-    availableFor: ["lite", "go", "flex", "pro"],
-    includedIn: [],
-    isCustomFeeder: true,
-  },
-  {
-    id: "usuarios-clientes",
-    name: "Usuários de Clientes",
-    description: "Usuários adicionais para clientes específicos",
-    price: 120,
-    availableFor: ["lite", "go", "flex", "pro"],
-    includedIn: [],
-    isCustomFeeder: true,
-  },
-  {
-    id: "animal-health",
-    name: "Sanidade Animal",
-    description: "Gestão completa da saúde do rebanho",
-    price: 400,
-    availableFor: ["lite", "go", "flex"],
-    includedIn: ["pro"],
-  },
-  {
-    id: "tronco",
-    name: "Tronco",
-    description: "Sistema completo de manejo no tronco",
-    price: 300,
-    availableFor: ["go"],
-    includedIn: ["flex", "pro"],
-  },
-  {
-    id: "leitor-brinco",
-    name: "Integração com Leitor de Brinco",
-    description: "Integração com sistemas de leitura de brincos eletrônicos",
-    price: 300,
-    availableFor: ["go"],
-    includedIn: ["flex", "pro"],
-  },
-  {
-    id: "alimentacao-avancada",
-    name: "Alimentação Avançada",
-    description: "Recursos avançados para gestão e otimização de alimentação",
-    price: 600,
-    availableFor: ["lite"],
-    includedIn: ["go", "flex", "pro"],
-  },
-  {
-    id: "pre-misturas",
-    name: "Geração de Pré-misturas",
-    description: "Sistema para geração e controle de pré-misturas",
-    price: 150,
-    availableFor: ["lite", "go"],
-    includedIn: ["flex", "pro"],
-  },
-  {
-    id: "analytics",
-    name: "Analytics",
-    description:
-      "Análises avançadas e relatórios detalhados para otimização da operação",
-    price: 300,
-    availableFor: ["go", "flex"],
-    includedIn: ["pro"],
-  },
-  {
-    id: "relatorio-mercado",
-    name: "Relatório de Valor de Mercado",
-    description: "Relatórios detalhados sobre valores de mercado do gado",
-    price: 150,
-    availableFor: ["go", "flex"],
-    includedIn: ["pro"],
-  },
-];
+// Get add-ons dynamically based on selected country
+const getAddOnsForCountry = (selectedCountry: string) => {
+  return getVisibleAddOns(selectedCountry);
+};
 
 export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
   const { t, formatPrice, selectedCountry, setSelectedCountry, isHydrated } =
@@ -153,6 +64,9 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
   const router = useRouter();
 
   const planType = selectedPlan.planType || "owner";
+
+  // Get add-ons for the current country
+  const ADD_ONS = getAddOnsForCountry(selectedCountry);
 
   useEffect(() => {
     try {
@@ -288,8 +202,8 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
       return total + addonPrice;
     }, 0);
 
-    const pensMonthlyTotal = additionalPens * PEN_PRICE;
-    const usersMonthlyTotal = additionalUsers * USER_PRICE;
+    const pensMonthlyTotal = additionalPens * getPenPrice(selectedCountry);
+    const usersMonthlyTotal = additionalUsers * getUserPrice(selectedCountry);
 
     const pensTotal =
       billingCycle === "annual"
@@ -582,7 +496,8 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                       {t("additionalPens")}
                     </h4>
                     <p className="text-sm font-roboto text-cattler-navy/70">
-                      {formatPrice(PEN_PRICE)}/{t("perMonth")} por curral
+                      {formatPrice(getPenPrice(selectedCountry))}/
+                      {t("perMonth")} por curral
                       {billingCycle === "annual" &&
                         " (10% de desconto anualmente)"}
                     </p>
@@ -620,7 +535,8 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                       {t("additionalUsers")}
                     </h4>
                     <p className="text-sm font-roboto text-cattler-navy/70">
-                      {formatPrice(USER_PRICE)}/{t("perMonth")} por usuário
+                      {formatPrice(getUserPrice(selectedCountry))}/
+                      {t("perMonth")} por usuário
                       {billingCycle === "annual" &&
                         " (10% de desconto anualmente)"}
                     </p>
@@ -728,8 +644,10 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                               <div className="flex items-center justify-between">
                                 <div className="flex-1">
                                   <span className="text-xs font-roboto text-cattler-navy/80">
-                                    {formatPrice(120)}/{t("perMonth")} por
-                                    usuário de cliente
+                                    {formatPrice(
+                                      getClientUsersPrice(selectedCountry)
+                                    )}
+                                    /{t("perMonth")} por usuário de cliente
                                     {billingCycle === "annual" &&
                                       " (10% de desconto anualmente)"}
                                   </span>
@@ -934,12 +852,15 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                           {billingCycle === "annual"
                             ? `${formatPrice(
                                 Math.round(
-                                  additionalPens * PEN_PRICE * 12 * 0.9
+                                  additionalPens *
+                                    getPenPrice(selectedCountry) *
+                                    12 *
+                                    0.9
                                 )
                               )} / ${t("perYear")}`
-                            : `${formatPrice(additionalPens * PEN_PRICE)} / ${t(
-                                "perMonth"
-                              )}`}
+                            : `${formatPrice(
+                                additionalPens * getPenPrice(selectedCountry)
+                              )} / ${t("perMonth")}`}
                         </span>
                       </div>
                     )}
@@ -952,11 +873,14 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
                           {billingCycle === "annual"
                             ? `${formatPrice(
                                 Math.round(
-                                  additionalUsers * USER_PRICE * 12 * 0.9
+                                  additionalUsers *
+                                    getUserPrice(selectedCountry) *
+                                    12 *
+                                    0.9
                                 )
                               )} / ${t("perYear")}`
                             : `${formatPrice(
-                                additionalUsers * USER_PRICE
+                                additionalUsers * getUserPrice(selectedCountry)
                               )} / ${t("perMonth")}`}
                         </span>
                       </div>

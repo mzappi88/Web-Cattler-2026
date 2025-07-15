@@ -6,12 +6,12 @@ import { useTranslation } from "@/hooks/TranslationProvider";
 
 export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT-EN" | "OT-ES"
 
-type Language = "en" | "es" | "pt"
+type Language = "en" | "es" | "pt" | "es-ar"
 
 const countryLanguageMap: Record<Country, Language> = {
   US: "en",
   CA: "en",
-  AR: "es",
+  AR: "es-ar",
   PY: "es",
   UY: "es",
   BO: "es",
@@ -73,22 +73,26 @@ const pricingTranslations = {
     feeding: "Feeding",
     cattleManagement: "Cattle Management",
     suppliesInventory: "Supplies Inventory",
-    dietManagement: "Diet Management",
+    rationManagement: "Ration Management",
     advancedFeeding: "Advanced Feeding",
     animalHealth: "Animal Health",
     chute: "Chute",
     tagReaderIntegration: "Tag Reader Integration",
-    premixGeneration: "Premix Generation",
+    inputTransformation: "Input Transformation",
     analytics: "Analytics",
     marketValueReport: "Market Value Report",
 
     // Add-ons
     addOnsTitle: "Available Add-ons",
     addOnsSubtitle: "Click on an add-on to purchase it for your existing Feedlot plan",
-    customFeederModule: "customFeeder Module",
-    customFeederModuleDesc: "Complete management for customFeeder operations with multiple clients",
+    customFeeder: "Custom Feeder Module",
+    customFeederDesc: "Complete management for custom feeding operations with multiple clients",
     clientUsers: "Client Users",
     clientUsersDesc: "Additional users for specific clients",
+    loading: "Loading...",
+    showDetails: "Show details",
+    hideDetails: "Hide details",
+    mainFeatures: "Main Features",
 
     // Checkout
     checkoutTitle: "Complete Your Order",
@@ -213,20 +217,24 @@ const pricingTranslations = {
     feeding: "Alimentación",
     cattleManagement: "Gestión de Ganado",
     suppliesInventory: "Inventario de Suministros",
-    dietManagement: "Manejo de Dietas",
+    rationManagement: "Manejo de Raciones",
     advancedFeeding: "Alimentación Avanzada",
     animalHealth: "Sanidad Animal",
     chute: "Manga",
     tagReaderIntegration: "Integración con Lector de Caravanas",
-    premixGeneration: "Generación de Premezclas",
+    inputTransformation: "Transformación de Insumos",
     analytics: "Análisis",
     marketValueReport: "Reporte de Valor de Mercado",
 
     // Add-ons
     addOnsTitle: "Complementos Disponibles",
     addOnsSubtitle: "Haz clic en un complemento para comprarlo para tu plan de Confinamiento existente",
-    customFeederModule: "Módulo customFeeder",
-    customFeederModuleDesc: "Gestión completa para operaciones de customFeeder con múltiples clientes",
+    customFeeder: "Módulo Hotelería",
+    customFeederDesc: "Gestión completa para operaciones de Hotelería con múltiples clientes",
+    loading: "Cargando...",
+    mainFeatures: "Funcionalidades Principales",
+    showDetails: "Ver detalles",
+    hideDetails: "Ocultar",
     clientUsers: "Usuarios de Clientes",
     clientUsersDesc: "Usuarios adicionales para clientes específicos",
 
@@ -263,6 +271,150 @@ const pricingTranslations = {
 
     // Feedlot Info
     feedlotInfoTitle: "Información del Confinamiento",
+    feedlotInfoSubtitle: "Cuéntanos más sobre tu operación para personalizar tu experiencia",
+    companyInfo: "Información de la Empresa",
+    location: "Ubicación",
+    operationInfo: "Información de la Operación",
+    totalCapacity: "Capacidad Total (cabezas)",
+    currentHeadCount: "Rebaño Actual",
+    startDate: "Fecha de Inicio Deseada",
+    previousSoftware: "Software de Alimentación Anterior",
+    howDidYouHear: "¿Cómo te enteraste de nosotros?",
+    additionalNotes: "Notas Adicionales",
+    finishSetup: "Finalizar Configuración",
+
+    // Success
+    successTitle: "¡Pago Exitoso!",
+    successSubtitle: "¡Bienvenido a FEEDER! Tu cuenta ha sido creada y está lista para usar.",
+    nextSteps: "Próximos Pasos",
+    accessAccount: "Accede a tu cuenta",
+    configureOperation: "Configura tu operación",
+    exploreFeatures: "Explora las características",
+    needHelp: "¿Necesitas Ayuda?",
+    contactSupport: "Contactar Soporte",
+    helpCenter: "Centro de Ayuda",
+    accessFeeder: "Acceder a FEEDER",
+    downloadReceipt: "Descargar Recibo",
+
+    // Countries
+    "countries.US": "Estados Unidos",
+    "countries.CA": "Canadá",
+    "countries.AR": "Argentina",
+    "countries.PY": "Paraguay",
+    "countries.UY": "Uruguay",
+    "countries.BO": "Bolivia",
+    "countries.BR": "Brasil",
+    "countries.MX": "México",
+    "countries.OT": "Otro",
+
+    // Software options
+    "software.none": "Sin Software de Alimentación",
+    "software.performanceBeef": "Performance Beef",
+    "software.nutron": "Nutron",
+    "software.other": "Otro",
+
+    // How did you hear options
+    "hear.google": "Búsqueda en Google",
+    "hear.social": "Redes Sociales",
+    "hear.conference": "Conferencia de la Industria",
+    "hear.referral": "Referencia de Colega",
+    "hear.publication": "Publicación Comercial",
+    "hear.sales": "Representante de Ventas",
+    "hear.customer": "Cliente Existente",
+    "hear.other": "Otro",
+  },
+  "es-ar": {
+    // Page titles
+    pricingTitle: "Elige Tu Plan de Feedlot",
+    pricingSubtitle:
+      "Soluciones completas de gestión de feedlot diseñadas para optimizar tus operaciones. Desde alimentación básica hasta análisis avanzados.",
+
+    // Plan names
+    planLite: "FEEDLOT INICIAL",
+    planGo: "FEEDLOT ESENCIAL",
+    planFlex: "FEEDLOT INTEGRAL",
+    planPro: "FEEDLOT AVANZADO",
+
+    // Plan descriptions
+    planLiteDesc: "Solución básica para pequeñas operaciones",
+    planGoDesc: "Para productores que buscan planificación nutricional",
+    planFlexDesc: "Para quienes desean gestión precisa en la manga",
+    planProDesc: "Para quienes exigen excelencia en sanidad y análisis del rebaño",
+
+    // Common terms
+    pens: "Corrales",
+    users: "Usuarios",
+    perMonth: "por mes",
+    perYear: "por año",
+    annually: "anualmente",
+    monthly: "mensual",
+    getStarted: "Comenzar",
+    mostPopular: "Más Popular",
+
+    // Billing
+    billingCycle: "Ciclo de Facturación",
+    monthlyBilling: "Mensual",
+    annualBilling: "Anual (10% de descuento)",
+    annualSavings: "Ahorra con facturación anual",
+
+    // Features
+    feeding: "Alimentación",
+    cattleManagement: "Gestión de Ganado",
+    suppliesInventory: "Inventario de Suministros",
+    rationManagement: "Manejo de Raciones",
+    advancedFeeding: "Alimentación Avanzada",
+    animalHealth: "Sanidad Animal",
+    chute: "Manga",
+    tagReaderIntegration: "Integración con Lector de Caravanas",
+    inputTransformation: "Transformación de Insumos",
+    analytics: "Análisis",
+    marketValueReport: "Reporte de Valor de Mercado",
+
+    // Add-ons
+    addOnsTitle: "Complementos Disponibles",
+    addOnsSubtitle: "Haz clic en un complemento para comprarlo para tu plan de Feedlot existente",
+    customFeederModule: "Módulo Hotelería",
+    customFeederModuleDesc: "Gestión completa para operaciones de Hotelería con múltiples clientes",
+    loading: "Cargando...",
+    mainFeatures: "Funcionalidades Principales",
+    showDetails: "Ver detalles",
+    hideDetails: "Ocultar",
+    clientUsers: "Usuarios de Clientes",
+    clientUsersDesc: "Usuarios adicionales para clientes específicos",
+
+    // Checkout
+    checkoutTitle: "Completa Tu Pedido",
+    checkoutSubtitle: "Personaliza tu plan con características adicionales",
+    contactInfo: "Información de Contacto",
+    orderSummary: "Resumen del Pedido",
+    fullName: "Nombre Completo",
+    emailAddress: "Dirección de Email",
+    companyName: "Nombre de la Empresa",
+    phoneNumber: "Número de Teléfono",
+    additionalPens: "Corrales Adicionales",
+    additionalUsers: "Usuarios Adicionales",
+    total: "Total",
+    continueToPayment: "Continuar al Pago",
+
+    // Payment
+    paymentTitle: "Información de Pago",
+    paymentSubtitle: "Completa tu suscripción de forma segura",
+    cardDetails: "Datos de la Tarjeta",
+    cardholderName: "Nombre del Titular",
+    cardNumber: "Número de Tarjeta",
+    expiryDate: "Fecha de Vencimiento",
+    cvv: "CVV",
+    billingAddress: "Dirección de Facturación",
+    address: "Dirección",
+    city: "Ciudad",
+    state: "Estado/Provincia",
+    zipCode: "Código Postal",
+    country: "País",
+    finalizePayment: "Finalizar Pago",
+    securePayment: "Pago Seguro",
+
+    // Feedlot Info
+    feedlotInfoTitle: "Información del Feedlot",
     feedlotInfoSubtitle: "Cuéntanos más sobre tu operación para personalizar tu experiencia",
     companyInfo: "Información de la Empresa",
     location: "Ubicación",
@@ -353,20 +505,24 @@ const pricingTranslations = {
     feeding: "Alimentação",
     cattleManagement: "Gestão de Gado",
     suppliesInventory: "Inventário de Suprimentos",
-    dietManagement: "Manejo de Dietas",
+    rationManagement: "Manejo de Rações",
     advancedFeeding: "Alimentação Avançada",
     animalHealth: "Sanidade Animal",
     chute: "Tronco",
     tagReaderIntegration: "Integração com Leitor de Brinco",
-    premixGeneration: "Geração de Pré-misturas",
+    inputTransformation: "Transformação de Insumos",
     analytics: "Analytics",
     marketValueReport: "Relatório de Valor de Mercado",
 
     // Add-ons
     addOnsTitle: "Complementos Disponíveis",
     addOnsSubtitle: "Clique no complemento para comprá-lo para seu plano de Confinamento existente",
-    customFeederModule: "Módulo customFeeder",
-    customFeederModuleDesc: "Gestão completa para operações de customFeeder com múltiplos clientes",
+    customFeederModule: "Módulo Bôitel",
+    customFeederModuleDesc: "Gestão completa para operações de Bôitel com múltiplos clientes",
+    loading: "Carregando...",
+    showDetails: "Ver detalhes",
+    hideDetails: "Ocultar",
+    mainFeatures: "Recursos Principais",
     clientUsers: "Usuários de Clientes",
     clientUsersDesc: "Usuários adicionais para clientes específicos",
 
@@ -521,4 +677,16 @@ const formatPrice = useCallback(
     formatPrice,
     isHydrated,
   }
+}
+
+// Standalone formatPrice function for direct import
+export function formatPrice(price: number, country: Country = "US") {
+  const currency = countryCurrencyMap[country];
+  if (price === undefined || price === null || isNaN(price)) {
+    return "N/A";
+  }
+  if (country === "AR") {
+    return `${price.toLocaleString()} ${currency}`;
+  }
+  return `${currency}${price.toLocaleString()}`;
 }

@@ -1,8 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+
+import { getVisibleAddOns } from "@/data/owner-addons";
+import {
+  getOwnerPlans,
+  getPlanDescription,
+  getPlanFeatures,
+} from "@/data/owner-plans";
+import {
+  getFeaturesForCountry,
+  Feature,
+  getLocalizedFeatureName,
+} from "@/data/owner-features";
 import {
   Card,
   CardContent,
@@ -40,74 +52,22 @@ interface Plan {
   country: string;
 }
 
-interface AddOn {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  originalPrice?: number;
-  availableFor: string[];
-  includedIn: string[];
-  promotion?: any;
-  promotionalState?: PricingState;
-  comingSoon?: boolean;
-  isCustomFeeder?: boolean;
-  country: string;
-}
-
-interface Feature {
-  name: string;
-  plan1: any;
-  plan2: any;
-  plan3: any;
-  plan4: any;
-  isAddOn?: boolean;
-  isExpandable?: boolean;
-  isCustomFeeder?: boolean;
-  comingSoon?: boolean;
-  subFeatures?: {
-    name: string;
-    plan1: any;
-    plan2: any;
-    plan3: any;
-    plan4: any;
-  }[];
-  country: string;
-}
-
-export interface PricingState {
-  isAnnual: boolean;
-  isPlan5050: boolean;
-  headCount: number;
-  summerStartDate: string;
-  summerEndDate: string;
-  defaultDiscountFactor: number;
-  saleActive: boolean;
-  saleName: string;
-  defaultIsAnnual: boolean;
-  discounts: {
-    annual: {
-      [key: string]: { isActive: boolean; discountFactor: number };
-    };
-    monthly: {
-      [key: string]: { isActive: boolean; discountFactor: number };
-    };
-    xMonthly: {
-      [key: string]: {
-        isActive: boolean;
-        discountFactor: number;
-        xMonths: number;
-      };
-    };
-    freeMonths: {
-      [key: string]: {
-        isActive: boolean;
-        discountFactor: number;
-        freeMonths: number;
-      };
-    };
-  };
-}
+import type { AddOn, PricingState } from "@/types/pricing";
+import {
+  PLAN_NAME_BY_COUNTRY,
+  PRICES_BY_COUNTRY,
+  getComingSoonText,
+  getExtraPenPrice,
+  getExtraUserPrice,
+  getCustomFeederPrice,
+  getAnimalHealthPrice,
+  getChutePrice,
+  getEIDIntegrationPrice,
+  getAdvancedFeedingPrice,
+  getInputTransformationPrice,
+  getClientUsersPrice,
+  calculateAnnualPrice,
+} from "@/data/owner-plans";
 
 export const initialPricingState: PricingState = {
   isAnnual: false,
@@ -164,9 +124,6 @@ export default function Component() {
   const router = useRouter();
   const { t, formatPrice, selectedCountry, setSelectedCountry, isHydrated } =
     usePricingTranslation();
-  const [expandedFeatures, setExpandedFeatures] = useState<Set<string>>(
-    new Set()
-  );
   const [promotionalState, setPromotionalState] =
     useState<PricingState>(initialPricingState);
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">(
@@ -180,9 +137,7 @@ export default function Component() {
   const [summerEndDate, setSummerEndDate] = useState("");
   const [summerPlan, setSummerPlan] = useState<string>("plan1");
 
-  const calculateAnnualPrice = (monthlyPrice: number) => {
-    return Math.round(monthlyPrice * 12 * 0.9);
-  };
+  // Use centralized annual price calculation from owner-plans.ts
 
   const getActivePromotion = (
     productId: string,
@@ -269,1737 +224,53 @@ export default function Component() {
         return null;
     }
   };
-  const PLAN_NAME_BY_COUNTRY: Record<
-    string,
-    Record<"plan1" | "plan2" | "plan3" | "plan4", string>
-  > = {
-    AR: {
-      plan1: "Feedlot Inicial",
-      plan2: "Feedlot Esencial",
-      plan3: "Feedlot Integral",
-      plan4: "Feedlot Avanzado",
-    },
-    BR: {
-      plan1: "Confinamento LITE",
-      plan2: "Confinamento GO",
-      plan3: "Confinamento FLEX",
-      plan4: "Confinamento PRO",
-    },
-    US: {
-      plan1: "Feeder START",
-      plan2: "Feeder CORE",
-      plan3: "Feeder PLUS",
-      plan4: "Feeder MAX",
-    },
-    CA: {
-      plan1: "Feeder START",
-      plan2: "Feeder CORE",
-      plan3: "Feeder PLUS",
-      plan4: "Feeder MAX",
-    },
-    UY: {
-      plan1: "Feedlot START",
-      plan2: "Feedlot CORE",
-      plan3: "Feedlot MAX",
-      plan4: "",
-    },
-    PY: {
-      plan1: "Confinamiento Esencial",
-      plan2: "confinamiento Núcleo",
-      plan3: "Confinamiento Total",
-      plan4: "Confinamiento Máximo",
-    },
-    BO: {
-      plan1: "Confinamiento START",
-      plan2: "Confinamiento CORE",
-      plan3: "Confinamiento MAX",
-      plan4: "",
-    },
-    MX: {
-      plan1: "Feeder START",
-      plan2: "Feeder CORE",
-      plan3: "Feeder PLUS",
-      plan4: "Feeder MAX",
-    },
-    OT$EN: {
-      plan1: "Feeder START",
-      plan2: "Feeder CORE",
-      plan3: "Feeder PLUS",
-      plan4: "Feeder MAX",
-    },
-    OT$ES: {
-      plan1: "Feeder START",
-      plan2: "Feeder CORE",
-      plan3: "Feeder PLUS",
-      plan4: "Feeder MAX",
-    },
-  };
 
-  const planName =
-    PLAN_NAME_BY_COUNTRY[selectedCountry] ?? PLAN_NAME_BY_COUNTRY["OT$EN"];
+  // Get dynamic prices from centralized configuration
+  const PEN_PRICE = getExtraPenPrice(selectedCountry);
+  const USER_PRICE = getExtraUserPrice(selectedCountry);
 
-  // Badge text by country
-  const getComingSoonText = () => {
-    switch (selectedCountry) {
-      case "US":
-      case "CA":
-        return "Coming Soon";
-      case "AR":
-        return "Proximamente";
-      case "BR":
-        return "Em Breve";
-      default:
-        return "Coming Soon";
-    }
-  };
+  // Get plans from centralized configuration - no more duplicated data!
+  const currentPlans = getOwnerPlans(selectedCountry);
 
-  const PRICES_BY_COUNTRY: Record<
-    string,
-    {
-      plan1: number;
-      plan2: number;
-      plan3: number;
-      plan4: number;
-      plan1pens: number;
-      plan2pens: number;
-      plan3pens: number;
-      plan4pens: number;
-      plan1users: number;
-      plan2users: number;
-      plan3users: number;
-      plan4usesr: number;
-      ExtraUsers: number;
-      ExtraPens: number;
-      customFeeder: number;
-      grainBank: number;
-      clientUsers: number;
-      AnimalHealth: number;
-      AnimalHealthbasic: number;
-      AnimalHealthadvanced: number;
-      AnimalHealth$Chute: number;
-      Chute: number;
-      Chute$EID: number;
-      ChuteQuickStart: number;
-      ChuteCattleIN: number;
-      EIDIntegration: number;
-      CustomFeederModule: number;
-      AdvancedFeeding: number;
-      FeedingProtocols: number;
-      InputTransformation: number;
-      Purchases: number;
-      MicroingredientesManagement: number;
-      FeedingAutomation: number;
-      BunkScoreCustomization: number;
-      AdvancedInventory: number;
-      Analytics: number;
-      MarketValueReport: number;
-      TruckScaleIntegration: number;
-      DumpBoxIntegration: number;
-      MicroMachineIntegration: number;
-      Cuota481: number;
-      cowCalfBasic: number;
-      cowCalfAdvanced: number;
-      pastureBasic: number;
-      pastureAdvanced: number;
-    }
-  > = {
-    BR: {
-      plan1: 1000,
-      plan2: 1500,
-      plan3: 1950,
-      plan4: 3700,
-      plan1pens: 10,
-      plan2pens: 25,
-      plan3pens: 40,
-      plan4pens: 80,
-      plan1users: 1,
-      plan2users: 2,
-      plan3users: 3,
-      plan4usesr: 5,
-      ExtraUsers: 120,
-      ExtraPens: 50,
-      customFeeder: 700,
-      grainBank: 0,
-      clientUsers: 120,
-      AnimalHealth: 400,
-      AnimalHealthbasic: 0,
-      AnimalHealthadvanced: 0,
-      AnimalHealth$Chute: 0,
-      Chute: 300,
-      Chute$EID: 0,
-      ChuteQuickStart: 0,
-      ChuteCattleIN: 0,
-      EIDIntegration: 300,
-      CustomFeederModule: 0,
-      AdvancedFeeding: 550,
-      FeedingProtocols: 0,
-      InputTransformation: 300,
-      Purchases: 120,
-      MicroingredientesManagement: 0,
-      FeedingAutomation: 0,
-      BunkScoreCustomization: 0,
-      AdvancedInventory: 550,
-      Analytics: 0,
-      MarketValueReport: 300,
-      TruckScaleIntegration: 0,
-      DumpBoxIntegration: 0,
-      MicroMachineIntegration: 0,
-      Cuota481: 0,
-      cowCalfBasic: 0,
-      cowCalfAdvanced: 0,
-      pastureBasic: 0,
-      pastureAdvanced: 0,
-    },
-    AR: {
-      plan1: 70,
-      plan2: 90,
-      plan3: 120,
-      plan4: 200,
-      plan1pens: 15,
-      plan2pens: 25,
-      plan3pens: 40,
-      plan4pens: 60,
-      plan1users: 1,
-      plan2users: 2,
-      plan3users: 3,
-      plan4usesr: 5,
-      ExtraUsers: 8,
-      ExtraPens: 2,
-      customFeeder: 30,
-      grainBank: 8,
-      clientUsers: 0,
-      AnimalHealth: 0,
-      AnimalHealthbasic: 0,
-      AnimalHealthadvanced: 0,
-      AnimalHealth$Chute: 0,
-      Chute: 0,
-      Chute$EID: 20,
-      ChuteQuickStart: 0,
-      ChuteCattleIN: 0,
-      EIDIntegration: 0,
-      CustomFeederModule: 0,
-      AdvancedFeeding: 0,
-      FeedingProtocols: 20,
-      BunkScoreCustomization: 10,
-      FeedingAutomation: 10,
-      AdvancedInventory: 40,
-      InputTransformation: 10,
-      Purchases: 10,
-      MicroingredientesManagement: 0,
-      Analytics: 20,
-      MarketValueReport: 10,
-      TruckScaleIntegration: 40,
-      DumpBoxIntegration: 40,
-      MicroMachineIntegration: 0,
-      Cuota481: 10,
-      cowCalfBasic: 0,
-      cowCalfAdvanced: 0,
-      pastureBasic: 0,
-      pastureAdvanced: 0,
-    },
-    US: {
-      plan1: 165,
-      plan2: 199,
-      plan3: 275,
-      plan4: 480,
-      plan1pens: 15,
-      plan2pens: 30,
-      plan3pens: 40,
-      plan4pens: 60,
-      plan1users: 1,
-      plan2users: 2,
-      plan3users: 3,
-      plan4usesr: 5,
-      ExtraUsers: 20,
-      ExtraPens: 5,
-      customFeeder: 100,
-      grainBank: 50,
-      clientUsers: 20,
-      AnimalHealth: 0,
-      AnimalHealthbasic: 0,
-      AnimalHealthadvanced: 0,
-      AnimalHealth$Chute: 0,
-      Chute: 0,
-      Chute$EID: 50,
-      ChuteQuickStart: 0,
-      ChuteCattleIN: 0,
-      EIDIntegration: 0,
-      CustomFeederModule: 0,
-      AdvancedFeeding: 0,
-      FeedingProtocols: 0,
-      BunkScoreCustomization: 0,
-      FeedingAutomation: 0,
-      AdvancedInventory: 100,
-      InputTransformation: 25,
-      Purchases: 0,
-      MicroingredientesManagement: 0,
-      Analytics: 50,
-      MarketValueReport: 25,
-      TruckScaleIntegration: 100,
-      DumpBoxIntegration: 100,
-      MicroMachineIntegration: 100,
-      Cuota481: 0,
-      cowCalfBasic: 0,
-      cowCalfAdvanced: 0,
-      pastureBasic: 0,
-      pastureAdvanced: 0,
-    },
-    CA: {
-      plan1: 165,
-      plan2: 199,
-      plan3: 275,
-      plan4: 480,
-      plan1pens: 15,
-      plan2pens: 30,
-      plan3pens: 40,
-      plan4pens: 60,
-      plan1users: 1,
-      plan2users: 2,
-      plan3users: 3,
-      plan4usesr: 5,
-      ExtraUsers: 20,
-      ExtraPens: 5,
-      customFeeder: 100,
-      grainBank: 50,
-      clientUsers: 20,
-      AnimalHealth: 0,
-      AnimalHealthbasic: 0,
-      AnimalHealthadvanced: 0,
-      AnimalHealth$Chute: 0,
-      Chute: 0,
-      Chute$EID: 50,
-      ChuteQuickStart: 0,
-      ChuteCattleIN: 0,
-      EIDIntegration: 0,
-      CustomFeederModule: 0,
-      AdvancedFeeding: 0,
-      FeedingProtocols: 0,
-      BunkScoreCustomization: 0,
-      FeedingAutomation: 0,
-      AdvancedInventory: 100,
-      InputTransformation: 25,
-      Purchases: 0,
-      MicroingredientesManagement: 0,
-      Analytics: 50,
-      MarketValueReport: 25,
-      TruckScaleIntegration: 100,
-      DumpBoxIntegration: 100,
-      MicroMachineIntegration: 100,
-      Cuota481: 0,
-      cowCalfBasic: 0,
-      cowCalfAdvanced: 0,
-      pastureBasic: 0,
-      pastureAdvanced: 0,
-    },
-    UY: {
-      plan1: 200,
-      plan2: 300,
-      plan3: 500,
-      plan4: 0,
-      plan1pens: 10,
-      plan2pens: 20,
-      plan3pens: 40,
-      plan4pens: 0,
-      plan1users: 2,
-      plan2users: 3,
-      plan3users: 4,
-      plan4usesr: 0,
-      ExtraUsers: 20,
-      ExtraPens: 5,
-      customFeeder: 100,
-      grainBank: 0,
-      clientUsers: 20,
-      AnimalHealth: 0,
-      AnimalHealthbasic: 0,
-      AnimalHealthadvanced: 0,
-      AnimalHealth$Chute: 100,
-      Chute: 0,
-      Chute$EID: 50,
-      ChuteQuickStart: 0,
-      ChuteCattleIN: 0,
-      EIDIntegration: 0,
-      CustomFeederModule: 0,
-      AdvancedFeeding: 0,
-      FeedingProtocols: 0,
-      BunkScoreCustomization: 0,
-      FeedingAutomation: 25,
-      AdvancedInventory: 100,
-      InputTransformation: 25,
-      Purchases: 0,
-      MicroingredientesManagement: 0,
-      Analytics: 50,
-      MarketValueReport: 25,
-      TruckScaleIntegration: 100,
-      DumpBoxIntegration: 100,
-      MicroMachineIntegration: 0,
-      Cuota481: 0,
-      cowCalfBasic: 0,
-      cowCalfAdvanced: 0,
-      pastureBasic: 0,
-      pastureAdvanced: 0,
-    },
-    PY: {
-      plan1: 200,
-      plan2: 275,
-      plan3: 390,
-      plan4: 500,
-      plan1pens: 10,
-      plan2pens: 15,
-      plan3pens: 20,
-      plan4pens: 30,
-      plan1users: 2,
-      plan2users: 3,
-      plan3users: 4,
-      plan4usesr: 5,
-      ExtraUsers: 20,
-      ExtraPens: 5,
-      customFeeder: 100,
-      grainBank: 0,
-      clientUsers: 20,
-      AnimalHealth: 0,
-      AnimalHealthbasic: 0,
-      AnimalHealthadvanced: 0,
-      AnimalHealth$Chute: 100,
-      Chute: 0,
-      Chute$EID: 50,
-      ChuteQuickStart: 0,
-      ChuteCattleIN: 25,
-      EIDIntegration: 0,
-      CustomFeederModule: 0,
-      AdvancedFeeding: 0,
-      FeedingProtocols: 0,
-      BunkScoreCustomization: 25,
-      FeedingAutomation: 0,
-      AdvancedInventory: 100,
-      InputTransformation: 25,
-      Purchases: 0,
-      MicroingredientesManagement: 0,
-      Analytics: 50,
-      MarketValueReport: 25,
-      TruckScaleIntegration: 100,
-      DumpBoxIntegration: 100,
-      MicroMachineIntegration: 0,
-      Cuota481: 0,
-      cowCalfBasic: 0,
-      cowCalfAdvanced: 0,
-      pastureBasic: 0,
-      pastureAdvanced: 0,
-    },
-    BO: {
-      plan1: 200,
-      plan2: 300,
-      plan3: 500,
-      plan4: 0,
-      plan1pens: 10,
-      plan2pens: 20,
-      plan3pens: 40,
-      plan4pens: 0,
-      plan1users: 2,
-      plan2users: 3,
-      plan3users: 4,
-      plan4usesr: 0,
-      ExtraUsers: 20,
-      ExtraPens: 5,
-      customFeeder: 100,
-      grainBank: 0,
-      clientUsers: 20,
-      AnimalHealth: 0,
-      AnimalHealthbasic: 0,
-      AnimalHealthadvanced: 0,
-      AnimalHealth$Chute: 100,
-      Chute: 0,
-      Chute$EID: 50,
-      ChuteQuickStart: 0,
-      ChuteCattleIN: 0,
-      EIDIntegration: 0,
-      CustomFeederModule: 0,
-      AdvancedFeeding: 0,
-      FeedingProtocols: 0,
-      BunkScoreCustomization: 0,
-      FeedingAutomation: 25,
-      AdvancedInventory: 100,
-      InputTransformation: 25,
-      Purchases: 0,
-      MicroingredientesManagement: 0,
-      Analytics: 50,
-      MarketValueReport: 25,
-      TruckScaleIntegration: 100,
-      DumpBoxIntegration: 100,
-      MicroMachineIntegration: 0,
-      Cuota481: 0,
-      cowCalfBasic: 0,
-      cowCalfAdvanced: 0,
-      pastureBasic: 0,
-      pastureAdvanced: 0,
-    },
-    MX: {
-      plan1: 165,
-      plan2: 199,
-      plan3: 275,
-      plan4: 480,
-      plan1pens: 15,
-      plan2pens: 30,
-      plan3pens: 40,
-      plan4pens: 60,
-      plan1users: 1,
-      plan2users: 2,
-      plan3users: 3,
-      plan4usesr: 5,
-      ExtraUsers: 20,
-      ExtraPens: 5,
-      customFeeder: 100,
-      grainBank: 50,
-      clientUsers: 20,
-      AnimalHealth: 0,
-      AnimalHealthbasic: 0,
-      AnimalHealthadvanced: 0,
-      AnimalHealth$Chute: 0,
-      Chute: 0,
-      Chute$EID: 50,
-      ChuteQuickStart: 0,
-      ChuteCattleIN: 0,
-      EIDIntegration: 0,
-      CustomFeederModule: 0,
-      AdvancedFeeding: 0,
-      FeedingProtocols: 0,
-      BunkScoreCustomization: 0,
-      FeedingAutomation: 0,
-      AdvancedInventory: 100,
-      InputTransformation: 25,
-      Purchases: 0,
-      MicroingredientesManagement: 0,
-      Analytics: 50,
-      MarketValueReport: 25,
-      TruckScaleIntegration: 100,
-      DumpBoxIntegration: 100,
-      MicroMachineIntegration: 100,
-      Cuota481: 0,
-      cowCalfBasic: 0,
-      cowCalfAdvanced: 0,
-      pastureBasic: 0,
-      pastureAdvanced: 0,
-    },
-    OT$EN: {
-      plan1: 165,
-      plan2: 199,
-      plan3: 275,
-      plan4: 480,
-      plan1pens: 15,
-      plan2pens: 30,
-      plan3pens: 40,
-      plan4pens: 60,
-      plan1users: 1,
-      plan2users: 2,
-      plan3users: 3,
-      plan4usesr: 5,
-      ExtraUsers: 20,
-      ExtraPens: 5,
-      customFeeder: 100,
-      grainBank: 50,
-      clientUsers: 20,
-      AnimalHealth: 0,
-      AnimalHealthbasic: 0,
-      AnimalHealthadvanced: 0,
-      AnimalHealth$Chute: 0,
-      Chute: 0,
-      Chute$EID: 50,
-      ChuteQuickStart: 0,
-      ChuteCattleIN: 0,
-      EIDIntegration: 0,
-      CustomFeederModule: 0,
-      AdvancedFeeding: 0,
-      FeedingProtocols: 0,
-      BunkScoreCustomization: 0,
-      FeedingAutomation: 0,
-      AdvancedInventory: 100,
-      InputTransformation: 25,
-      Purchases: 0,
-      MicroingredientesManagement: 0,
-      Analytics: 50,
-      MarketValueReport: 25,
-      TruckScaleIntegration: 100,
-      DumpBoxIntegration: 100,
-      MicroMachineIntegration: 100,
-      Cuota481: 0,
-      cowCalfBasic: 0,
-      cowCalfAdvanced: 0,
-      pastureBasic: 0,
-      pastureAdvanced: 0,
-    },
-    OT$ES: {
-      plan1: 165,
-      plan2: 199,
-      plan3: 275,
-      plan4: 480,
-      plan1pens: 15,
-      plan2pens: 30,
-      plan3pens: 40,
-      plan4pens: 60,
-      plan1users: 1,
-      plan2users: 2,
-      plan3users: 3,
-      plan4usesr: 5,
-      ExtraUsers: 20,
-      ExtraPens: 5,
-      customFeeder: 100,
-      grainBank: 50,
-      clientUsers: 20,
-      AnimalHealth: 0,
-      AnimalHealthbasic: 0,
-      AnimalHealthadvanced: 0,
-      AnimalHealth$Chute: 0,
-      Chute: 0,
-      Chute$EID: 50,
-      ChuteQuickStart: 0,
-      ChuteCattleIN: 0,
-      EIDIntegration: 0,
-      CustomFeederModule: 0,
-      AdvancedFeeding: 0,
-      FeedingProtocols: 0,
-      BunkScoreCustomization: 0,
-      FeedingAutomation: 0,
-      AdvancedInventory: 100,
-      InputTransformation: 25,
-      Purchases: 0,
-      MicroingredientesManagement: 0,
-      Analytics: 50,
-      MarketValueReport: 25,
-      TruckScaleIntegration: 100,
-      DumpBoxIntegration: 100,
-      MicroMachineIntegration: 100,
-      Cuota481: 0,
-      cowCalfBasic: 0,
-      cowCalfAdvanced: 0,
-      pastureBasic: 0,
-      pastureAdvanced: 0,
-    },
-    // Otros países si hace falta
-  };
-  const countryPrices =
-    PRICES_BY_COUNTRY[selectedCountry] ?? PRICES_BY_COUNTRY["OT$EN"];
-
-  const PEN_PRICE = 30;
-  const USER_PRICE = 120;
-
-  const ownerPlansBR: Omit<Plan, "country">[] = [
-    {
-      id: "BR-Lite",
-      name: planName.plan1,
-      price: countryPrices.plan1,
-      annualPrice: calculateAnnualPrice(countryPrices.plan1),
-      description: "caca",
-      pens: `${countryPrices.plan1pens} ${"pens"}`,
-      users: `${countryPrices.plan1users} ${"user"}`,
-      keyFeatures: [
-        "feeding",
-        "cattleManagement",
-        "suppliesInventory",
-        "dietManagement",
-      ],
-      popular: false,
-    },
-    {
-      id: "BR-Go",
-      name: planName.plan2,
-      price: countryPrices.plan2,
-      annualPrice: calculateAnnualPrice(countryPrices.plan2),
-      description: t("planGoDesc"),
-      pens: `${countryPrices.plan2pens} ${t("pens")}`,
-      users: `${countryPrices.plan2users} ${t("users")}`,
-      keyFeatures: [
-        "Tudo do LITE",
-        "Protocolos de alimentação",
-        "Personalização da leitura de cocho",
-      ],
-      popular: false,
-    },
-    {
-      id: "BR-Flex",
-      name: planName.plan3,
-      price: countryPrices.plan3,
-      annualPrice: calculateAnnualPrice(countryPrices.plan3),
-      description: t("planFlexDesc"),
-      pens: `${countryPrices.plan3pens} ${t("pens")}`,
-      users: `${countryPrices.plan3users} ${t("users")}`,
-      keyFeatures: [
-        "Tudo do GO",
-        t("chute"),
-        t("tagReaderIntegration"),
-        t("premixGeneration"),
-      ],
-      popular: true,
-    },
-    {
-      id: "BR-Pro",
-      name: planName.plan4,
-      price: countryPrices.plan4,
-      annualPrice: calculateAnnualPrice(countryPrices.plan4),
-      description: t("planFlexDesc"),
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Tudo do GO",
-        t("chute"),
-        t("tagReaderIntegration"),
-        t("premixGeneration"),
-      ],
-      popular: true,
-    },
-  ];
-  // Plans for ARGENTINA
-  const ownerPlansAR: Omit<Plan, "country">[] = [
-    {
-      id: "AR-Inicial",
-      name: planName.plan1,
-      price: countryPrices.plan1,
-      annualPrice: calculateAnnualPrice(countryPrices.plan1),
-      description:
-        "Para quienes quieren enfocarse en lo fundamental de la gestión de hacienda y alimentación.",
-      pens: `${countryPrices.plan1pens} ${"pens"}`,
-      users: `${countryPrices.plan1users} ${"user"}`,
-      keyFeatures: [
-        "Gestión comleta de Alimentación",
-        "Manejo de Haciendad y Mapa de Corrales",
-        "Manejo de Inventarios",
-      ],
-      popular: false,
-    },
-    {
-      id: "AR-Esencial",
-      name: planName.plan2,
-      price: countryPrices.plan2,
-      annualPrice: calculateAnnualPrice(countryPrices.plan2),
-      description: "Ideal para quienes buscan una gestión completa de sanidad.",
-      pens: `${countryPrices.plan2pens} ${t("pens")}`,
-      users: `${countryPrices.plan2users} ${t("users")}`,
-      keyFeatures: [
-        "Incluye todo en Feedlot Inicial",
-        "Sanidad animal (protocolos de tratamiento, registros de eventos y analytics)",
-        "Manejo sanitario individual de animales",
-        "PLectura de comederos personalizada",
-      ],
-      popular: false,
-    },
-    {
-      id: "AR-Integral",
-      name: planName.plan3,
-      price: countryPrices.plan3,
-      annualPrice: calculateAnnualPrice(countryPrices.plan3),
-      description:
-        "Registro en tiempo real del trabajo en manga, ideal para quienes no quieren dejar ningún detalle afuera.",
-      pens: `${countryPrices.plan3pens} ${t("pens")}`,
-      users: `${countryPrices.plan3users} ${t("users")}`,
-      keyFeatures: [
-        "Incluye todo en Feedlot Esencial",
-        "Trabajo de manga completo",
-        "Integración con lectores de caravanas electrónicas",
-        "Creación de premixes",
-      ],
-      popular: true,
-    },
-    {
-      id: "AR-Avanzado",
-      name: planName.plan4,
-      price: countryPrices.plan4,
-      annualPrice: calculateAnnualPrice(countryPrices.plan4),
-      description:
-        "Pensado para feedlots con gestión avanzada de alimentación e inventarios",
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Incluye todo en Feedlot Integral",
-        "Protocolos de alimentación y autogeneración de órdenes de alimentación",
-        "Informes cuota 481",
-        "Inventario avanzado",
-      ],
-      popular: true,
-    },
-  ];
-  const ownerPlansUS: Omit<Plan, "country">[] = [
-    {
-      id: "US-Start",
-      name: planName.plan1,
-      price: countryPrices.plan1,
-      annualPrice: calculateAnnualPrice(countryPrices.plan1),
-      description: "For essential cattle and feed management.",
-      pens: `${countryPrices.plan1pens} ${"pens"}`,
-      users: `${countryPrices.plan1users} ${"user"}`,
-      keyFeatures: [
-        "Feeding Management",
-        "Yardsheet",
-        "Cattle Management",
-        "Supply Inventory",
-        "Pen Rider",
-      ],
-      popular: false,
-    },
-    {
-      id: "US-Core",
-      name: planName.plan2,
-      price: countryPrices.plan2,
-      annualPrice: calculateAnnualPrice(countryPrices.plan2),
-      description: "Everything you need for basic health and chute operations",
-      pens: `${countryPrices.plan2pens} ${t("pens")}`,
-      users: `${countryPrices.plan2users} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Starter",
-        "Animal Health Basic",
-        "Quick Start Chute",
-        "Billing",
-      ],
-      popular: true,
-    },
-    {
-      id: "US-Plus",
-      name: planName.plan3,
-      price: countryPrices.plan3,
-      annualPrice: calculateAnnualPrice(countryPrices.plan3),
-      description: "Run advanced health and chute workflows — powered by EID",
-      pens: `${countryPrices.plan3pens} ${t("pens")}`,
-      users: `${countryPrices.plan3users} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Core",
-        "Advanced Animal Health & Chute",
-        "EID Integration",
-        "Input Transformation - Premixes creation",
-        "Chute-based cattle entry",
-      ],
-      popular: false,
-    },
-    {
-      id: "US-Max",
-      name: planName.plan4,
-      price: countryPrices.plan4,
-      annualPrice: calculateAnnualPrice(countryPrices.plan4),
-      description:
-        "Feeding and inventory automations with market value reports — all in one plan.",
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Plus",
-        "Advanced Feeding & Inventory",
-        "Market Value Reports",
-        <span className="flex items-center">
-          Analytics
-          <Badge className="ml-2 bg-blue-500 text-white text-xs">
-            {getComingSoonText()}
-          </Badge>
-        </span>,
-      ],
-      popular: false,
-    },
-  ];
-  const ownerPlansCA: Omit<Plan, "country">[] = [
-    {
-      id: "CA-Start",
-      name: planName.plan1,
-      price: countryPrices.plan1,
-      annualPrice: calculateAnnualPrice(countryPrices.plan1),
-      description: "For essential cattle and feed management.",
-      pens: `${countryPrices.plan1pens} ${"pens"}`,
-      users: `${countryPrices.plan1users} ${"user"}`,
-      keyFeatures: [
-        "Feeding Management",
-        "Yardsheet",
-        "Cattle Management",
-        "Supply Inventory",
-        "Pen Rider",
-      ],
-      popular: false,
-    },
-    {
-      id: "CA-Core",
-      name: planName.plan2,
-      price: countryPrices.plan2,
-      annualPrice: calculateAnnualPrice(countryPrices.plan2),
-      description: "Everything you need for basic health and chute operations",
-      pens: `${countryPrices.plan2pens} ${t("pens")}`,
-      users: `${countryPrices.plan2users} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Starter",
-        "Animal Health Basic",
-        "Quick Start Chute",
-        "Billing",
-      ],
-      popular: true,
-    },
-    {
-      id: "CA-Plus",
-      name: planName.plan3,
-      price: countryPrices.plan3,
-      annualPrice: calculateAnnualPrice(countryPrices.plan3),
-      description: "Run advanced health and chute workflows — powered by EID",
-      pens: `${countryPrices.plan3pens} ${t("pens")}`,
-      users: `${countryPrices.plan3users} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Core",
-        "Advanced Animal Health & Chute",
-        "EID Integration",
-        "Input Transformation - Premixes creation",
-        "Chute-based cattle entry",
-      ],
-      popular: false,
-    },
-    {
-      id: "CA-Max",
-      name: planName.plan4,
-      price: countryPrices.plan4,
-      annualPrice: calculateAnnualPrice(countryPrices.plan4),
-      description:
-        "Feeding and inventory automations with market value reports — all in one plan.",
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Plus",
-        "Advanced Feeding & Inventory",
-        "Market Value Reports",
-        <span className="flex items-center">
-          Analytics
-          <Badge className="ml-2 bg-blue-500 text-white text-xs">
-            {getComingSoonText()}
-          </Badge>
-        </span>,
-      ],
-      popular: false,
-    },
-  ];
-  const ownerPlansPY: Omit<Plan, "country">[] = [
-    {
-      id: "PY-Esencial",
-      name: planName.plan1,
-      price: countryPrices.plan1,
-      annualPrice: calculateAnnualPrice(countryPrices.plan1),
-      description:
-        "Para quienes quieren enfocarse en lo fundamental de la gestión de hacienda y alimentación.",
-      pens: `${countryPrices.plan1pens} ${"pens"}`,
-      users: `${countryPrices.plan1users} ${"user"}`,
-      keyFeatures: [
-        "Gestión comleta de Alimentación",
-        "Manejo de Haciendad y Mapa de Corrales",
-        "Manejo de Inventarios",
-      ],
-      popular: false,
-    },
-    {
-      id: "PY-Nucleo",
-      name: planName.plan2,
-      price: countryPrices.plan2,
-      annualPrice: calculateAnnualPrice(countryPrices.plan2),
-      description:
-        "Planifica mejor tu alimentación con protocolos y herramientas de premix.",
-      pens: `${countryPrices.plan2pens} ${t("pens")}`,
-      users: `${countryPrices.plan2users} ${t("users")}`,
-      keyFeatures: [
-        "Incluye todo en Confinamiento Inicial",
-        "Protocolos de alimentación",
-        "Creación de premixes",
-      ],
-      popular: false,
-    },
-    {
-      id: "PY-Total",
-      name: planName.plan3,
-      price: countryPrices.plan3,
-      annualPrice: calculateAnnualPrice(countryPrices.plan3),
-      description:
-        "Llevá tu operación al siguiente nivel con lectura de batea personalizada y entrada de animales desde la manga.",
-      pens: `${countryPrices.plan3pens} ${t("pens")}`,
-      users: `${countryPrices.plan3users} ${t("users")}`,
-      keyFeatures: [
-        "Incluye todo en Confinamiento Nucleo",
-        "Ingreso de animales desde la manga",
-        "Lectura de bateas personalizada",
-        "Autoajuste de entregas",
-      ],
-      popular: true,
-    },
-    {
-      id: "PY-Maximo",
-      name: planName.plan4,
-      price: countryPrices.plan4,
-      annualPrice: calculateAnnualPrice(countryPrices.plan4),
-      description:
-        "Manejo completo de sanidad y trabajo en manga en un solo plan.",
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Incluye todo en Confinamiento Total",
-        "Sanidad animal (protocolos de tratamiento, registros de eventos y analytics)",
-        "Trabajo de manga completo y conexión con lectores caravanas electrónicas",
-        "Inventario avanzado",
-      ],
-      popular: false,
-    },
-  ];
-  const ownerPlanUY: Omit<Plan, "country">[] = [
-    {
-      id: "UY-Start",
-      name: planName.plan1,
-      price: countryPrices.plan1,
-      annualPrice: calculateAnnualPrice(countryPrices.plan1),
-      description:
-        "Para quienes quieren enfocarse en lo fundamental de la gestión de hacienda y alimentación.",
-      pens: `${countryPrices.plan1pens} ${"pens"}`,
-      users: `${countryPrices.plan1users} ${"user"}`,
-      keyFeatures: [
-        "Gestión comleta de Alimentación",
-        "Manejo de Haciendad y Mapa de Corrales",
-        "Manejo de Inventarios",
-      ],
-      popular: false,
-    },
-    {
-      id: "UY-Core",
-      name: planName.plan2,
-      price: countryPrices.plan2,
-      annualPrice: calculateAnnualPrice(countryPrices.plan2),
-      description:
-        "Manejo completo de sanidad y trabajo en manga en un solo plan.",
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Incluye todo en Feedlot Start",
-        "Sanidad animal (protocolos de tratamiento, registros de eventos y analytics)",
-        "Trabajo de manga completo y conexión con lectores caravanas electrónicas",
-        "Protocolos de alimentación",
-      ],
-      popular: true,
-    },
-    {
-      id: "UY-Max",
-      name: planName.plan3,
-      price: countryPrices.plan3,
-      annualPrice: calculateAnnualPrice(countryPrices.plan3),
-      description:
-        "Pensado para feedlots con gestión avanzada de alimentación e inventarios",
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Incluye todo en Feedlot Core",
-        "Lectura de Comederos Personalizada",
-        "Informes cuota 481",
-        "Inventario avanzado",
-      ],
-      popular: false,
-    },
-  ];
-  const ownerPlansBO: Omit<Plan, "country">[] = [
-    {
-      id: "BO-Start",
-      name: planName.plan1,
-      price: countryPrices.plan1,
-      annualPrice: calculateAnnualPrice(countryPrices.plan1),
-      description:
-        "Para quienes quieren enfocarse en lo fundamental de la gestión de hacienda y alimentación.",
-      pens: `${countryPrices.plan1pens} ${"pens"}`,
-      users: `${countryPrices.plan1users} ${"user"}`,
-      keyFeatures: [
-        "Gestión comleta de Alimentación",
-        "Manejo de Haciendad y Mapa de Corrales",
-        "Manejo de Inventarios",
-      ],
-      popular: true,
-    },
-    {
-      id: "BO-Core",
-      name: planName.plan2,
-      price: countryPrices.plan2,
-      annualPrice: calculateAnnualPrice(countryPrices.plan2),
-      description:
-        "Manejo completo de sanidad y trabajo en manga en un solo plan.",
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Incluye todo en Confinamiento Start",
-        "Sanidad animal (protocolos de tratamiento, registros de eventos y analytics)",
-        "Trabajo de manga completo y conexión con lectores caravanas electrónicas",
-        "Protocolos de alimentación",
-      ],
-      popular: false,
-    },
-    {
-      id: "BO-Max",
-      name: planName.plan3,
-      price: countryPrices.plan3,
-      annualPrice: calculateAnnualPrice(countryPrices.plan3),
-      description:
-        "Pensado para feedlots con gestión avanzada de alimentación e inventarios",
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Incluye todo en Confinamiento Core",
-        "Lectura de Comederos Personalizada",
-        "Informes cuota 481",
-        "Inventario avanzado",
-      ],
-      popular: false,
-    },
-  ];
-  const ownerPlansOT$EN: Omit<Plan, "country">[] = [
-    {
-      id: "OT-EN-Start",
-      name: planName.plan1,
-      price: countryPrices.plan1,
-      annualPrice: calculateAnnualPrice(countryPrices.plan1),
-      description: "For essential cattle and feed management.",
-      pens: `${countryPrices.plan1pens} ${"pens"}`,
-      users: `${countryPrices.plan1users} ${"user"}`,
-      keyFeatures: [
-        "Feeding Management",
-        "Yardsheet",
-        "Cattle Management",
-        "Supply Inventory",
-        "Pen Rider",
-      ],
-      popular: false,
-    },
-    {
-      id: "OT-EN-Core",
-      name: planName.plan2,
-      price: countryPrices.plan2,
-      annualPrice: calculateAnnualPrice(countryPrices.plan2),
-      description: "Everything you need for basic health and chute operations",
-      pens: `${countryPrices.plan2pens} ${t("pens")}`,
-      users: `${countryPrices.plan2users} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Starter",
-        "Animal Health Basic",
-        "Quick Start Chute",
-        "Billing",
-      ],
-      popular: true,
-    },
-    {
-      id: "OT-EN-Plus",
-      name: planName.plan3,
-      price: countryPrices.plan3,
-      annualPrice: calculateAnnualPrice(countryPrices.plan3),
-      description: "Run advanced health and chute workflows — powered by EID",
-      pens: `${countryPrices.plan3pens} ${t("pens")}`,
-      users: `${countryPrices.plan3users} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Core",
-        "Advanced Animal Health & Chute",
-        "EID Integration",
-        "Input Transformation - Premixes creation",
-        "Chute-based cattle entry",
-      ],
-      popular: false,
-    },
-    {
-      id: "OT-EN-Max",
-      name: planName.plan4,
-      price: countryPrices.plan4,
-      annualPrice: calculateAnnualPrice(countryPrices.plan4),
-      description:
-        "Feeding and inventory automations with market value reports — all in one plan.",
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Plus",
-        "Advanced Feeding & Inventory",
-        "Market Value Reports",
-        <span className="flex items-center">
-          Analytics
-          <Badge className="ml-2 bg-blue-500 text-white text-xs">
-            {getComingSoonText()}
-          </Badge>
-        </span>,
-      ],
-      popular: false,
-    },
-  ];
-  const ownerPlansOT$ES: Omit<Plan, "country">[] = [
-    {
-      id: "OT-ES-Start",
-      name: planName.plan1,
-      price: countryPrices.plan1,
-      annualPrice: calculateAnnualPrice(countryPrices.plan1),
-      description: "For essential cattle and feed management.",
-      pens: `${countryPrices.plan1pens} ${"pens"}`,
-      users: `${countryPrices.plan1users} ${"user"}`,
-      keyFeatures: [
-        "Feeding Management",
-        "Yardsheet",
-        "Cattle Management",
-        "Supply Inventory",
-        "Pen Rider",
-      ],
-      popular: false,
-    },
-    {
-      id: "OT-ES-Core",
-      name: planName.plan2,
-      price: countryPrices.plan2,
-      annualPrice: calculateAnnualPrice(countryPrices.plan2),
-      description: "Everything you need for basic health and chute operations",
-      pens: `${countryPrices.plan2pens} ${t("pens")}`,
-      users: `${countryPrices.plan2users} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Starter",
-        "Animal Health Basic",
-        "Quick Start Chute",
-        "Billing",
-      ],
-      popular: true,
-    },
-    {
-      id: "OT-ES-Plus",
-      name: planName.plan3,
-      price: countryPrices.plan3,
-      annualPrice: calculateAnnualPrice(countryPrices.plan3),
-      description: "Run advanced health and chute workflows — powered by EID",
-      pens: `${countryPrices.plan3pens} ${t("pens")}`,
-      users: `${countryPrices.plan3users} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Core",
-        "Advanced Animal Health & Chute",
-        "EID Integration",
-        "Input Transformation - Premixes creation",
-        "Chute-based cattle entry",
-      ],
-      popular: false,
-    },
-    {
-      id: "OT-ES-Max",
-      name: planName.plan4,
-      price: countryPrices.plan4,
-      annualPrice: calculateAnnualPrice(countryPrices.plan4),
-      description:
-        "Feeding and inventory automations with market value reports — all in one plan.",
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Plus",
-        "Advanced Feeding & Inventory",
-        "Market Value Reports",
-        <span className="flex items-center">
-          Analytics
-          <Badge className="ml-2 bg-blue-500 text-white text-xs">
-            {getComingSoonText()}
-          </Badge>
-        </span>,
-      ],
-      popular: false,
-    },
-  ];
-  const ownerPlansMX: Omit<Plan, "country">[] = [
-    {
-      id: "MX-Start",
-      name: planName.plan1,
-      price: countryPrices.plan1,
-      annualPrice: calculateAnnualPrice(countryPrices.plan1),
-      description: "For essential cattle and feed management.",
-      pens: `${countryPrices.plan1pens} ${"pens"}`,
-      users: `${countryPrices.plan1users} ${"user"}`,
-      keyFeatures: [
-        "Feeding Management",
-        "Yardsheet",
-        "Cattle Management",
-        "Supply Inventory",
-        "Pen Rider",
-      ],
-      popular: false,
-    },
-    {
-      id: "MX-Core",
-      name: planName.plan2,
-      price: countryPrices.plan2,
-      annualPrice: calculateAnnualPrice(countryPrices.plan2),
-      description: "Everything you need for basic health and chute operations",
-      pens: `${countryPrices.plan2pens} ${t("pens")}`,
-      users: `${countryPrices.plan2users} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Starter",
-        "Animal Health Basic",
-        "Quick Start Chute",
-        "Billing",
-      ],
-      popular: true,
-    },
-    {
-      id: "MX-Plus",
-      name: planName.plan3,
-      price: countryPrices.plan3,
-      annualPrice: calculateAnnualPrice(countryPrices.plan3),
-      description: "Run advanced health and chute workflows — powered by EID",
-      pens: `${countryPrices.plan3pens} ${t("pens")}`,
-      users: `${countryPrices.plan3users} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Core",
-        "Advanced Animal Health & Chute",
-        "EID Integration",
-        "Input Transformation - Premixes creation",
-        "Chute-based cattle entry",
-      ],
-      popular: false,
-    },
-    {
-      id: "MX-Max",
-      name: planName.plan4,
-      price: countryPrices.plan4,
-      annualPrice: calculateAnnualPrice(countryPrices.plan4),
-      description:
-        "Feeding and inventory automations with market value reports — all in one plan.",
-      pens: `${countryPrices.plan4pens} ${t("pens")}`,
-      users: `${countryPrices.plan4usesr} ${t("users")}`,
-      keyFeatures: [
-        "Everything in Plus",
-        "Advanced Feeding & Inventory",
-        "Market Value Reports",
-        <span className="flex items-center">
-          Analytics
-          <Badge className="ml-2 bg-blue-500 text-white text-xs">
-            {getComingSoonText()}
-          </Badge>
-        </span>,
-      ],
-      popular: false,
-    },
-  ];
-  const ownersPlans: Plan[] = [
-    ...ownerPlansBR.map((ownerPlans) => ({ ...ownerPlans, country: "BR" })),
-    ...ownerPlansAR.map((ownerPlans) => ({ ...ownerPlans, country: "AR" })),
-    ...ownerPlansUS.map((ownerPlans) => ({ ...ownerPlans, country: "US" })),
-    ...ownerPlansCA.map((ownerPlans) => ({ ...ownerPlans, country: "CA" })),
-    ...ownerPlansOT$EN.map((ownerPlans) => ({
-      ...ownerPlans,
-      country: "OT$EN",
-    })),
-    ...ownerPlansPY.map((ownerPlans) => ({ ...ownerPlans, country: "PY" })),
-    ...ownerPlansOT$ES.map((ownerPlans) => ({
-      ...ownerPlans,
-      country: "OT$ES",
-    })),
-    ...ownerPlansMX.map((ownerPlans) => ({ ...ownerPlans, country: "MX" })),
-    ...ownerPlanUY.map((ownerPlans) => ({ ...ownerPlans, country: "UY" })),
-    ...ownerPlansBO.map((ownerPlans) => ({ ...ownerPlans, country: "BO" })),
-  ];
-
-  const currentPlans = ownersPlans.filter(
-    (plan) => plan.country === selectedCountry
-  );
-
-  const ownerFeaturesAR: Omit<Feature, "country">[] = [
-    {
-      name: `${"pens"} Incluidos`,
-      plan1: "10",
-      plan2: "25",
-      plan3: "40",
-      plan4: "80",
-    },
-    { name: "users", plan1: "1", plan2: "2", plan3: "3", plan4: "5" },
-    {
-      name: "Curral Extra",
-      plan1: `+${formatPrice(30)}`,
-      plan2: `+${formatPrice(30)}`,
-      plan3: `+${formatPrice(30)}`,
-      plan4: `+${formatPrice(30)}`,
-    },
-    {
-      name: "Usuário Extra",
-      plan1: `+${formatPrice(120)}`,
-      plan2: `+${formatPrice(120)}`,
-      plan3: `+${formatPrice(120)}`,
-      plan4: `+${formatPrice(120)}`,
-    },
-    {
-      name: t("feeding"),
-      plan1: true,
-      plan2: true,
-      plan3: true,
-      plan4: true,
-    },
-    {
-      name: "Mapa do Confinamento",
-      plan1: true,
-      plan2: true,
-      plan3: true,
-      plan4: true,
-    },
-    {
-      name: t("cattleManagement"),
-      plan1: true,
-      plan2: true,
-      plan3: true,
-      plan4: true,
-    },
-    {
-      name: t("suppliesInventory"),
-      plan1: true,
-      plan2: true,
-      plan3: true,
-      plan4: true,
-    },
-    {
-      name: "Quantidade de Suprimentos",
-      plan1: "Ilimitado",
-      plan2: "Ilimitado",
-      plan3: "Ilimitado",
-      plan4: "Ilimitado",
-    },
-    {
-      name: t("dietManagement"),
-      plan1: true,
-      plan2: true,
-      plan3: true,
-      plan4: true,
-    },
-    {
-      name: "Quantidade de Dietas",
-      plan1: "Ilimitado",
-      plan2: "Ilimitado",
-      plan3: "Ilimitado",
-      plan4: "Ilimitado",
-    },
-    {
-      name: "Recorredor",
-      plan1: true,
-      plan2: true,
-      plan3: true,
-      plan4: true,
-    },
-    {
-      name: "Relatórios",
-      plan1: true,
-      plan2: true,
-      plan3: true,
-      plan4: true,
-    },
-    {
-      name: "advancedFeeding",
-      plan1: `+${formatPrice(600)}`,
-      plan2: true,
-      plan3: true,
-      plan4: true,
-      isExpandable: true,
-
-      subFeatures: [
-        {
-          name: "Protocolos de Alimentação",
-          plan1: false,
-          plan2: true,
-          plan3: true,
-          plan4: true,
-        },
-        {
-          name: "Automação de Ordens de Carga/Descarga",
-          plan1: false,
-          plan2: true,
-          plan3: true,
-          plan4: true,
-        },
-        {
-          name: "Personalização da Leitura de Cocho",
-          plan1: false,
-          plan2: true,
-          plan3: true,
-          plan4: true,
-        },
-      ],
-    },
-    {
-      name: "premixGeneration",
-      plan1: `+${formatPrice(150)}`,
-      plan2: `+${formatPrice(150)}`,
-      plan3: true,
-      plan4: true,
-    },
-    {
-      name: "animalHealth",
-      plan1: `+${formatPrice(400)}`,
-      plan2: `+${formatPrice(400)}`,
-      plan3: `+${formatPrice(400)}`,
-      plan4: true,
-    },
-    {
-      name: "chute",
-      plan1: false,
-      plan2: `+${formatPrice(300)}`,
-      plan3: true,
-      plan4: true,
-    },
-    {
-      name: "tagReaderIntegration",
-      plan1: false,
-      plan2: `+${formatPrice(300)}`,
-      plan3: true,
-      plan4: true,
-    },
-    {
-      name: "customFeederModule",
-      plan1: `+${formatPrice(600)}`,
-      plan2: `+${formatPrice(600)}`,
-      plan3: `+${formatPrice(600)}`,
-      plan4: `+${formatPrice(600)}`,
-      isAddOn: true,
-      isCustomFeeder: true,
-      isExpandable: true,
-
-      subFeatures: [
-        {
-          name: "Demonstrativos",
-          plan1: false,
-          plan2: false,
-          plan3: false,
-          plan4: false,
-        },
-        {
-          name: "Gestão de Contas",
-          plan1: false,
-          plan2: false,
-          plan3: false,
-          plan4: false,
-        },
-        {
-          name: "Relatório de Margens e Lucros",
-          plan1: false,
-          plan2: false,
-          plan3: false,
-          plan4: false,
-        },
-        {
-          name: "clientUsers",
-          plan1: `+${formatPrice(120)}`,
-          plan2: `+${formatPrice(120)}`,
-          plan3: `+${formatPrice(120)}`,
-          plan4: `+${formatPrice(120)}`,
-        },
-      ],
-    },
-    {
-      name: "Integração com Balanças de Caminhões",
-      plan1: false,
-      plan2: false,
-      plan3: "Proximamente",
-      plan4: "Proximamente",
-    },
-    {
-      name: "Integração com Dump Box",
-      plan1: false,
-      plan2: false,
-      plan3: "Proximamente",
-      plan4: "Proximamente",
-    },
-  ];
+  // Get features from centralized configuration
   const ownerFeatures: Feature[] = [
-    ...ownerFeaturesAR.map((ownerFeatures) => ({
-      ...ownerFeatures,
-      country: "AR",
+    ...getFeaturesForCountry(selectedCountry, t).map((feature) => ({
+      ...feature,
+      country: selectedCountry,
     })),
   ];
 
-  // filtrar owner plans por pais preguntar a chatgpt (por selectedCountry)
-  const currentFeatures = ownerFeatures.filter(
-    (features) => features.country === selectedCountry
+  // Get features for the selected country
+  const currentFeatures = useMemo(() => {
+    return getFeaturesForCountry(selectedCountry, t);
+  }, [selectedCountry, t]);
+
+  // Initialize expanded features state
+  const [expandedFeatures, setExpandedFeatures] = useState<Set<string>>(
+    new Set()
   );
 
-  // AddOns BRASIL//
+  // Set default expanded features when currentFeatures changes
+  useEffect(() => {
+    const defaultExpanded = currentFeatures
+      .filter((feature) => feature.expandedByDefault)
+      .map((feature) => feature.name);
+    setExpandedFeatures(new Set(defaultExpanded));
+  }, [currentFeatures]);
 
-  const addOnsBR: Omit<AddOn, "country">[] = [
-    {
-      id: "customFeeder-addon",
-      name: t("customFeederModule"),
-      description: t("customFeederModuleDesc"),
-      price: 600,
-      availableFor: ["lite", "go", "flex", "pro"],
-      includedIn: [],
-      isCustomFeeder: true,
-    },
-    {
-      id: "usuarios-clientes",
-      name: t("clientUsers"),
-      description: t("clientUsersDesc"),
-      price: 120,
-      availableFor: ["lite", "go", "flex", "pro"],
-      includedIn: [],
-      isCustomFeeder: true,
-    },
-    {
-      id: "animal-health",
-      name: t("animalHealth"),
-      description: "Gestão completa da saúde do rebanho",
-      price: 400,
-      availableFor: ["lite", "go", "flex"],
-      includedIn: ["pro"],
-    },
-    {
-      id: "tronco",
-      name: t("chute"),
-      description: "Sistema completo de manejo no tronco",
-      price: 300,
-      availableFor: ["go"],
-      includedIn: ["flex", "pro"],
-    },
-    {
-      id: "leitor-brinco",
-      name: t("tagReaderIntegration"),
-      description: "Integração com sistemas de leitura de brincos eletrônicos",
-      price: 300,
-      availableFor: ["go"],
-      includedIn: ["flex", "pro"],
-    },
-    {
-      id: "alimentacao-avancada",
-      name: t("advancedFeeding"),
-      description: "Recursos avançados para gestão e otimização de alimentação",
-      price: 600,
-      availableFor: ["lite"],
-      includedIn: ["go", "flex", "pro"],
-    },
-    {
-      id: "pre-misturas",
-      name: t("premixGeneration"),
-      description: "Sistema para geração e controle de pré-misturas",
-      price: 150,
-      availableFor: ["lite", "go"],
-      includedIn: ["flex", "pro"],
-    },
-    {
-      id: "analytics",
-      name: t("analytics"),
-      description:
-        "Análises avançadas e relatórios detalhados para otimização da operação",
-      price: 300,
-      availableFor: ["go", "flex"],
-      includedIn: ["pro"],
-    },
-    {
-      id: "relatorio-mercado",
-      name: t("marketValueReport"),
-      description: "Relatórios detalhados sobre valores de mercado do gado",
-      price: 150,
-      availableFor: ["go", "flex"],
-      includedIn: ["pro"],
-    },
+  // Get visible add-ons and maintain the original order from configuration
+  const allAddOns = useMemo(() => {
+    return getVisibleAddOns(selectedCountry);
+  }, [selectedCountry]);
 
-    {
-      id: "balanca-caminhoes",
-      name: "Integração com Balanças de Caminhões",
-      description:
-        "Integração com sistemas de balança de caminhão para pesagem automática",
-      price: 600,
-      availableFor: ["flex", "pro"],
-      includedIn: [],
-      comingSoon: true,
-    },
-    {
-      id: "dump-box",
-      name: "Integração com Dump Box",
-      description:
-        "Integração com sistemas de Dump Box para automação de alimentação",
-      price: 600,
-      availableFor: ["flex", "pro"],
-      includedIn: [],
-      comingSoon: true,
-    },
-  ];
-  const addOnsAR: Omit<AddOn, "country">[] = [
-    {
-      id: "customFeeder-addon",
-      name: t("customFeederModule"),
-      description: t("customFeederModuleDesc"),
-      price: 600,
-      availableFor: ["plan1"],
-      includedIn: ["plan2"],
-      isCustomFeeder: true,
-    },
-    {
-      id: "usuarios-clientes",
-      name: t("clientUsers"),
-      description: t("clientUsersDesc"),
-      price: 120,
-      availableFor: ["AR-Inicial", "AR-Esencial", "AR-Integral", "AR-Avanzado"],
-      includedIn: [],
-      isCustomFeeder: true,
-    },
-    {
-      id: "animal-health",
-      name: t("animalHealth"),
-      description: "Gestão completa da saúde do rebanho",
-      price: 400,
-      availableFor: ["AR-Inicial", "AR-Esencial", "AR-Integral", "AR-Avanzado"],
-      includedIn: ["AR-Avanzado"],
-    },
-    {
-      id: "tronco",
-      name: t("chute"),
-      description: "Sistema completo de manejo no tronco",
-      price: countryPrices.Chute,
-      availableFor: ["AR-Inicial"],
-      includedIn: ["AR-Esencial", "AR-Integral", "AR-Avanzado"],
-    },
-    {
-      id: "leitor-brinco",
-      name: t("tagReaderIntegration"),
-      description: "Integração com sistemas de leitura de brincos eletrônicos",
-      price: 300,
-      availableFor: ["AR-Inicial"],
-      includedIn: ["AR-Esencial", "AR-Integral", "AR-Avanzado"],
-    },
-    {
-      id: "alimentacao-avancada",
-      name: t("advancedFeeding"),
-      description: "Recursos avançados para gestão e otimização de alimentação",
-      price: 600,
-      availableFor: ["AR-Inicial"],
-      includedIn: ["AR-Esencial", "AR-Integral", "AR-Avanzado"],
-    },
-    {
-      id: "pre-misturas",
-      name: t("premixGeneration"),
-      description: "Sistema para geração e controle de pré-misturas",
-      price: 150,
-      availableFor: ["AR-Inicial"],
-      includedIn: ["AR-Esencial", "AR-Integral", "AR-Avanzado"],
-    },
-    {
-      id: "analytics",
-      name: t("analytics"),
-      description:
-        "Análises avançadas e relatórios detalhados para otimização da operação",
-      price: 300,
-      availableFor: ["AR-Inicial"],
-      includedIn: ["AR-Esencial", "AR-Integral", "AR-Avanzado"],
-    },
-    {
-      id: "relatorio-mercado",
-      name: t("marketValueReport"),
-      description: "Relatórios detalhados sobre valores de mercado do gado",
-      price: 150,
-      availableFor: ["AR-Inicial"],
-      includedIn: ["AR-Esencial", "AR-Integral", "AR-Avanzado"],
-    },
+  // Separate add-ons into two groups while maintaining original order within each group
+  const currentAddOns = useMemo(() => {
+    const notComingSoon = allAddOns.filter((addon) => !addon.comingSoon);
+    const comingSoon = allAddOns.filter((addon) => addon.comingSoon);
 
-    {
-      id: "balanca-caminhoes",
-      name: "Integração com Balanças de Caminhões",
-      description:
-        "Integração com sistemas de balança de caminhão para pesagem automática",
-      price: 600,
-      availableFor: ["AR-Inicial"],
-      includedIn: [],
-      comingSoon: true,
-    },
-    {
-      id: "dump-boxAR",
-      name: "Integracion con Dump Box",
-      description:
-        "Integração com sistemas de Dump Box para automação de alimentação",
-      price: 600,
-      availableFor: ["AR-Inicial"],
-      includedIn: [],
-      comingSoon: true,
-    },
-  ];
-  const addOns: AddOn[] = [
-    ...addOnsBR.map((addon) => ({ ...addon, country: "BR" })),
-    ...addOnsAR.map((addon) => ({ ...addon, country: "AR" })),
-  ];
-
-  const currentAddOns = addOns.filter(
-    (addon) => addon.country === selectedCountry
-  );
+    // Combine them with coming soon at the end
+    return [...notComingSoon, ...comingSoon];
+  }, [allAddOns]);
 
   const toggleFeatureExpansion = (featureName: string) => {
     setExpandedFeatures((prev) => {
@@ -2019,6 +290,49 @@ export default function Component() {
     featureName?: string,
     comingSoon?: boolean
   ) => {
+    // Check if value is a comingSoon object
+    if (value && typeof value === "object" && value.type === "comingSoon") {
+      return (
+        <div className="flex justify-center items-center">
+          <Badge className="bg-blue-500 text-white text-xs">{value.text}</Badge>
+        </div>
+      );
+    }
+
+    // Add asterisk for MicroMachineIntegration if MicroingredientesManagement is active
+    if (
+      typeof value === "string" &&
+      value.startsWith("+") &&
+      featureName ===
+        getLocalizedFeatureName("MicroMachineIntegration", selectedCountry) &&
+      currentFeatures.some(
+        (feature) =>
+          feature.name ===
+            getLocalizedFeatureName(
+              "MicroingredientesManagement",
+              selectedCountry
+            ) &&
+          (feature.plan1 === true ||
+            feature.plan2 === true ||
+            feature.plan3 === true ||
+            feature.plan4 === true)
+      )
+    ) {
+      return (
+        <div className="flex flex-col items-center">
+          <span className="text-sm font-roboto text-cattler-orange font-medium">
+            {value}
+            <span className="text-cattler-navy">*</span>
+          </span>
+          {comingSoon && (
+            <Badge className="mt-1 bg-blue-500 text-white text-xs">
+              {getComingSoonText(selectedCountry)}
+            </Badge>
+          )}
+        </div>
+      );
+    }
+
     if (typeof value === "boolean") {
       if (!showIcons) {
         return (
@@ -2030,7 +344,7 @@ export default function Component() {
           {value ? (
             <Check className="h-5 w-5 text-cattler-green" />
           ) : (
-            <X className="h-5 w-5 text-gray-400" />
+            <X className="h-5 w-5 text-red-500" />
           )}
         </div>
       );
@@ -2043,7 +357,7 @@ export default function Component() {
           </span>
           {comingSoon && (
             <Badge className="mt-1 bg-blue-500 text-white text-xs">
-              Em Breve
+              {getComingSoonText(selectedCountry)}
             </Badge>
           )}
         </div>
@@ -2054,7 +368,7 @@ export default function Component() {
         <div className="flex flex-col items-center">
           <Check className="h-5 w-5 text-cattler-green" />
           <Badge className="mt-1 bg-blue-500 text-white text-xs">
-            Em Breve
+            {getComingSoonText(selectedCountry)}
           </Badge>
         </div>
       );
@@ -2062,7 +376,9 @@ export default function Component() {
     if (typeof value === "string" && value === "Proximamente") {
       return (
         <div className="flex flex-col items-center">
-          <Badge className="bg-blue-500 text-white text-xs">Em Breve</Badge>
+          <Badge className="bg-blue-500 text-white text-xs">
+            {getComingSoonText(selectedCountry)}
+          </Badge>
         </div>
       );
     }
@@ -2097,11 +413,73 @@ export default function Component() {
       <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cattler-green mx-auto mb-4"></div>
-          <p className="text-cattler-navy font-lato">Carregando...</p>
+          <p className="text-cattler-navy font-lato">{t("loading")}</p>
         </div>
       </div>
     );
   }
+
+  function getShortPlanName(planKey: "plan1" | "plan2" | "plan3" | "plan4") {
+    const planName =
+      PLAN_NAME_BY_COUNTRY[selectedCountry] ?? PLAN_NAME_BY_COUNTRY["OT$EN"];
+    const fullName = planName[planKey];
+    if (!fullName) return "";
+    const parts = fullName.split(" ");
+    return parts.length > 1 ? parts.slice(1).join(" ") : fullName;
+  }
+
+  function getCustomFeederBadgeText() {
+    switch (selectedCountry) {
+      case "BR":
+        return "Bôitel";
+      case "AR":
+        return "Hotelería";
+      case "US":
+      case "CA":
+      case "OT-EN":
+        return "Custom Feeder";
+      case "MX":
+      case "PY":
+      case "UY":
+      case "BO":
+      case "OT-ES":
+        return "Hotelería";
+      default:
+        return "Custom Feeder";
+    }
+  }
+
+  function getCustomFeederDescription() {
+    switch (selectedCountry) {
+      case "BR":
+        return "Gestão completa para operações de Bôitel com múltiplos clientes";
+      case "AR":
+      case "MX":
+      case "PY":
+      case "UY":
+      case "BO":
+      case "OT-ES":
+        return "Gestión completa para operaciones de Hotelería con múltiples clientes";
+      case "US":
+      case "CA":
+      case "OT-EN":
+      default:
+        return "Complete management for custom feeder operations with multiple clients";
+    }
+  }
+
+  const isMicroingredientesActive = currentFeatures.some(
+    (feature) =>
+      feature.name ===
+        getLocalizedFeatureName(
+          "MicroingredientesManagement",
+          selectedCountry
+        ) &&
+      (feature.plan1 === true ||
+        feature.plan2 === true ||
+        feature.plan3 === true ||
+        feature.plan4 === true)
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20">
@@ -2266,12 +644,29 @@ export default function Component() {
                   <div className="text-sm font-roboto text-cattler-navy/60">
                     {t("perMonth")}
                     {billingCycle === "annual"
-                      ? `, cobrado ${t("annually")}`
+                      ? `,  ${
+                          selectedCountry === "BR"
+                            ? "cobrado anualmente"
+                            : ["UY", "PY", "BO", "MX", "OT-ES"].includes(
+                                selectedCountry
+                              )
+                            ? "cobrado anualmente"
+                            : "billed annually"
+                        }`
                       : ""}
                   </div>
                   {billingCycle === "annual" && (
                     <div className="mt-1 text-xs font-roboto text-cattler-orange font-medium">
-                      {formatPrice(plan.annualPrice!)} {t("perYear")} (Economize{" "}
+                      {formatPrice(plan.annualPrice!)} {t("perYear")} (
+                      {selectedCountry === "BR"
+                        ? "Economize"
+                        : ["UY", "PY", "BO", "MX", "OT-ES"].includes(
+                            selectedCountry
+                          )
+                        ? "Ahorre"
+                        : ["AR"].includes(selectedCountry)
+                        ? "Ahorrá"
+                        : "Save"}{" "}
                       {formatPrice(Math.round(plan.price * 12 * 0.1))})
                     </div>
                   )}
@@ -2297,7 +692,7 @@ export default function Component() {
                   </div>
                   <div className="space-y-2">
                     <h4 className="font-semibold text-sm font-lato text-cattler-navy">
-                      Recursos Principais:
+                      {t("mainFeatures")}:
                     </h4>
                     <ul className="space-y-1">
                       {plan.keyFeatures.map((feature, idx) => {
@@ -2356,7 +751,7 @@ export default function Component() {
                 </div>
                 <h2 className="text-4xl font-bold font-barlow text-cattler-navy">
                   {selectedCountry === "BR"
-                    ? "Você faz customFeeder?"
+                    ? `Você faz Bôitel?`
                     : ["AR"].includes(selectedCountry)
                     ? "¿Hacés Hotelería?"
                     : ["UY", "PY", "BO", "MX", "OT-ES"].includes(
@@ -2369,7 +764,7 @@ export default function Component() {
 
               <p className="text-xl font-lato text-cattler-navy/80 max-w-3xl mx-auto mb-8">
                 {selectedCountry === "BR"
-                  ? "Aprimore suas operações de customFeeder com recursos especializados projetados para gerenciar múltiplos clientes e operações complexas."
+                  ? "Aprimore suas operações de Bôitel com recursos especializados projetados para gerenciar múltiplos clientes e operações complexas."
                   : ["AR"].includes(selectedCountry)
                   ? "Mejorá tus operaciones de Hotelería con recursos especializados diseñados para gestionar múltiples clientes y operaciones complejas."
                   : ["UY", "PY", "BO", "MX", "OT-ES"].includes(selectedCountry)
@@ -2380,41 +775,36 @@ export default function Component() {
               <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 mb-8 border border-cattler-amber/20">
                 <h3 className="text-lg font-bold font-barlow text-cattler-navy mb-4">
                   {selectedCountry === "BR"
-                    ? "Complemento Recomendado para customFeeder"
+                    ? "Complemento Recomendado para Bôitel"
                     : ["AR", "UY", "PY", "BO", "MX", "OT-ES"].includes(
                         selectedCountry
                       )
                     ? "Módulo Recomendado para Hotelería"
-                    : "Recommended Add-On for Custom Feeding"}
+                    : "Recommended Add-On for Custom Feeders"}
                 </h3>
                 <div className="max-w-md mx-auto">
                   <div className="bg-gradient-to-br from-cattler-amber/5 to-cattler-orange/5 rounded-lg p-4 border border-cattler-amber/30 flex flex-col">
                     <h4 className="font-bold font-lato text-cattler-amber mb-2">
                       {selectedCountry === "BR"
-                        ? "Módulo customFeeder"
+                        ? "Módulo Bôitel"
                         : ["AR", "UY", "PY", "BO", "MX", "OT-ES"].includes(
                             selectedCountry
                           )
                         ? "Módulo Hotelería"
-                        : "Custom Feeding Add On"}
+                        : "Custom Feeder Add On"}
                     </h4>
                     <p className="text-sm font-roboto text-cattler-navy/70 mb-3">
-                      {selectedCountry === "BR"
-                        ? "Gestão completa para operações de customFeeder com múltiplos clientes"
-                        : ["AR", "UY", "PY", "BO", "MX", "OT-ES"].includes(
-                            selectedCountry
-                          )
-                        ? "Gestión completa para operaciones de Hotelería con múltiples clientes"
-                        : "Complete management for custom feeding operations with multiple clients"}
+                      {getCustomFeederDescription()}
                     </p>
                     <div className="text-lg font-bold font-barlow text-cattler-green mb-4">
-                      +{formatPrice(600)}/{t("perMonth")}
+                      +{formatPrice(getCustomFeederPrice(selectedCountry))} /
+                      {t("perMonth")}
                     </div>
                     <Button
                       className="mt-auto bg-cattler-amber hover:bg-cattler-amber/90 text-white font-lato font-bold py-3 shadow-md hover:shadow-lg transition-all duration-300"
                       onClick={() =>
                         handleAddOnSelect(
-                          addOns.find(
+                          currentAddOns.find(
                             (addon) => addon.id === "customFeeder-addon"
                           )!
                         )
@@ -2434,7 +824,7 @@ export default function Component() {
 
               <div className="mt-6 text-sm font-roboto text-cattler-navy/60">
                 {selectedCountry === "BR"
-                  ? "Este complemento é especificamente projetado para operações de customFeeder e pode ser adicionado a qualquer plano de Confinamento."
+                  ? "Este complemento é especificamente projetado para operações de Bôitel e pode ser adicionado a qualquer plano de Confinamento."
                   : ["AR", "UY", "OT-ES"].includes(selectedCountry)
                   ? "Este módulo está diseñado específicamente para operaciones de Hotelería y puede añadirse a cualquier plan de Feedlot."
                   : ["PY", "BO", "MX", "OT-ES"].includes(selectedCountry)
@@ -2447,50 +837,62 @@ export default function Component() {
           {/* Comparison Table */}
           <div className="bg-white rounded-lg shadow-xl border border-cattler-teal/20 p-8">
             <h2 className="text-3xl font-bold font-barlow text-cattler-navy text-center mb-8">
-              Compare Todos os Planos
+              {selectedCountry === "BR"
+                ? "Compare Todos os Planos"
+                : ["UY", "PY", "BO", "MX", "OT-ES"].includes(selectedCountry)
+                ? "Compare Todos los Planes"
+                : ["AR"].includes(selectedCountry)
+                ? "Compará Todos los Planes"
+                : "Compare All Plans"}
             </h2>
             <div className="overflow-x-auto max-h-96 overflow-y-auto border border-cattler-teal/20 rounded-lg">
               <table className="w-full">
                 <thead className="sticky top-0 bg-white z-10 border-b-2 border-cattler-teal/30">
                   <tr>
                     <th className="text-left py-4 px-4 font-bold font-lato text-cattler-navy bg-white">
-                      Recursos
+                      {selectedCountry === "BR"
+                        ? "Recursos"
+                        : ["AR", "UY", "PY", "BO", "MX", "OT-ES"].includes(
+                            selectedCountry
+                          )
+                        ? "Funcionalidades"
+                        : "Features"}
                     </th>
                     <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-white">
-                      {t("planLite")}
+                      {currentPlans[0]?.name || "Plan 1"}
                       <br />
                       <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        {formatPrice(1000)}
+                        {formatPrice(currentPlans[0]?.price || 0)}
                       </span>
                     </th>
                     <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-white">
-                      {t("planGo")}
+                      {currentPlans[1]?.name || "Plan 2"}
                       <br />
                       <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        {formatPrice(1500)}
+                        {formatPrice(currentPlans[1]?.price || 0)}
                       </span>
                     </th>
                     <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-cattler-light-teal/20">
-                      {t("planFlex")}
+                      {currentPlans[2]?.name || "Plan 3"}
                       <br />
                       <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        {formatPrice(1950)}
+                        {formatPrice(currentPlans[2]?.price || 0)}
                       </span>
                     </th>
                     <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-white">
-                      {t("planPro")}
+                      {currentPlans[3]?.name || "Plan 4"}
                       <br />
                       <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        {formatPrice(3700)}
+                        {formatPrice(currentPlans[3]?.price || 0)}
                       </span>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {currentFeatures.map((feature, index) => (
-                    <>
+                  {currentFeatures.flatMap((feature, index) => {
+                    const mainRow = (
                       <tr
-                        key={index}
+                        key={`feature-${index}`}
                         className={`border-b border-cattler-teal/10 hover:bg-cattler-light-teal/5 ${
                           feature.isAddOn
                             ? "bg-cattler-orange/5"
@@ -2513,7 +915,7 @@ export default function Component() {
                             {feature.isCustomFeeder && (
                               <Badge className="ml-2 bg-cattler-amber text-white text-xs">
                                 <Users className="h-3 w-3 mr-1" />
-                                customFeeder
+                                {getCustomFeederBadgeText()}
                               </Badge>
                             )}
                             {feature.isExpandable && (
@@ -2525,7 +927,7 @@ export default function Component() {
                               >
                                 {expandedFeatures.has(feature.name) ? (
                                   <>
-                                    <span>Ocultar</span>
+                                    <span>{t("hideDetails")}</span>
                                     <svg
                                       className="w-3 h-3"
                                       fill="none"
@@ -2542,7 +944,7 @@ export default function Component() {
                                   </>
                                 ) : (
                                   <>
-                                    <span>Ver detalhes</span>
+                                    <span>{t("showDetails")}</span>
                                     <svg
                                       className="w-3 h-3"
                                       fill="none"
@@ -2562,7 +964,7 @@ export default function Component() {
                             )}
                             {feature.comingSoon && (
                               <Badge className="ml-2 bg-blue-500 text-white text-xs">
-                                Em Breve
+                                {getComingSoonText(selectedCountry)}
                               </Badge>
                             )}
                           </div>
@@ -2600,57 +1002,69 @@ export default function Component() {
                           )}
                         </td>
                       </tr>
-                      {/* Sub-features */}
-                      {feature.subFeatures &&
-                        expandedFeatures.has(feature.name) &&
-                        feature.subFeatures.map((subFeature, subIndex) => (
-                          <tr
-                            key={`${index}-${subIndex}`}
-                            className="border-b border-cattler-teal/5 bg-cattler-light-teal/5"
-                          >
-                            <td className="py-2 px-4 pl-8 text-sm font-roboto text-cattler-navy/80">
-                              <div className="flex items-center">
-                                <span className="mr-2 text-cattler-teal">
-                                  └
-                                </span>
-                                {subFeature.name}
-                              </div>
-                            </td>
-                            <td className="py-2 px-4 text-center">
-                              {renderFeatureValue(
-                                subFeature.plan1,
-                                true,
-                                subFeature.name
-                              )}
-                            </td>
-                            <td className="py-2 px-4 text-center">
-                              {renderFeatureValue(
-                                subFeature.plan2,
-                                true,
-                                subFeature.name
-                              )}
-                            </td>
-                            <td className="py-2 px-4 text-center bg-cattler-light-teal/10">
-                              {renderFeatureValue(
-                                subFeature.plan3,
-                                true,
-                                subFeature.name
-                              )}
-                            </td>
-                            <td className="py-2 px-4 text-center">
-                              {renderFeatureValue(
-                                subFeature.plan4,
-                                true,
-                                subFeature.name
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                    </>
-                  ))}
+                    );
+
+                    const subRows =
+                      feature.subFeatures && expandedFeatures.has(feature.name)
+                        ? feature.subFeatures.map((subFeature, subIndex) => (
+                            <tr
+                              key={`${index}-${subIndex}`}
+                              className="border-b border-cattler-teal/5 bg-cattler-light-teal/5"
+                            >
+                              <td className="py-2 px-4 pl-8 text-sm font-roboto text-cattler-navy/80">
+                                <div className="flex items-center">
+                                  <span className="mr-2 text-cattler-teal">
+                                    └
+                                  </span>
+                                  {subFeature.name}
+                                </div>
+                              </td>
+                              <td className="py-2 px-4 text-center">
+                                {renderFeatureValue(
+                                  subFeature.plan1,
+                                  true,
+                                  subFeature.name
+                                )}
+                              </td>
+                              <td className="py-2 px-4 text-center">
+                                {renderFeatureValue(
+                                  subFeature.plan2,
+                                  true,
+                                  subFeature.name
+                                )}
+                              </td>
+                              <td className="py-2 px-4 text-center bg-cattler-light-teal/10">
+                                {renderFeatureValue(
+                                  subFeature.plan3,
+                                  true,
+                                  subFeature.name
+                                )}
+                              </td>
+                              <td className="py-2 px-4 text-center">
+                                {renderFeatureValue(
+                                  subFeature.plan4,
+                                  true,
+                                  subFeature.name
+                                )}
+                              </td>
+                            </tr>
+                          ))
+                        : [];
+
+                    return [mainRow, ...subRows];
+                  })}
                 </tbody>
               </table>
             </div>
+            {/* Disclaimer for MicroMachineIntegration */}
+            {isMicroingredientesActive && (
+              <div className="mt-4 text-sm font-roboto text-cattler-navy/70 px-8">
+                <p>
+                  * Micro Machine Integration for FEEDER PLUS requires the
+                  Microingredients Management add-on
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Add-ons Section */}
@@ -2717,7 +1131,7 @@ export default function Component() {
                       {addon.isCustomFeeder && (
                         <Badge className="ml-2 bg-cattler-amber text-white text-xs">
                           <Users className="h-3 w-3 mr-1" />
-                          customFeeder
+                          {getCustomFeederBadgeText()}
                         </Badge>
                       )}
                     </h4>
@@ -2730,7 +1144,7 @@ export default function Component() {
                     >
                       {addon.description}
                     </p>
-                    <p
+                    <div
                       className={`text-lg font-bold font-barlow ${
                         addon.comingSoon
                           ? "text-gray-500"
@@ -2744,7 +1158,7 @@ export default function Component() {
                           return (
                             <div className="flex flex-col items-center">
                               <Badge className="bg-blue-500 text-white text-xs">
-                                Em Breve
+                                {getComingSoonText(selectedCountry)}
                               </Badge>
                             </div>
                           );
@@ -2781,7 +1195,7 @@ export default function Component() {
                           </div>
                         );
                       })()}
-                    </p>
+                    </div>
 
                     {/* Plan availability information */}
                     <div className="mt-3 space-y-2">
@@ -2797,8 +1211,10 @@ export default function Component() {
                           <Plus className="h-3 w-3 mr-1" />
                           Disponível para:{" "}
                           {addon.availableFor
-                            .map(
-                              (plan) => planName[plan as keyof typeof planName]
+                            .map((plan) =>
+                              getShortPlanName(
+                                plan as "plan1" | "plan2" | "plan3" | "plan4"
+                              )
                             )
                             .join(", ")}
                         </Badge>
@@ -2810,9 +1226,10 @@ export default function Component() {
                             <Check className="h-3 w-3 mr-1" />
                             Incluído em:{" "}
                             {addon.includedIn
-                              .map(
-                                (plan) =>
-                                  planName[plan as keyof typeof planName]
+                              .map((plan) =>
+                                getShortPlanName(
+                                  plan as "plan1" | "plan2" | "plan3" | "plan4"
+                                )
                               )
                               .join(", ")}
                           </Badge>
@@ -2830,7 +1247,13 @@ export default function Component() {
                               : "bg-cattler-teal hover:bg-cattler-teal/90"
                           } text-white font-lato font-bold`}
                         >
-                          Adicionar ao Plano
+                          {selectedCountry === "BR"
+                            ? "Adicionar ao Plano"
+                            : ["AR", "UY", "PY", "BO", "MX", "OT-ES"].includes(
+                                selectedCountry
+                              )
+                            ? "Agregar al Plan"
+                            : "Add to Plan"}
                         </Button>
                       </div>
                     )}
@@ -2843,25 +1266,48 @@ export default function Component() {
           {/* CTA Section */}
           <div className="text-center mt-16 bg-gradient-to-r from-cattler-navy to-cattler-teal rounded-2xl p-12 text-white">
             <h2 className="text-3xl font-bold font-barlow mb-4">
-              Pronto para Começar?
+              {selectedCountry === "BR"
+                ? "Pronto para Começar?"
+                : ["AR", "UY", "PY", "BO", "MX", "OT-ES"].includes(
+                    selectedCountry
+                  )
+                ? "¿Listo para empezar?"
+                : "Ready to Start?"}
             </h2>
             <p className="text-xl font-lato mb-8 opacity-90">
-              Escolha o plano que se adapta à sua operação e comece a gerenciar
-              seu confinamento com mais eficiência hoje.
+              {selectedCountry === "BR"
+                ? "Escolha o plano que se adapta à sua operação e comece a gerenciar seu confinamento com mais eficiência hoje."
+                : ["UY", "PY", "BO", "MX", "OT-ES"].includes(selectedCountry)
+                ? "Elija el plan que se adapte a su operación y comience a gestionar su confinamiento con más eficiencia hoy."
+                : ["AR"].includes(selectedCountry)
+                ? "Elegí el plan que se adapte a tu operación y comienza a gestionar tu confinamiento con más eficiencia hoy."
+                : "Choose the plan that fits your operation and start managing your confinement with more efficiency today."}
             </p>
             <div className="space-x-4">
               <Button
                 size="lg"
                 className="bg-cattler-orange hover:bg-cattler-orange/90 text-white font-lato font-bold px-8 py-3"
               >
-                Iniciar Teste Gratuito
+                {selectedCountry === "BR"
+                  ? "Iniciar Teste Gratuito"
+                  : ["AR", "UY", "PY", "BO", "MX", "OT-ES"].includes(
+                      selectedCountry
+                    )
+                  ? "Iniciar Prueba Gratuita"
+                  : "Start Free Trial"}
               </Button>
               <Button
                 size="lg"
                 variant="outline"
                 className="border-2 border-white text-white hover:bg-white hover:text-cattler-navy font-lato font-bold px-8 py-3 bg-white/10 backdrop-blur-sm hover:shadow-lg transition-all duration-300"
               >
-                Contatar Vendas
+                {selectedCountry === "BR"
+                  ? "Contatar Vendas"
+                  : ["AR", "UY", "PY", "BO", "MX", "OT-ES"].includes(
+                      selectedCountry
+                    )
+                  ? "Contactar Ventas"
+                  : "Contact Sales"}
               </Button>
             </div>
           </div>

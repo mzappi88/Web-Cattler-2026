@@ -3,114 +3,15 @@
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import AddOnCheckout from "@/components/pricing/addon-checkout";
-
-// Move add-ons data outside component to prevent recreation on every render
-const ADD_ONS = [
-  {
-    id: "customFeeder-addon",
-    name: "Módulo customFeeder",
-    description:
-      "Gestão completa para operações de customFeeder com múltiplos clientes",
-    price: 600,
-    availableFor: ["lite", "go", "flex", "pro"],
-    includedIn: [],
-    isCustomFeeder: true,
-  },
-  {
-    id: "usuarios-clientes",
-    name: "Usuários de Clientes",
-    description: "Usuários adicionais para clientes específicos",
-    price: 120,
-    availableFor: ["lite", "go", "flex", "pro"],
-    includedIn: [],
-    isCustomFeeder: true,
-  },
-  {
-    id: "animal-health",
-    name: "Sanidade Animal",
-    description: "Gestão completa da saúde do rebanho",
-    price: 400,
-    availableFor: ["lite", "go", "flex"],
-    includedIn: ["pro"],
-  },
-  {
-    id: "tronco",
-    name: "Tronco",
-    description: "Sistema completo de manejo no tronco",
-    price: 300,
-    availableFor: ["go"],
-    includedIn: ["flex", "pro"],
-  },
-  {
-    id: "leitor-brinco",
-    name: "Integração com Leitor de Brinco",
-    description: "Integração com sistemas de leitura de brincos eletrônicos",
-    price: 300,
-    availableFor: ["go"],
-    includedIn: ["flex", "pro"],
-  },
-  {
-    id: "alimentacao-avancada",
-    name: "Alimentação Avançada",
-    description: "Recursos avançados para gestão e otimização de alimentação",
-    price: 600,
-    availableFor: ["lite"],
-    includedIn: ["go", "flex", "pro"],
-  },
-  {
-    id: "pre-misturas",
-    name: "Geração de Pré-misturas",
-    description: "Sistema para geração e controle de pré-misturas",
-    price: 150,
-    availableFor: ["lite", "go"],
-    includedIn: ["flex", "pro"],
-  },
-  {
-    id: "analytics",
-    name: "Analytics",
-    description:
-      "Análises avançadas e relatórios detalhados para otimização da operação",
-    price: 300,
-    availableFor: ["go", "flex"],
-    includedIn: ["pro"],
-  },
-  {
-    id: "relatorio-mercado",
-    name: "Relatório de Valor de Mercado",
-    description: "Relatórios detalhados sobre valores de mercado do gado",
-    price: 150,
-    availableFor: ["go", "flex"],
-    includedIn: ["pro"],
-  },
-  {
-    id: "balanca-caminhoes",
-    name: "Integração com Balanças de Caminhões",
-    description:
-      "Integração com sistemas de balança de caminhão para pesagem automática",
-    price: 600,
-    availableFor: ["flex", "pro"],
-    includedIn: [],
-    comingSoon: true,
-  },
-  {
-    id: "dump-box",
-    name: "Integração com Dump Box",
-    description:
-      "Integração com sistemas de Dump Box para automação de alimentação",
-    price: 600,
-    availableFor: ["flex", "pro"],
-    includedIn: [],
-    comingSoon: true,
-  },
-];
+import { getAddOns, getAddOnInfo } from "@/data/owner-addons";
 
 export default function AddonCheckoutPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [selectedAddOn, setSelectedAddOn] = useState(null);
+  const [selectedAddOn, setSelectedAddOn] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Memoize the addon ID and data parameter
   const addonId = useMemo(() => {
@@ -159,9 +60,15 @@ export default function AddonCheckoutPage() {
           }
         }
 
-        // Fallback to finding addon in static data
+        // Fallback to getting addon from centralized data source
         if (!addon) {
-          addon = ADD_ONS.find((a) => a.id === addonId);
+          // Get addon from the centralized data source
+          // We'll use a default country for now, but ideally this should be passed as a parameter
+          const defaultCountry = "BR"; // This should be dynamic based on user selection
+          const addonInfo = getAddOnInfo(addonId, defaultCountry);
+          if (addonInfo) {
+            addon = addonInfo;
+          }
         }
 
         if (addon) {
@@ -250,12 +157,15 @@ export default function AddonCheckoutPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-cattler-navy font-lato">
-            Complemento não encontrado
+          <p className="text-cattler-navy font-lato mb-4">
+            Nenhum complemento selecionado
           </p>
-          <p className="text-cattler-navy/70 font-roboto">
-            Redirecionando para a página de planos...
-          </p>
+          <button
+            onClick={handleBack}
+            className="bg-cattler-teal text-white px-6 py-2 rounded-lg hover:bg-cattler-green transition-colors"
+          >
+            Voltar aos Planos
+          </button>
         </div>
       </div>
     );
