@@ -119,7 +119,7 @@ export const PRICES_BY_COUNTRY: Record<
     TruckScaleIntegration: number;
     DumpBoxIntegration: number;
     MicroMachineIntegration: number;
-    Cuota481: number;
+    informeCuota481: number;
     cowCalfBasic: number;
     cowCalfAdvanced: number;
     pastureBasic: number;
@@ -168,7 +168,7 @@ export const PRICES_BY_COUNTRY: Record<
     TruckScaleIntegration: 0,
     DumpBoxIntegration: 0,
     MicroMachineIntegration: 0,
-    Cuota481: 0,
+    informeCuota481: 0,
     cowCalfBasic: 0,
     cowCalfAdvanced: 0,
     pastureBasic: 0,
@@ -216,7 +216,7 @@ export const PRICES_BY_COUNTRY: Record<
     TruckScaleIntegration: 40,
     DumpBoxIntegration: 40,
     MicroMachineIntegration: 0,
-    Cuota481: 10,
+    informeCuota481: 10,
     cowCalfBasic: 0,
     cowCalfAdvanced: 0,
     pastureBasic: 0,
@@ -224,7 +224,7 @@ export const PRICES_BY_COUNTRY: Record<
   },
   US: {
     plan1: 165,
-    plan2: 199,
+    plan2: 221,
     plan3: 275,
     plan4: 480,
     plan1pens: 15,
@@ -264,7 +264,7 @@ export const PRICES_BY_COUNTRY: Record<
     TruckScaleIntegration: 100,
     DumpBoxIntegration: 100,
     MicroMachineIntegration: 100,
-    Cuota481: 0,
+    informeCuota481: 0,
     cowCalfBasic: 0,
     cowCalfAdvanced: 0,
     pastureBasic: 0,
@@ -312,7 +312,7 @@ export const PRICES_BY_COUNTRY: Record<
     TruckScaleIntegration: 100,
     DumpBoxIntegration: 100,
     MicroMachineIntegration: 100,
-    Cuota481: 0,
+    informeCuota481: 0,
     cowCalfBasic: 0,
     cowCalfAdvanced: 0,
     pastureBasic: 0,
@@ -360,7 +360,7 @@ export const PRICES_BY_COUNTRY: Record<
     TruckScaleIntegration: 100,
     DumpBoxIntegration: 100,
     MicroMachineIntegration: 0,
-    Cuota481: 0,
+    informeCuota481: 0,
     cowCalfBasic: 0,
     cowCalfAdvanced: 0,
     pastureBasic: 0,
@@ -408,7 +408,7 @@ export const PRICES_BY_COUNTRY: Record<
     TruckScaleIntegration: 100,
     DumpBoxIntegration: 100,
     MicroMachineIntegration: 0,
-    Cuota481: 0,
+    informeCuota481: 0,
     cowCalfBasic: 0,
     cowCalfAdvanced: 0,
     pastureBasic: 0,
@@ -456,7 +456,7 @@ export const PRICES_BY_COUNTRY: Record<
     TruckScaleIntegration: 100,
     DumpBoxIntegration: 100,
     MicroMachineIntegration: 0,
-    Cuota481: 0,
+    informeCuota481: 0,
     cowCalfBasic: 0,
     cowCalfAdvanced: 0,
     pastureBasic: 0,
@@ -504,7 +504,7 @@ export const PRICES_BY_COUNTRY: Record<
     TruckScaleIntegration: 100,
     DumpBoxIntegration: 100,
     MicroMachineIntegration: 100,
-    Cuota481: 0,
+    informeCuota481: 0,
     cowCalfBasic: 0,
     cowCalfAdvanced: 0,
     pastureBasic: 0,
@@ -552,7 +552,7 @@ export const PRICES_BY_COUNTRY: Record<
     TruckScaleIntegration: 100,
     DumpBoxIntegration: 100,
     MicroMachineIntegration: 100,
-    Cuota481: 0,
+    informeCuota481: 0,
     cowCalfBasic: 0,
     cowCalfAdvanced: 0,
     pastureBasic: 0,
@@ -600,7 +600,7 @@ export const PRICES_BY_COUNTRY: Record<
     TruckScaleIntegration: 100,
     DumpBoxIntegration: 100,
     MicroMachineIntegration: 100,
-    Cuota481: 0,
+    informeCuota481: 0,
     cowCalfBasic: 0,
     cowCalfAdvanced: 0,
     pastureBasic: 0,
@@ -633,12 +633,31 @@ export const getComingSoonText = (selectedCountry: string) => {
   }
 };
 
+// Helper function to get localized pens and users text
+function getLocalizedPensUsersText(selectedCountry: string): { pens: string; users: string } {
+  const translations: Record<string, { pens: string; users: string }> = {
+    BR: { pens: "currais", users: "usuários" },
+    AR: { pens: "corrales", users: "usuarios" },
+    US: { pens: "pens", users: "users" },
+    CA: { pens: "pens", users: "users" },
+    MX: { pens: "corrales", users: "usuarios" },
+    PY: { pens: "corrales", users: "usuarios" },
+    UY: { pens: "corrales", users: "usuarios" },
+    BO: { pens: "corrales", users: "usuarios" },
+    "OT-EN": { pens: "pens", users: "users" },
+    "OT-ES": { pens: "corrales", users: "usuarios" },
+  };
+
+  return translations[selectedCountry] ?? translations["OT-EN"];
+}
+
 // Function to get owner plans for a specific country
 export function getOwnerPlans(selectedCountry: string): Plan[] {
   const planName =
     PLAN_NAME_BY_COUNTRY[selectedCountry] ?? PLAN_NAME_BY_COUNTRY["OT$EN"];
   const countryPrices =
     PRICES_BY_COUNTRY[selectedCountry] ?? PRICES_BY_COUNTRY["OT$EN"];
+  const localizedText = getLocalizedPensUsersText(selectedCountry);
 
   const plans: Plan[] = [];
 
@@ -650,8 +669,8 @@ export function getOwnerPlans(selectedCountry: string): Plan[] {
       price: countryPrices.plan1,
       annualPrice: calculateAnnualPrice(countryPrices.plan1),
       description: getPlanDescription(selectedCountry, 1),
-      pens: `${countryPrices.plan1pens} pens`,
-      users: `${countryPrices.plan1users} user`,
+      pens: `${countryPrices.plan1pens} ${localizedText.pens}`,
+      users: `${countryPrices.plan1users} ${localizedText.users}`,
       keyFeatures: getPlanFeatures(selectedCountry, 1),
       popular: false,
       country: selectedCountry,
@@ -666,8 +685,8 @@ export function getOwnerPlans(selectedCountry: string): Plan[] {
       price: countryPrices.plan2,
       annualPrice: calculateAnnualPrice(countryPrices.plan2),
       description: getPlanDescription(selectedCountry, 2),
-      pens: `${countryPrices.plan2pens} pens`,
-      users: `${countryPrices.plan2users} users`,
+      pens: `${countryPrices.plan2pens} ${localizedText.pens}`,
+      users: `${countryPrices.plan2users} ${localizedText.users}`,
       keyFeatures: getPlanFeatures(selectedCountry, 2),
       popular: getPopularPlan(selectedCountry) === 2,
       country: selectedCountry,
@@ -682,8 +701,8 @@ export function getOwnerPlans(selectedCountry: string): Plan[] {
       price: countryPrices.plan3,
       annualPrice: calculateAnnualPrice(countryPrices.plan3),
       description: getPlanDescription(selectedCountry, 3),
-      pens: `${countryPrices.plan3pens} pens`,
-      users: `${countryPrices.plan3users} users`,
+      pens: `${countryPrices.plan3pens} ${localizedText.pens}`,
+      users: `${countryPrices.plan3users} ${localizedText.users}`,
       keyFeatures: getPlanFeatures(selectedCountry, 3),
       popular: getPopularPlan(selectedCountry) === 3,
       country: selectedCountry,
@@ -698,8 +717,8 @@ export function getOwnerPlans(selectedCountry: string): Plan[] {
       price: countryPrices.plan4,
       annualPrice: calculateAnnualPrice(countryPrices.plan4),
       description: getPlanDescription(selectedCountry, 4),
-      pens: `${countryPrices.plan4pens} pens`,
-      users: `${countryPrices.plan4usesr} users`,
+      pens: `${countryPrices.plan4pens} ${localizedText.pens}`,
+      users: `${countryPrices.plan4usesr} ${localizedText.users}`,
       keyFeatures: getPlanFeatures(selectedCountry, 4),
       popular: getPopularPlan(selectedCountry) === 4,
       country: selectedCountry,
@@ -1205,12 +1224,31 @@ export function getadvancedinventoryPrice(selectedCountry: string): number {
 }
 export function getBillingPrice(selectedCountry: string): number {
   const countryPrices = PRICES_BY_COUNTRY[selectedCountry] ?? PRICES_BY_COUNTRY["OT$EN"];
-  return countryPrices.Billing;
+  return countryPrices.billing;
 }
 export function getAnalyticsPrice(selectedCountry: string): number {
   const countryPrices = PRICES_BY_COUNTRY[selectedCountry] ?? PRICES_BY_COUNTRY["OT$EN"];
   return countryPrices.Analytics;
 }
-
+export function getInformeCuota481Price(selectedCountry: string): number {
+  const countryPrices = PRICES_BY_COUNTRY[selectedCountry] ?? PRICES_BY_COUNTRY["OT$EN"];
+  return countryPrices.informeCuota481;
+}
+export function getPastureManagementBasicPrice(selectedCountry: string): number {
+  const countryPrices = PRICES_BY_COUNTRY[selectedCountry] ?? PRICES_BY_COUNTRY["OT$EN"];
+  return countryPrices.pastureBasic;
+}
+export function getPastureManagementAdvancedPrice(selectedCountry: string): number {
+  const countryPrices = PRICES_BY_COUNTRY[selectedCountry] ?? PRICES_BY_COUNTRY["OT$EN"];
+  return countryPrices.pastureAdvanced;
+}
+export function getCowCalfBasicPrice(selectedCountry: string): number {
+  const countryPrices = PRICES_BY_COUNTRY[selectedCountry] ?? PRICES_BY_COUNTRY["OT$EN"];
+  return countryPrices.cowCalfBasic;
+}
+export function getCowCalfAdvancedPrice(selectedCountry: string): number {
+  const countryPrices = PRICES_BY_COUNTRY[selectedCountry] ?? PRICES_BY_COUNTRY["OT$EN"];
+  return countryPrices.cowCalfAdvanced;
+}
 
 

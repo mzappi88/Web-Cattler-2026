@@ -4,7 +4,8 @@ import { getAdvancedFeedingPrice, getInputTransformationPrice, getAnimalHealthPr
   getBunkcoreCustomizationPrice, getAnimalHealthAdvancedPrice, getAnimalHealthChutePrice, getChutePrice, getchutequickstartPrice,
   getchutecattleinPrice,getchuteneworderPrice, getEIDIntegrationPrice, getCustomFeederPrice, getClientUsersPrice, getMicroingredientesManagementPrice, 
   getMarketValueReportPrice, getTruckScaleIntegrationPrice, getDumpBoxIntegrationPrice, getMicroMachineIntegrationPrice, getGrainBankPrice ,getAutoAdjustPrice,
-  getFeedingAutomationPrice,getFeedingProtocolsPrice,getPurchasesPrice,getadvancedinventoryPrice,getBillingPrice,getAnalyticsPrice} from "./owner-plans";
+  getFeedingAutomationPrice,getFeedingProtocolsPrice,getPurchasesPrice,getadvancedinventoryPrice,getBillingPrice,getAnalyticsPrice,getInformeCuota481Price,getPastureManagementBasicPrice,
+  getPastureManagementAdvancedPrice,getCowCalfBasicPrice,getCowCalfAdvancedPrice} from "./owner-plans";
 
 
 export interface Feature {
@@ -195,7 +196,14 @@ const FEATURE_CONFIG: FeatureConfig = {
     penRider: { plan1: true, plan2: true, plan3: true, plan4: true },
     reports: { plan1: true, plan2: true, plan3: true, plan4: true },
     animalHealth: { plan1: false, plan2: true, plan3: true, plan4: true},
-    chute: { plan1: false, plan2: "addon", plan3: true, plan4: true },
+    chute: { plan1: false, plan2: "addon", plan3: true, plan4: true, isExpandable: true, expandedByDefault: true, 
+      subFeatures:[
+        {name: "chuteCattleIn",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteNewOrder",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteQuickStart",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "EIDIntegration",plan1: "", plan2: "", plan3:"",plan4:""},
+      ]
+    },
     advancedFeeding: { plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
       subFeatures: [
         { name: "feedingProtocols", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
@@ -210,6 +218,7 @@ const FEATURE_CONFIG: FeatureConfig = {
         {name: "inputTransformation", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
       ]
     },
+    informeCuota481: { plan1: "addon", plan2: "addon", plan3: "addon", plan4: true },
     customFeeder: { 
       plan1: "addon", 
       plan2: "addon", 
@@ -225,10 +234,14 @@ const FEATURE_CONFIG: FeatureConfig = {
         { name: "clientUsers", plan1: "addon", plan2: "addon", plan3: "addon", plan4: "addon" },
       ]
     },
-    analytics: { plan1: "addon", plan2: "addon", plan3: "addon", plan4: "addon" },  
+    pastureManagementBasic: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    pastureManagementAdvanced:{plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    cowCalfBasic:{plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    cowCalfAdvanced: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    analytics: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },  
     truckScalesIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
     dumpBoxIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
-    MicroMachineIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
+    
   },
   BR: {
     feeding: { plan1: true, plan2: true, plan3: true, plan4: true },
@@ -859,7 +872,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
     },
     chuteNewOrder: {
       BR: "Tronco de Nova Ordem",
-      AR: "Creación de Órdenes d e Manga",
+      AR: "Creación de Órdenes de Manga",
       US: "Chute New Order",
       CA: "Chute New Order",
       MX: "Creación de Órdenes de Manga",
@@ -1075,6 +1088,66 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
         OT$EN: "Analytics",
         OT$ES: "Análisis de Datos",
       },
+      informeCuota481: {
+        BR: "Informes Cuota 481",
+        AR: "Informes Cuota 481",
+        US: "Cuota 481 Reports",
+        CA: "Cuota 481 Reports",
+        MX: "Informes Cuota 481",
+        PY: "Informes Cuota 481",
+        UY: "Informes Cuota 481",
+        BO: "Informes Cuota 481",
+        OT$EN: "Cuota 481 Reports",
+        OT$ES: "Informes Cuota 481",
+      },  
+      pastureManagementBasic: {
+        BR: "Pasture Management Basic",
+        AR: "Manejo de Pasturas Básico",
+        US: "Pasture Management Basic",
+        CA: "Pasture Management Basic",
+        MX: "Manejo de Pasturas Básico",
+        PY: "Manejo de Pasturas Básico",
+        UY: "Manejo de Pasturas Básico",
+        BO: "Manejo de Pasturas Básico",
+        OT$EN: "Pasture Management Basic",
+        OT$ES: "Manejo de Pasturas Básico",
+      },  
+      pastureManagementAdvanced: {
+        BR: "Pasture Management Advanced",
+        AR: "Manejo de Pasturas Avanzado",
+        US: "Pasture Management Advanced",
+        CA: "Pasture Management Advanced",
+        MX: "Manejo de Pasturas Avanzado",
+        PY: "Manejo de Pasturas Avanzado",
+        UY: "Manejo de Pasturas Avanzado",
+        BO: "Manejo de Pasturas Avanzado",
+        OT$EN: "Pasture Management Advanced",
+        OT$ES: "Manejo de Pasturas Avanzado",
+      },    
+      cowCalfBasic: {
+        BR: "Cow Calf Basic",
+        AR: "Manejo de Crías y Recría Básico",
+        US: "Cow Calf Basic",
+        CA: "Cow Calf Basic",
+        MX: "Manejo de Crías y Recría Básico",
+        PY: "Manejo de Crías y Recría Básico",
+        UY: "Manejo de Crías y Recría Básico",
+        BO: "Cow Calf Basic",
+        OT$EN: "Cow Calf Basic",
+        OT$ES: "Manejo de Crías y Recría Básico",
+      },  
+      cowCalfAdvanced: {  
+        BR: "Cow Calf Advanced",
+        AR: "Manejo de Crías y Recría Avanzado",
+        US: "Cow Calf Advanced",
+        CA: "Cow Calf Advanced",
+        MX: "Manejo de Crías y Recría Avanzado",
+        PY: "Manejo de Crías y Recría Avanzado",
+        UY: "Manejo de Crías y Recría Avanzado",
+        BO: "Manejo de Crías y Recría Avanzado",
+        OT$EN: "Cow Calf Advanced",
+        OT$ES: "Manejo de Crías y Recría Avanzado",
+      },
     comingSoon: {
       BR: "Proximamente",
       AR: "Próximamente",
@@ -1193,7 +1266,17 @@ export function getFeaturesForCountry(selectedCountry: Country, t: (key: string)
           return `+${formatPrice(getBunkcoreCustomizationPrice(selectedCountry), selectedCountry)}`;
           case "analytics":
             return `+${formatPrice(getAnalyticsPrice(selectedCountry), selectedCountry)}`;
-          default:
+        case "informeCuota481":
+          return `+${formatPrice(getInformeCuota481Price(selectedCountry), selectedCountry)}`;
+        case "pastureManagementBasic":
+          return `+${formatPrice(getPastureManagementBasicPrice(selectedCountry), selectedCountry)}`;
+        case "pastureManagementAdvanced":
+          return `+${formatPrice(getPastureManagementAdvancedPrice(selectedCountry), selectedCountry)}`;
+        case "cowCalfBasic":
+          return `+${formatPrice(getCowCalfBasicPrice(selectedCountry), selectedCountry)}`;
+        case "cowCalfAdvanced":
+          return `+${formatPrice(getCowCalfAdvancedPrice(selectedCountry), selectedCountry)}`;
+        default:
             return value;}
       
     } else if (value === "comingSoon") {
@@ -1306,6 +1389,16 @@ export function getFeaturesForCountry(selectedCountry: Country, t: (key: string)
           return getLocalizedFeatureName("clientUsers", country);
         case "analytics":
             return getLocalizedFeatureName("analytics", country);
+        case "informeCuota481":
+          return getLocalizedFeatureName("informeCuota481", country);
+        case "pastureManagementBasic":
+          return getLocalizedFeatureName("pastureManagementBasic", country);
+        case "pastureManagementAdvanced":
+          return getLocalizedFeatureName("pastureManagementAdvanced", country);
+        case "cowCalfBasic":
+          return getLocalizedFeatureName("cowCalfBasic", country);
+        case "cowCalfAdvanced":
+          return getLocalizedFeatureName("cowCalfAdvanced", country);
         default:
         return featureKey;
 

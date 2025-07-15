@@ -62,7 +62,7 @@ export const ADDON_IDS = {
   
   // Additional modules
   GRAIN_BANK: "grainBank",
-  CUOTA_481: "cuota481",
+  CUOTA_481: "informeCuota481",
   PASTURE_MANAGEMENT_BASIC: "pastureManagementBasic",
   PASTURE_MANAGEMENT_ADVANCED: "pastureManagementAdvanced",
   COW_CALF_BASIC: "cowCalfBasic",
@@ -206,9 +206,9 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: [],
       hidden: true,
     },
-    "cuota481": {
-      name: "Cuota 481",
-      description: "Sistema de gestão de cuota 481",
+    "informeCuota481": {
+      name: "Informes Cuota 481",
+      description: "Sistema de gestão de informes cuota 481",
       availableFor: ["plan1", "plan2", "plan3", "plan4"],
       includedIn: [],
       hidden: true,
@@ -430,7 +430,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: [],
       hidden: true
     },
-    "cuota481": {
+    "informeCuota481": {
       name: "Informes Cuota 481",
       description: "Generación de informes de cuota 481",
       availableFor: ["plan1", "plan2", "plan3"],
@@ -2309,7 +2309,7 @@ function getAddOnPriceFromConfig(addOnId: string, selectedCountry: string): numb
     
     // Additional modules
     [ADDON_IDS.GRAIN_BANK]: "grainBank",
-    [ADDON_IDS.CUOTA_481]: "Cuota481",
+    [ADDON_IDS.CUOTA_481]: "informeCuota481",
     [ADDON_IDS.PASTURE_MANAGEMENT_BASIC]: "pastureBasic",
     [ADDON_IDS.PASTURE_MANAGEMENT_ADVANCED]: "pastureAdvanced",
     [ADDON_IDS.COW_CALF_BASIC]: "cowCalfBasic",
@@ -2542,7 +2542,7 @@ export function getGrainBankAddOn(selectedCountry: string): AddOn | undefined {
   return addOns.find(addon => addon.id === ADDON_IDS.GRAIN_BANK);
 }
 
-export function getCuota481AddOn(selectedCountry: string): AddOn | undefined {
+export function getInformeCuota481AddOn(selectedCountry: string): AddOn | undefined {
   const addOns = getAddOns(selectedCountry);
   return addOns.find(addon => addon.id === ADDON_IDS.CUOTA_481);
 }

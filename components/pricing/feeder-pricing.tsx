@@ -647,7 +647,7 @@ export default function Component() {
                       ? `,  ${
                           selectedCountry === "BR"
                             ? "cobrado anualmente"
-                            : ["UY", "PY", "BO", "MX", "OT-ES"].includes(
+                            : ["AR", "UY", "PY", "BO", "MX", "OT-ES"].includes(
                                 selectedCountry
                               )
                             ? "cobrado anualmente"
