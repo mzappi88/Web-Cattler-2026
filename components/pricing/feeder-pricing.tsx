@@ -1209,7 +1209,13 @@ export default function Component() {
                           }`}
                         >
                           <Plus className="h-3 w-3 mr-1" />
-                          Disponível para:{" "}
+                          {selectedCountry === "BR"
+                            ? "Disponível para:"
+                            : ["AR", "UY", "PY", "BO", "MX", "OT-ES"].includes(
+                                selectedCountry
+                              )
+                            ? "Disponible para:"
+                            : "Available for:"}
                           {addon.availableFor
                             .map((plan) =>
                               getShortPlanName(
@@ -1224,7 +1230,18 @@ export default function Component() {
                         <div className="flex items-center justify-center gap-1 text-xs font-roboto">
                           <Badge className="bg-cattler-green text-white text-xs">
                             <Check className="h-3 w-3 mr-1" />
-                            Incluído em:{" "}
+                            {selectedCountry === "BR"
+                              ? "Incluído em:"
+                              : [
+                                  "AR",
+                                  "UY",
+                                  "PY",
+                                  "BO",
+                                  "MX",
+                                  "OT-ES",
+                                ].includes(selectedCountry)
+                              ? "Incluído en:"
+                              : "Included in:"}
                             {addon.includedIn
                               .map((plan) =>
                                 getShortPlanName(

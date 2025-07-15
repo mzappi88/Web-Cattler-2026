@@ -1414,30 +1414,32 @@ export function getFeaturesForCountry(selectedCountry: Country, t: (key: string)
       plan1: getPensForPlan(selectedCountry, 1).toString(),
       plan2: getPensForPlan(selectedCountry, 2).toString(),
       plan3: getPensForPlan(selectedCountry, 3).toString(),
-      plan4: getPensForPlan(selectedCountry, 4).toString(),
-    },
+      plan4: getPensForPlan(selectedCountry, 4).toString(), isExpandable: true, expandedByDefault: true, subFeatures: [
+      {
+        name: getLocalizedFeatureName("extraPen", selectedCountry),
+        plan1: `+${formatPrice(getExtraPenPrice(selectedCountry), selectedCountry)}`,
+        plan2: `+${formatPrice(getExtraPenPrice(selectedCountry), selectedCountry)}`,
+        plan3: `+${formatPrice(getExtraPenPrice(selectedCountry), selectedCountry)}`,
+        plan4: `+${formatPrice(getExtraPenPrice(selectedCountry), selectedCountry)}`,
+      },
+    ]
+      },
     { 
       name: t("users"), 
       plan1: getUsersForPlan(selectedCountry, 1).toString(), 
       plan2: getUsersForPlan(selectedCountry, 2).toString(), 
       plan3: getUsersForPlan(selectedCountry, 3).toString(), 
-      plan4: getUsersForPlan(selectedCountry, 4).toString() 
+      plan4: getUsersForPlan(selectedCountry, 4).toString() , isExpandable: true, expandedByDefault: true, subFeatures: [
+      {
+        name: getLocalizedFeatureName("extraUser", selectedCountry),
+        plan1: `+${formatPrice(getExtraUserPrice(selectedCountry), selectedCountry)}`,
+        plan2: `+${formatPrice(getExtraUserPrice(selectedCountry), selectedCountry)}`,
+        plan3: `+${formatPrice(getExtraUserPrice(selectedCountry), selectedCountry)}`,
+        plan4: `+${formatPrice(getExtraUserPrice(selectedCountry), selectedCountry)}`,
+      },
+    ]
     },
-    // Extra prices (always dynamic)
-    {
-      name: getLocalizedFeatureName("extraPen", selectedCountry),
-      plan1: `+${formatPrice(getExtraPenPrice(selectedCountry), selectedCountry)}`,
-      plan2: `+${formatPrice(getExtraPenPrice(selectedCountry), selectedCountry)}`,
-      plan3: `+${formatPrice(getExtraPenPrice(selectedCountry), selectedCountry)}`,
-      plan4: `+${formatPrice(getExtraPenPrice(selectedCountry), selectedCountry)}`,
-    },
-    {
-      name: getLocalizedFeatureName("extraUser", selectedCountry),
-      plan1: `+${formatPrice(getExtraUserPrice(selectedCountry), selectedCountry)}`,
-      plan2: `+${formatPrice(getExtraUserPrice(selectedCountry), selectedCountry)}`,
-      plan3: `+${formatPrice(getExtraUserPrice(selectedCountry), selectedCountry)}`,
-      plan4: `+${formatPrice(getExtraUserPrice(selectedCountry), selectedCountry)}`,
-    },
+  
   ];
 
   // Add dynamic features from configuration
