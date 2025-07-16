@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { TranslationProvider } from "@/hooks/TranslationProvider";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "v0 App",
@@ -16,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <TranslationProvider>{children}</TranslationProvider>
+        <TranslationProvider>
+          {children}
+          <Footer />
+        </TranslationProvider>
       </body>
     </html>
   );

@@ -136,6 +136,15 @@ export default function Component() {
   const [summerStartDate, setSummerStartDate] = useState("");
   const [summerEndDate, setSummerEndDate] = useState("");
   const [summerPlan, setSummerPlan] = useState<string>("plan1");
+  const [forceShow, setForceShow] = useState(false);
+
+  // Force show after 3 seconds to prevent infinite loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setForceShow(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Use centralized annual price calculation from owner-plans.ts
 
@@ -450,13 +459,13 @@ export default function Component() {
     setBillingCycle((prev) => (prev === "monthly" ? "annual" : "monthly"));
   };
 
-  // Show loading state until hydrated
-  if (!isHydrated) {
+  // Show loading state until hydrated (with timeout fallback)
+  if (!isHydrated && !forceShow) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cattler-green mx-auto mb-4"></div>
-          <p className="text-cattler-navy font-lato">{t("loading")}</p>
+          <p className="text-cattler-navy font-lato">Cargando...</p>
         </div>
       </div>
     );

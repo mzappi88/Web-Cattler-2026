@@ -5,7 +5,7 @@ import { Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 
 export default function Footer() {
-  const { t } = useTranslation();
+  const { t, selectedCountry } = useTranslation();
 
   // Custom TikTok icon since it's not in Lucide
   const TikTok = () => (
@@ -28,7 +28,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Company Info */}
           <div>
             <img
@@ -41,7 +41,18 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <a
-                href="https://instagram.com"
+                href={
+                  selectedCountry === "AR" ||
+                  selectedCountry === "PY" ||
+                  selectedCountry === "UY" ||
+                  selectedCountry === "BO" ||
+                  selectedCountry === "MX" ||
+                  selectedCountry === "OT-ES"
+                    ? "https://www.instagram.com/cattler_ar"
+                    : selectedCountry === "BR"
+                    ? "https://www.instagram.com/cattler_us"
+                    : "https://www.instagram.com/cattler_us"
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white"
@@ -50,7 +61,18 @@ export default function Footer() {
                 <span className="sr-only">Instagram</span>
               </a>
               <a
-                href="https://twitter.com"
+                href={
+                  selectedCountry === "AR" ||
+                  selectedCountry === "PY" ||
+                  selectedCountry === "UY" ||
+                  selectedCountry === "BO" ||
+                  selectedCountry === "MX" ||
+                  selectedCountry === "OT-ES"
+                    ? "https://x.com/CattlerLatam"
+                    : selectedCountry === "BR"
+                    ? "https://www.twitter.com/cattler2"
+                    : "https://www.twitter.com/cattler2"
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white"
@@ -59,7 +81,7 @@ export default function Footer() {
                 <span className="sr-only">Twitter</span>
               </a>
               <a
-                href="https://youtube.com"
+                href="https://www.youtube.com/channel/UCqUE87diFowfBqLC3L-vC-A"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white"
@@ -68,7 +90,7 @@ export default function Footer() {
                 <span className="sr-only">YouTube</span>
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://linkedin.com/company/cattler-corporation"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white"
@@ -76,75 +98,39 @@ export default function Footer() {
                 <Linkedin size={20} />
                 <span className="sr-only">LinkedIn</span>
               </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white"
-              >
-                <Facebook size={20} />
-                <span className="sr-only">Facebook</span>
-              </a>
-              <a
-                href="https://tiktok.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white"
-              >
-                <TikTok />
-                <span className="sr-only">TikTok</span>
-              </a>
+              {(selectedCountry === "US" ||
+                selectedCountry === "CA" ||
+                selectedCountry === "OT-EN" ||
+                selectedCountry === "BR") && (
+                <a
+                  href="https://www.facebook.com/cattler.farm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white"
+                >
+                  <Facebook size={20} />
+                  <span className="sr-only">Facebook</span>
+                </a>
+              )}
+              {(selectedCountry === "US" ||
+                selectedCountry === "CA" ||
+                selectedCountry === "OT-EN" ||
+                selectedCountry === "BR") && (
+                <a
+                  href="https://www.tiktok.com/@cattler"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white"
+                >
+                  <TikTok />
+                  <span className="sr-only">TikTok</span>
+                </a>
+              )}
             </div>
           </div>
 
-          {/* Company Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">
-              {t("footer.company")}
-            </h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/about_us"
-                  className="text-gray-400 hover:text-white"
-                >
-                  {t("footer.aboutCattler")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/careers"
-                  className="text-gray-400 hover:text-white"
-                >
-                  {t("footer.careers")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-gray-400 hover:text-white">
-                  {t("footer.termsConditions")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/privacy"
-                  className="text-gray-400 hover:text-white"
-                >
-                  {t("footer.privacyPolicy")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-gray-400 hover:text-white"
-                >
-                  {t("footer.contact")}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
           {/* Contact Info */}
-          <div className="lg:col-span-2">
+          <div>
             <h3 className="text-lg font-semibold mb-4">
               {t("footer.contactUs")}
             </h3>
@@ -165,25 +151,11 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Copyright and Legal */}
-        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm mb-4 md:mb-0">
+        {/* Copyright */}
+        <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+          <p className="text-gray-400 text-sm">
             © 2022 by Cattler Corporation. {t("footer.allRightsReserved")}
           </p>
-          <div className="flex space-x-6">
-            <Link
-              href="/privacy"
-              className="text-gray-400 hover:text-white text-sm"
-            >
-              {t("footer.privacyPolicy")}
-            </Link>
-            <Link
-              href="/terms"
-              className="text-gray-400 hover:text-white text-sm"
-            >
-              {t("footer.termsOfService")}
-            </Link>
-          </div>
         </div>
       </div>
     </footer>
