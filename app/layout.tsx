@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import { TranslationProvider } from "@/hooks/TranslationProvider";
 
 export const metadata: Metadata = {
@@ -18,11 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <TranslationProvider>
-          <Header />
-          <div className="pt-20">{children}</div>
-          <Footer />
-        </TranslationProvider>
+        <TranslationProvider>{children}</TranslationProvider>
       </body>
     </html>
   );

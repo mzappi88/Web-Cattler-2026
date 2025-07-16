@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
+import { useCountryDetection } from "./use-country-detection"
 
 
 export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT-EN" | "OT-ES"
@@ -606,15 +607,19 @@ const translations = {
 export function useTranslation() {
   const [selectedCountry, setSelectedCountry] = useState<Country>("US")
   const [isHydrated, setIsHydrated] = useState(false)
+  const { detectedCountry, isDetecting } = useCountryDetection()
 
   // Initialize from localStorage on mount
   useEffect(() => {
     const savedCountry = localStorage.getItem("cattler-country") as Country
     if (savedCountry && Object.keys(countryLanguageMap).includes(savedCountry)) {
       setSelectedCountry(savedCountry)
+    } else if (detectedCountry && !isDetecting) {
+      // Si no hay país guardado, usar el detectado automáticamente
+      setSelectedCountry(detectedCountry)
     }
     setIsHydrated(true)
-  }, [])
+  }, [detectedCountry, isDetecting])
 
   // Save to localStorage when country changes
   useEffect(() => {
