@@ -416,6 +416,12 @@ export default function Component() {
   };
 
   const handleAddOnSelect = (addOn: AddOn) => {
+    // Verificar que el addon existe
+    if (!addOn) {
+      console.warn("AddOn is undefined");
+      return;
+    }
+
     if (addOn.comingSoon) {
       return;
     }
@@ -837,13 +843,14 @@ export default function Component() {
                     </div>
                     <Button
                       className="mt-auto bg-cattler-amber hover:bg-cattler-amber/90 text-white font-lato font-bold py-3 shadow-md hover:shadow-lg transition-all duration-300"
-                      onClick={() =>
-                        handleAddOnSelect(
-                          currentAddOns.find(
-                            (addon) => addon.id === "customFeeder-addon"
-                          )!
-                        )
-                      }
+                      onClick={() => {
+                        const customFeederAddon = currentAddOns.find(
+                          (addon) => addon.id === "customFeeder-addon"
+                        );
+                        if (customFeederAddon) {
+                          handleAddOnSelect(customFeederAddon);
+                        }
+                      }}
                     >
                       {selectedCountry === "BR"
                         ? "Adicionar ao Plano"
@@ -1264,7 +1271,7 @@ export default function Component() {
                               ? "bg-cattler-amber hover:bg-cattler-amber/90"
                               : "bg-cattler-teal hover:bg-cattler-teal/90"
                           } text-white font-lato font-bold`}
-                          onClick={() => handleAddOnSelect(addon)}
+                          onClick={() => addon && handleAddOnSelect(addon)}
                         >
                           {selectedCountry === "BR"
                             ? "Adicionar ao Plano"
