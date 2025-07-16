@@ -6,15 +6,15 @@ export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "O
 
 const countryCurrencyMap: Record<Country, string> = {
   US: "$",
-  CA: "$",
+  CA: "US$",
   AR: "kg",
-  PY: "$",
-  UY: "$",
-  BO: "$",
+  PY: "US$",
+  UY: "US$",
+  BO: "US$",
   BR: "R$",
-  MX: "$",
-  "OT-EN": "$",
-  "OT-ES": "$",
+  MX: "US$",
+  "OT-EN": "US$",
+  "OT-ES": "US$",
 }
 
 const pricingTranslations = {
@@ -1068,7 +1068,7 @@ const pricingTranslations = {
 
     // Add-ons
     addOnsTitle: "Complementos Disponibles",
-    addOnsSubtitle: "Haz clic en un complemento para comprarlo para tu plan de Feedlot existente",
+    addOnsSubtitle: "Hacé clic en un complemento para comprarlo para tu plan de Feedlot existente",
     customFeeder: "Módulo Hotelería",
     customFeederDesc: "Gestión completa para operaciones de Hotelería con múltiples clientes",
     clientUsers: "Usuarios de Clientes",
@@ -1363,7 +1363,7 @@ export function usePricingTranslation() {
       if (selectedCountry === "AR") {
         return `${price.toLocaleString()} ${currency}`;
       }
-      return `${currency}${price.toLocaleString()}`;
+      return `${currency} ${price.toLocaleString()}`;
     },
     [currency, selectedCountry],
   );
@@ -1387,5 +1387,5 @@ export function formatPrice(price: number, country: Country = "US") {
   if (country === "AR") {
     return `${price.toLocaleString()} ${currency}`;
   }
-  return `${currency}${price.toLocaleString()}`;
+  return `${currency} ${price.toLocaleString()}`;
 }

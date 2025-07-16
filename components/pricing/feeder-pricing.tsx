@@ -288,7 +288,8 @@ export default function Component() {
     value: any,
     showIcons = true,
     featureName?: string,
-    comingSoon?: boolean
+    comingSoon?: boolean,
+    planNumber?: number
   ) => {
     // Check if value is a comingSoon object
     if (value && typeof value === "object" && value.type === "comingSoon") {
@@ -299,23 +300,30 @@ export default function Component() {
       );
     }
 
-    // Add asterisk for MicroMachineIntegration if MicroingredientesManagement is active
+    // Add asterisk for MicroMachineIntegration if MicroingredientesManagement is active (only for plan 3)
     if (
       typeof value === "string" &&
       value.startsWith("+") &&
       featureName ===
         getLocalizedFeatureName("MicroMachineIntegration", selectedCountry) &&
+      planNumber === 3 &&
       currentFeatures.some(
         (feature) =>
-          feature.name ===
+          (feature.name ===
             getLocalizedFeatureName(
               "MicroingredientesManagement",
               selectedCountry
             ) &&
-          (feature.plan1 === true ||
-            feature.plan2 === true ||
-            feature.plan3 === true ||
-            feature.plan4 === true)
+            feature.plan4 === true) ||
+          (feature.subFeatures &&
+            feature.subFeatures.some(
+              (subFeature) =>
+                subFeature.name ===
+                  getLocalizedFeatureName(
+                    "MicroingredientesManagement",
+                    selectedCountry
+                  ) && subFeature.plan4 === true
+            ))
       )
     ) {
       return (
@@ -470,15 +478,21 @@ export default function Component() {
 
   const isMicroingredientesActive = currentFeatures.some(
     (feature) =>
-      feature.name ===
+      (feature.name ===
         getLocalizedFeatureName(
           "MicroingredientesManagement",
           selectedCountry
         ) &&
-      (feature.plan1 === true ||
-        feature.plan2 === true ||
-        feature.plan3 === true ||
-        feature.plan4 === true)
+        feature.plan4 === true) ||
+      (feature.subFeatures &&
+        feature.subFeatures.some(
+          (subFeature) =>
+            subFeature.name ===
+              getLocalizedFeatureName(
+                "MicroingredientesManagement",
+                selectedCountry
+              ) && subFeature.plan4 === true
+        ))
   );
 
   return (
@@ -858,34 +872,20 @@ export default function Component() {
                         ? "Funcionalidades"
                         : "Features"}
                     </th>
-                    <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-white">
-                      {currentPlans[0]?.name || "Plan 1"}
-                      <br />
-                      <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        {formatPrice(currentPlans[0]?.price || 0)}
-                      </span>
-                    </th>
-                    <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-white">
-                      {currentPlans[1]?.name || "Plan 2"}
-                      <br />
-                      <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        {formatPrice(currentPlans[1]?.price || 0)}
-                      </span>
-                    </th>
-                    <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-cattler-light-teal/20">
-                      {currentPlans[2]?.name || "Plan 3"}
-                      <br />
-                      <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        {formatPrice(currentPlans[2]?.price || 0)}
-                      </span>
-                    </th>
-                    <th className="text-center py-4 px-4 font-bold font-lato text-cattler-navy bg-white">
-                      {currentPlans[3]?.name || "Plan 4"}
-                      <br />
-                      <span className="text-sm font-normal font-roboto text-cattler-navy/60">
-                        {formatPrice(currentPlans[3]?.price || 0)}
-                      </span>
-                    </th>
+                    {currentPlans.map((plan, index) => (
+                      <th
+                        key={index}
+                        className={`text-center py-4 px-4 font-bold font-lato text-cattler-navy ${
+                          plan.popular ? "bg-cattler-light-teal/20" : "bg-white"
+                        }`}
+                      >
+                        {plan.name}
+                        <br />
+                        <span className="text-sm font-normal font-roboto text-cattler-navy/60">
+                          {formatPrice(plan.price)}
+                        </span>
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
@@ -969,38 +969,24 @@ export default function Component() {
                             )}
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-center">
-                          {renderFeatureValue(
-                            feature.plan1,
-                            true,
-                            feature.name,
-                            feature.comingSoon
-                          )}
-                        </td>
-                        <td className="py-3 px-4 text-center">
-                          {renderFeatureValue(
-                            feature.plan2,
-                            true,
-                            feature.name,
-                            feature.comingSoon
-                          )}
-                        </td>
-                        <td className="py-3 px-4 text-center bg-cattler-light-teal/10">
-                          {renderFeatureValue(
-                            feature.plan3,
-                            true,
-                            feature.name,
-                            feature.comingSoon
-                          )}
-                        </td>
-                        <td className="py-3 px-4 text-center">
-                          {renderFeatureValue(
-                            feature.plan4,
-                            true,
-                            feature.name,
-                            feature.comingSoon
-                          )}
-                        </td>
+                        {currentPlans.map((plan, planIndex) => (
+                          <td
+                            key={planIndex}
+                            className={`py-3 px-4 text-center ${
+                              plan.popular ? "bg-cattler-light-teal/10" : ""
+                            }`}
+                          >
+                            {renderFeatureValue(
+                              feature[
+                                `plan${planIndex + 1}` as keyof typeof feature
+                              ],
+                              true,
+                              feature.name,
+                              feature.comingSoon,
+                              planIndex + 1
+                            )}
+                          </td>
+                        ))}
                       </tr>
                     );
 
@@ -1019,34 +1005,28 @@ export default function Component() {
                                   {subFeature.name}
                                 </div>
                               </td>
-                              <td className="py-2 px-4 text-center">
-                                {renderFeatureValue(
-                                  subFeature.plan1,
-                                  true,
-                                  subFeature.name
-                                )}
-                              </td>
-                              <td className="py-2 px-4 text-center">
-                                {renderFeatureValue(
-                                  subFeature.plan2,
-                                  true,
-                                  subFeature.name
-                                )}
-                              </td>
-                              <td className="py-2 px-4 text-center bg-cattler-light-teal/10">
-                                {renderFeatureValue(
-                                  subFeature.plan3,
-                                  true,
-                                  subFeature.name
-                                )}
-                              </td>
-                              <td className="py-2 px-4 text-center">
-                                {renderFeatureValue(
-                                  subFeature.plan4,
-                                  true,
-                                  subFeature.name
-                                )}
-                              </td>
+                              {currentPlans.map((plan, planIndex) => (
+                                <td
+                                  key={planIndex}
+                                  className={`py-2 px-4 text-center ${
+                                    plan.popular
+                                      ? "bg-cattler-light-teal/10"
+                                      : ""
+                                  }`}
+                                >
+                                  {renderFeatureValue(
+                                    subFeature[
+                                      `plan${
+                                        planIndex + 1
+                                      }` as keyof typeof subFeature
+                                    ],
+                                    true,
+                                    subFeature.name,
+                                    undefined,
+                                    planIndex + 1
+                                  )}
+                                </td>
+                              ))}
                             </tr>
                           ))
                         : [];

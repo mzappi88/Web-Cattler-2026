@@ -78,20 +78,26 @@ const FEATURE_CONFIG: FeatureConfig = {
     chuteQuickStart: { plan1: false, plan2:true, plan3: true, plan4: true },
     chuteCattleIn: { plan1: false, plan2: false, plan3: true, plan4: true },
     chuteNewOrder: { plan1: false, plan2: false, plan3: true, plan4: true },
-    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },
-    inputTransformation: { plan1: true, plan2: "addon", plan3: true, plan4: true },
-    MicroingredientesManagement: { plan1: false, plan2: false, plan3: "addon", plan4: true },
-    advancedFeeding: { 
+    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },    
+     advancedFeeding: { 
       plan1: "addon", 
       plan2: "addon", 
       plan3: "addon", 
       plan4: true,
       isExpandable: true,
       subFeatures: [
-        { name: "feedingProtocols", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "FeedingAutomation", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "BunkScoreCustomization", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "AutoAdjust", plan1: false, plan2: true, plan3: true, plan4: true }
+        { name: "feedingProtocols", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "FeedingAutomation", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "BunkScoreCustomization", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "AutoAdjust", plan1: "", plan2: "", plan3: "", plan4: "" }
+      ]
+    },
+    AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        {name: "purchases", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
+        {name: "inputTransformation", plan1: true, plan2: "addon", plan3: true, plan4: true },
+        {name: "MicroingredientesManagement", plan1: false, plan2: false, plan3: "addon", plan4: true },
+        
       ]
     },
     MicroMachineIntegration: { plan1: false, plan2: false, plan3: "addon", plan4: "addon" },    
@@ -140,19 +146,26 @@ const FEATURE_CONFIG: FeatureConfig = {
     chuteQuickStart: { plan1: false, plan2:true, plan3: true, plan4: true },
     chuteCattleIn: { plan1: false, plan2: false, plan3: true, plan4: true },
     chuteNewOrder: { plan1: false, plan2: false, plan3: true, plan4: true },
-    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },
-    inputTransformation: { plan1: true, plan2: "addon", plan3: true, plan4: true },
-    MicroingredientesManagement: { plan1: false, plan2: false, plan3: "addon", plan4: true },
-    advancedFeeding: { 
+    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },    
+     advancedFeeding: { 
       plan1: "addon", 
       plan2: "addon", 
       plan3: "addon", 
       plan4: true,
       isExpandable: true,
       subFeatures: [
-        { name: "feedingProtocols", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "loadUnloadAutomation", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "BunkScoreCustomization", plan1: false, plan2: true, plan3: true, plan4: true },
+        { name: "feedingProtocols", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "FeedingAutomation", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "BunkScoreCustomization", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "AutoAdjust", plan1: "", plan2: "", plan3: "", plan4: "" }
+      ]
+    },
+    AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        {name: "purchases", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
+        {name: "inputTransformation", plan1: true, plan2: "addon", plan3: true, plan4: true },
+        {name: "MicroingredientesManagement", plan1: false, plan2: false, plan3: "addon", plan4: true },
+        
       ]
     },
     MicroMachineIntegration: { plan1: false, plan2: false, plan3: "addon", plan4: "addon" },    
@@ -247,10 +260,16 @@ const FEATURE_CONFIG: FeatureConfig = {
     feeding: { plan1: true, plan2: true, plan3: true, plan4: true },
     yardsheet: { plan1: true, plan2: true, plan3: true, plan4: true },
     cattleManagement: { plan1: true, plan2: true, plan3: true, plan4: true },
-    suppliesInventory: { plan1: true, plan2: true, plan3: true, plan4: true },
-    suppliesQuantity: { plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
-    rationManagement: { plan1: true, plan2: true, plan3: true, plan4: true },
-    rationQuantity: { plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
+    suppliesInventory: { plan1: true, plan2: true, plan3: true, plan4: true , isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        { name: "suppliesQuantity", plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
+      ]
+    },
+    rationManagement: { plan1: true, plan2: true, plan3: true, plan4: true , isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        { name: "rationQuantity", plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
+      ]
+    },
     penRider: { plan1: true, plan2: true, plan3: true, plan4: true },
     reports: { plan1: true, plan2: true, plan3: true, plan4: true },
     advancedFeeding: { 
@@ -267,9 +286,23 @@ const FEATURE_CONFIG: FeatureConfig = {
       ]
     },
     inputTransformation: { plan1: "addon", plan2: "addon", plan3: true, plan4: true },
-    animalHealth: { plan1: "addon", plan2: "addon", plan3: "addon", plan4: true },
-    chute: { plan1: false, plan2: "addon", plan3: true, plan4: true },
+    chute: { plan1: false, plan2: "addon", plan3: true, plan4: true, isExpandable: true, expandedByDefault: false,
+      subFeatures: [
+        {name: "chuteCattleIn",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteNewOrder",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteQuickStart",plan1: "", plan2: "", plan3:"",plan4:""},
+        
+      ]
+    },
     EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },
+    animalHealth: { plan1: false, plan2: "addon", plan3: "addon", plan4: true },   
+    AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: false,
+      subFeatures: [
+        { name: "purchases", plan1: false, plan2: "addon", plan3: "addon", plan4: true },
+        {name: "inputTransformation", plan1: false, plan2: "addon", plan3: "addon", plan4: true },
+        
+      ]
+    },    
     customFeeder: { 
       plan1: "addon", 
       plan2: "addon", 
@@ -285,18 +318,29 @@ const FEATURE_CONFIG: FeatureConfig = {
         { name: "clientUsers", plan1: "addon", plan2: "addon", plan3: "addon", plan4: "addon" },
       ]
     },
+    pastureManagementBasic: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    pastureManagementAdvanced: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    cowCalfBasic: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    cowCalfAdvanced: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    analytics: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },  
     truckScalesIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
     dumpBoxIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
-    MicroMachineIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
+   
   },
   PY: {
     feeding: { plan1: true, plan2: true, plan3: true, plan4: true },
     yardsheet: { plan1: true, plan2: true, plan3: true, plan4: true },
     cattleManagement: { plan1: true, plan2: true, plan3: true, plan4: true },
-    suppliesInventory: { plan1: true, plan2: true, plan3: true, plan4: true },
-    suppliesQuantity: { plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
-    rationManagement: { plan1: true, plan2: true, plan3: true, plan4: true },
-    rationQuantity: { plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
+    suppliesInventory: { plan1: true, plan2: true, plan3: true, plan4: true, isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        { name: "suppliesQuantity", plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
+      ]
+    },
+    rationManagement: { plan1: true, plan2: true, plan3: true, plan4: true, isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        { name: "rationQuantity", plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
+      ]
+    },
     penRider: { plan1: true, plan2: true, plan3: true, plan4: true },
     reports: { plan1: true, plan2: true, plan3: true, plan4: true },
     advancedFeeding: { 
@@ -307,15 +351,21 @@ const FEATURE_CONFIG: FeatureConfig = {
       isExpandable: true,
       subFeatures: [
         { name: "feedingProtocols", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "FeedingAutomation", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "BunkScoreCustomization", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "AutoAdjust", plan1: false, plan2: true, plan3: true, plan4: true }
+        { name: "FeedingAutomation", plan1: false, plan2: "addon", plan3: true, plan4: true },
+        { name: "BunkScoreCustomization", plan1: false, plan2: "addon", plan3: true, plan4: true },
+        { name: "AutoAdjust", plan1: false, plan2: "addon", plan3: true, plan4: true }
       ]
     },
-    inputTransformation: { plan1: "addon", plan2: "addon", plan3: true, plan4: true },
-    animalHealth: { plan1: "addon", plan2: "addon", plan3: "addon", plan4: true },
-    chute: { plan1: false, plan2: "addon", plan3: true, plan4: true },
-    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },
+    AnimalHealthChute: { plan1: false, plan2: "addon", plan3: "addon", plan4: true, isExpandable: true, expandedByDefault: false,
+      subFeatures: [
+        {name: "animalHealth",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteCattleIn",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteNewOrder",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteQuickStart",plan1: "", plan2: "", plan3:"",plan4:""},
+        
+      ]
+    },
+    EIDIntegration: { plan1: false, plan2: "addon", plan3: "addon", plan4: true },
     customFeeder: { 
       plan1: "addon", 
       plan2: "addon", 
@@ -331,6 +381,18 @@ const FEATURE_CONFIG: FeatureConfig = {
         { name: "clientUsers", plan1: "addon", plan2: "addon", plan3: "addon", plan4: "addon" },
       ]
     },
+    advancedInventory: {plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: false,
+      subFeatures: [
+        { name: "purchases", plan1: false, plan2: "addon", plan3: "addon", plan4: true },
+        {name: "inputTransformation", plan1: "addon ", plan2: "addon", plan3: true, plan4: true },
+        
+      ]
+    },
+    pastureManagementBasic: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    pastureManagementAdvanced: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    cowCalfBasic: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    cowCalfAdvanced: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    analytics: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },  
     truckScalesIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
     dumpBoxIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
     MicroMachineIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
@@ -339,95 +401,146 @@ const FEATURE_CONFIG: FeatureConfig = {
     feeding: { plan1: true, plan2: true, plan3: true, plan4: false },
     yardsheet: { plan1: true, plan2: true, plan3: true, plan4: false },
     cattleManagement: { plan1: true, plan2: true, plan3: true, plan4: false },
-    suppliesInventory: { plan1: true, plan2: true, plan3: true, plan4: false },
+    suppliesInventory: { plan1: true, plan2: true, plan3: true, plan4: false, isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        { name: "suppliesQuantity", plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
+      ]
+    },
     suppliesQuantity: { plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: false },
-    rationManagement: { plan1: true, plan2: true, plan3: true, plan4: false },
-    rationQuantity: { plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: false },
+    rationManagement: { plan1: true, plan2: true, plan3: true, plan4: false, isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        { name: "rationQuantity", plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
+      ]
+    },
     penRider: { plan1: true, plan2: true, plan3: true, plan4: false },
     reports: { plan1: true, plan2: true, plan3: true, plan4: false },
     advancedFeeding: { 
-      plan1: "addon", 
-      plan2: true, 
-      plan3: true, 
-      plan4: false,
+      plan1: "", 
+      plan2: "", 
+      plan3: "", 
+      plan4: "",
       isExpandable: true,
       subFeatures: [
         { name: "feedingProtocols", plan1: false, plan2: true, plan3: true, plan4: false },
-        { name: "FeedingAutomation", plan1: false, plan2: true, plan3: true, plan4: false },
-        { name: "BunkScoreCustomization", plan1: false, plan2: true, plan3: true, plan4: false },
+        { name: "FeedingAutomation", plan1: false, plan2: "addon", plan3: true, plan4: false },
+        { name: "BunkScoreCustomization", plan1: false, plan2: "addon", plan3: true, plan4: false },
         { name: "AutoAdjust", plan1: false, plan2: true, plan3: true, plan4: false }
       ]
     },
-    inputTransformation: { plan1: "addon", plan2: "addon", plan3: true, plan4: false },
-    animalHealth: { plan1: "addon", plan2: "addon", plan3: "addon", plan4: false },
-    chute: { plan1: false, plan2: "addon", plan3: true, plan4: false },
-    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: false },
+    AnimalHealthChute: { plan1: false, plan2: "addon", plan3: "addon", plan4: false, isExpandable: true, expandedByDefault: false,
+      subFeatures: [
+        {name: "animalHealth",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteCattleIn",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteNewOrder",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteQuickStart",plan1: "", plan2: "", plan3:"",plan4:""},
+        
+      ]
+    },    
+    EIDIntegration: { plan1: "addon", plan2: true, plan3: true, plan4: false },
     customFeeder: { 
       plan1: "addon", 
       plan2: "addon", 
       plan3: "addon", 
-      plan4: false,
+      plan4: "addon",
       isAddOn: true,
       isCustomFeeder: true,
       isExpandable: true,
       subFeatures: [
-        { name: "billing", plan1: false, plan2: false, plan3: false, plan4: false },
-        { name: "accountManagement", plan1: false, plan2: false, plan3: false, plan4: false },
-        { name: "marginsReport", plan1: false, plan2: false, plan3: false, plan4: false },
-        { name: "clientUsers", plan1: "addon", plan2: "addon", plan3: "addon", plan4: false },
+        { name: "billing", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "accountManagement", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "marginsReport", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "clientUsers", plan1: "addon", plan2: "addon", plan3: "addon", plan4: "addon" },
       ]
     },
+    AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        {name: "inputTransformation", plan1: "addon", plan2: true, plan3: true, plan4: "addon" },
+        {name: "purchases", plan1: "addon", plan2: "addon", plan3: true, plan4: "addon" },
+        
+        
+      ]
+    },
+    informeCuota481: { plan1: "addon", plan2: "addon", plan3: true, plan4: "addon" },
+    pastureManagementBasic: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    pastureManagementAdvanced: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    cowCalfBasic: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    cowCalfAdvanced: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    analytics: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },  
     truckScalesIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: false },
     dumpBoxIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: false },
-    MicroMachineIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: false },
   },
   BO: {
     feeding: { plan1: true, plan2: true, plan3: true, plan4: false },
     yardsheet: { plan1: true, plan2: true, plan3: true, plan4: false },
     cattleManagement: { plan1: true, plan2: true, plan3: true, plan4: false },
-    suppliesInventory: { plan1: true, plan2: true, plan3: true, plan4: false },
+    suppliesInventory: { plan1: true, plan2: true, plan3: true, plan4: false, isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        { name: "suppliesQuantity", plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
+      ]
+    },
     suppliesQuantity: { plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: false },
-    rationManagement: { plan1: true, plan2: true, plan3: true, plan4: false },
-    rationQuantity: { plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: false },
+    rationManagement: { plan1: true, plan2: true, plan3: true, plan4: false, isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        { name: "rationQuantity", plan1: "Ilimitado", plan2: "Ilimitado", plan3: "Ilimitado", plan4: "Ilimitado" },
+      ]
+    },
     penRider: { plan1: true, plan2: true, plan3: true, plan4: false },
     reports: { plan1: true, plan2: true, plan3: true, plan4: false },
     advancedFeeding: { 
-      plan1: "addon", 
-      plan2: true, 
-      plan3: true, 
-      plan4: false,
+      plan1: "", 
+      plan2: "", 
+      plan3: "", 
+      plan4: "",
       isExpandable: true,
       subFeatures: [
         { name: "feedingProtocols", plan1: false, plan2: true, plan3: true, plan4: false },
-        { name: "FeedingAutomation", plan1: false, plan2: true, plan3: true, plan4: false },
-        { name: "BunkScoreCustomization", plan1: false, plan2: true, plan3: true, plan4: false },
+        { name: "FeedingAutomation", plan1: false, plan2: "addon", plan3: true, plan4: false },
+        { name: "BunkScoreCustomization", plan1: false, plan2: "addon", plan3: true, plan4: false },
         { name: "AutoAdjust", plan1: false, plan2: true, plan3: true, plan4: false }
       ]
     },
-    inputTransformation: { plan1: "addon", plan2: "addon", plan3: true, plan4: false },
-    animalHealth: { plan1: "addon", plan2: "addon", plan3: "addon", plan4: false },
-    chute: { plan1: false, plan2: "addon", plan3: true, plan4: false },
-    tagReaderIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: false },
+    AnimalHealthChute: { plan1: false, plan2: "addon", plan3: "addon", plan4: false, isExpandable: true, expandedByDefault: false,
+      subFeatures: [
+        {name: "animalHealth",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteCattleIn",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteNewOrder",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteQuickStart",plan1: "", plan2: "", plan3:"",plan4:""},
+        
+      ]
+    },    
+    EIDIntegration: { plan1: "addon", plan2: true, plan3: true, plan4: false },
     customFeeder: { 
       plan1: "addon", 
       plan2: "addon", 
       plan3: "addon", 
-      plan4: false,
+      plan4: "addon",
       isAddOn: true,
       isCustomFeeder: true,
       isExpandable: true,
       subFeatures: [
-        { name: "billing", plan1: false, plan2: false, plan3: false, plan4: false },
-        { name: "accountManagement", plan1: false, plan2: false, plan3: false, plan4: false },
-        { name: "marginsReport", plan1: false, plan2: false, plan3: false, plan4: false },
-        { name: "clientUsers", plan1: "addon", plan2: "addon", plan3: "addon", plan4: false },
+        { name: "billing", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "accountManagement", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "marginsReport", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "clientUsers", plan1: "addon", plan2: "addon", plan3: "addon", plan4: "addon" },
       ]
     },
+    AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        {name: "inputTransformation", plan1: "addon", plan2: true, plan3: true, plan4: "addon" },
+        {name: "purchases", plan1: "addon", plan2: "addon", plan3: true, plan4: "addon" },
+        
+        
+      ]
+    },
+    pastureManagementBasic: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    pastureManagementAdvanced: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    cowCalfBasic: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    cowCalfAdvanced: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
+    analytics: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },  
     truckScalesIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: false },
     dumpBoxIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: false },
-      MicroMachineIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: false },
   },
-  MX:  {
+  MX: {
     feeding: { plan1: true, plan2: true, plan3: true, plan4: true },
     yardsheet: { plan1: true, plan2: true, plan3: true, plan4: true },
     cattleManagement: { plan1: true, plan2: true, plan3: true, plan4: true },
@@ -450,20 +563,26 @@ const FEATURE_CONFIG: FeatureConfig = {
     chuteQuickStart: { plan1: false, plan2:true, plan3: true, plan4: true },
     chuteCattleIn: { plan1: false, plan2: false, plan3: true, plan4: true },
     chuteNewOrder: { plan1: false, plan2: false, plan3: true, plan4: true },
-    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },
-    inputTransformation: { plan1: true, plan2: "addon", plan3: true, plan4: true },
-    MicroingredientesManagement: { plan1: false, plan2: false, plan3: "addon", plan4: true },
-    advancedFeeding: { 
+    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },    
+     advancedFeeding: { 
       plan1: "addon", 
       plan2: "addon", 
       plan3: "addon", 
       plan4: true,
       isExpandable: true,
       subFeatures: [
-        { name: "feedingProtocols", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "FeedingAutomation", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "BunkScoreCustomization", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "AutoAdjust", plan1: false, plan2: true, plan3: true, plan4: false }
+        { name: "feedingProtocols", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "FeedingAutomation", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "BunkScoreCustomization", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "AutoAdjust", plan1: "", plan2: "", plan3: "", plan4: "" }
+      ]
+    },
+    AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        {name: "purchases", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
+        {name: "inputTransformation", plan1: true, plan2: "addon", plan3: true, plan4: true },
+        {name: "MicroingredientesManagement", plan1: false, plan2: false, plan3: "addon", plan4: true },
+        
       ]
     },
     MicroMachineIntegration: { plan1: false, plan2: false, plan3: "addon", plan4: "addon" },    
@@ -489,7 +608,7 @@ const FEATURE_CONFIG: FeatureConfig = {
     isAddOn: true,
     isCustomFeeder: true,},
   },
-  "OT$EN":  {
+  "OT$EN": {
     feeding: { plan1: true, plan2: true, plan3: true, plan4: true },
     yardsheet: { plan1: true, plan2: true, plan3: true, plan4: true },
     cattleManagement: { plan1: true, plan2: true, plan3: true, plan4: true },
@@ -512,20 +631,26 @@ const FEATURE_CONFIG: FeatureConfig = {
     chuteQuickStart: { plan1: false, plan2:true, plan3: true, plan4: true },
     chuteCattleIn: { plan1: false, plan2: false, plan3: true, plan4: true },
     chuteNewOrder: { plan1: false, plan2: false, plan3: true, plan4: true },
-    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },
-    inputTransformation: { plan1: true, plan2: "addon", plan3: true, plan4: true },
-    MicroingredientesManagement: { plan1: false, plan2: false, plan3: "addon", plan4: true },
-    advancedFeeding: { 
+    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },    
+     advancedFeeding: { 
       plan1: "addon", 
       plan2: "addon", 
       plan3: "addon", 
       plan4: true,
       isExpandable: true,
       subFeatures: [
-        { name: "feedingProtocols", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "FeedingAutomation", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "BunkScoreCustomization", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "AutoAdjust", plan1: false, plan2: true, plan3: true, plan4: true }
+        { name: "feedingProtocols", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "FeedingAutomation", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "BunkScoreCustomization", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "AutoAdjust", plan1: "", plan2: "", plan3: "", plan4: "" }
+      ]
+    },
+    AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        {name: "purchases", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
+        {name: "inputTransformation", plan1: true, plan2: "addon", plan3: true, plan4: true },
+        {name: "MicroingredientesManagement", plan1: false, plan2: false, plan3: "addon", plan4: true },
+        
       ]
     },
     MicroMachineIntegration: { plan1: false, plan2: false, plan3: "addon", plan4: "addon" },    
@@ -551,7 +676,7 @@ const FEATURE_CONFIG: FeatureConfig = {
     isAddOn: true,
     isCustomFeeder: true,},
   },
-  "OT$ES":  {
+  "OT$ES": {
     feeding: { plan1: true, plan2: true, plan3: true, plan4: true },
     yardsheet: { plan1: true, plan2: true, plan3: true, plan4: true },
     cattleManagement: { plan1: true, plan2: true, plan3: true, plan4: true },
@@ -574,20 +699,26 @@ const FEATURE_CONFIG: FeatureConfig = {
     chuteQuickStart: { plan1: false, plan2:true, plan3: true, plan4: true },
     chuteCattleIn: { plan1: false, plan2: false, plan3: true, plan4: true },
     chuteNewOrder: { plan1: false, plan2: false, plan3: true, plan4: true },
-    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },
-    inputTransformation: { plan1: true, plan2: "addon", plan3: true, plan4: true },
-    MicroingredientesManagement: { plan1: false, plan2: false, plan3: "addon", plan4: true },
-    advancedFeeding: { 
+    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },    
+     advancedFeeding: { 
       plan1: "addon", 
       plan2: "addon", 
       plan3: "addon", 
       plan4: true,
       isExpandable: true,
       subFeatures: [
-        { name: "feedingProtocols", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "FeedingAutomation", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "BunkScoreCustomization", plan1: false, plan2: true, plan3: true, plan4: true },
-        { name: "AutoAdjust", plan1: false, plan2: true, plan3: true, plan4: true }
+        { name: "feedingProtocols", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "FeedingAutomation", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "BunkScoreCustomization", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "AutoAdjust", plan1: "", plan2: "", plan3: "", plan4: "" }
+      ]
+    },
+    AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        {name: "purchases", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
+        {name: "inputTransformation", plan1: true, plan2: "addon", plan3: true, plan4: true },
+        {name: "MicroingredientesManagement", plan1: false, plan2: false, plan3: "addon", plan4: true },
+        
       ]
     },
     MicroMachineIntegration: { plan1: false, plan2: false, plan3: "addon", plan4: "addon" },    
@@ -812,15 +943,15 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
     },
     animalHealthChute: {
       BR: "Saúde Animal no Tronco",
-      AR: "Salud Animal en Manga",
+      AR: "Salud Animal y Trabajo de Manga",
       US: "Animal Health in Chute",
       CA: "Animal Health in Chute",
-      MX: "Salud Animal en Manga",
-      PY: "Salud Animal en Manga",
-      UY: "Salud Animal en Manga",
-      BO: "Salud Animal en Manga",
+      MX: "Salud Animal y Trabajo de Manga",
+      PY: "Salud Animal y Trabajo de Manga",
+      UY: "Salud Animal y Trabajo de Manga",
+      BO: "Salud Animal y Trabajo de Manga",
       OT$EN: "Animal Health in Chute",
-      OT$ES: "Salud Animal en Manga",
+      OT$ES: "Salud Animal y Trabajo de Manga",
     },
     AnimalHealthbasic: {
       BR: "Saúde Animal Básico",

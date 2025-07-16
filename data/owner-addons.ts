@@ -1212,7 +1212,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       description: "Gestión completa de la salud de la tropa",
       availableFor: ["plan1", "plan2"],
       includedIn: ["plan3"],
-      hidden: false,
+      hidden: true,
     },
     "chute": {
       name: "Manga",
@@ -1220,6 +1220,13 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       availableFor: ["plan1"],
       includedIn: ["plan2", "plan3"],
       hidden: true,
+    },
+    "animalHealthChute": {
+      name: "Sanidad Animal y Manga",
+      description: "Sistema de sanidad animal integrado con la manga",
+      availableFor: ["plan1"],
+      includedIn: ["plan2","plan3"],
+      hidden: false,
     },
     "EIDIntegration": {
       name: "Integración con Lector de Caravana",
@@ -1288,11 +1295,11 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: [],
       hidden: true,
     },
-    "cuota481": {
+    "informeCuota481": {
       name: "Informes Cuota 481",
       description: "Generación de informes de cuota 481",
-      availableFor: ["plan1", "plan2", "plan3"],
-      includedIn: [],
+      availableFor: ["plan1", "plan2"],
+      includedIn: ["plan3"],
       hidden: false,
     },
     "pastureManagementBasic": {
@@ -1332,7 +1339,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       description: "Sistema de protocolos de alimentación",
       availableFor: [],
       includedIn: ["plan2","plan3"],
-      hidden: false,
+      hidden: true,
     },
     "loadDropAutomation": {
       name: "Automatización de Carga y Descarga",
@@ -1370,13 +1377,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan4"],
       hidden: true,
     },
-    "animalHealthChute": {
-      name: "Sanidad Animal y Manga",
-      description: "Sistema de sanidad animal integrado con la manga",
-      availableFor: ["plan1"],
-      includedIn: ["plan2","plan3"],
-      hidden: false,
-    },
+    
     "chuteQuickStart": {
       name: "Manga Quick Start",
       description: "Sistema rápido de configuración de manga",
@@ -1429,7 +1430,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       description: "Gestión completa de la salud de la tropa",
       availableFor: ["plan1", "plan2"],
       includedIn: ["plan3"],
-      hidden: false,
+      hidden: true,
     },
     "chute": {
       name: "Manga",
@@ -1505,12 +1506,12 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: [],
       hidden: true,
     },
-    "cuota481": {
+    "informeCuota481": {
       name: "Informes Cuota 481",
       description: "Generación de informes de cuota 481",
-      availableFor: ["plan1", "plan2", "plan3"],
-      includedIn: [],
-      hidden: false,
+      availableFor: ["plan1", "plan2"],
+      includedIn: ["plan3"],
+      hidden: true,
     },
     "pastureManagementBasic": {
       name: "Gestión de Pastura Básica",
@@ -1549,7 +1550,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       description: "Sistema de protocolos de alimentación",
       availableFor: [],
       includedIn: ["plan2","plan3"],
-      hidden: false,
+      hidden: true,
     },
     "loadDropAutomation": {
       name: "Automatización de Carga y Descarga",
@@ -1569,7 +1570,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
     "microingridientManagement": {
       name: "Gestión de Microingredientes",
       description: "Sistema de gestión de microingredientes",
-      availableFor: ["plan2", "plan3"],
+      availableFor: ["plan2", "plan3", "plan4"],
       includedIn: [],
       hidden: true,
     },
