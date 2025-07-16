@@ -403,8 +403,12 @@ export default function Component() {
       planNumber = planIndex + 1;
     }
 
-    // Redirigir a la URL específica de Cattler
-    const cattlerUrl = `https://www.cattler.com.ar/form-plan${planNumber}`;
+    // Redirigir a la URL específica de Cattler según el país
+    const baseUrl =
+      selectedCountry === "BR"
+        ? "https://www.cattler.agr.br"
+        : "https://www.cattler.com.ar";
+    const cattlerUrl = `${baseUrl}/form-plan${planNumber}`;
 
     // Si estamos en un iframe, cambiar la URL del padre
     if (window.parent && window.parent !== window) {
@@ -426,8 +430,12 @@ export default function Component() {
       return;
     }
 
-    // Redirigir a la URL específica de Cattler para add-ons
-    const cattlerUrl = "https://www.cattler.com.ar/form-addon";
+    // Redirigir a la URL específica de Cattler para add-ons según el país
+    const baseUrl =
+      selectedCountry === "BR"
+        ? "https://www.cattler.agr.br"
+        : "https://www.cattler.com.ar";
+    const cattlerUrl = `${baseUrl}/form-addon`;
 
     // Si estamos en un iframe, cambiar la URL del padre
     if (window.parent && window.parent !== window) {
@@ -1314,7 +1322,13 @@ export default function Component() {
                 size="lg"
                 className="bg-cattler-orange hover:bg-cattler-orange/90 text-white font-lato font-bold px-8 py-3"
                 onClick={() => {
-                  const cattlerUrl = "https://www.cattler.com.ar/demo";
+                  const baseUrl =
+                    selectedCountry === "BR"
+                      ? "https://www.cattler.agr.br"
+                      : "https://www.cattler.com.ar";
+                  const demoPath =
+                    selectedCountry === "BR" ? "/solicitar-demo" : "/demo";
+                  const cattlerUrl = `${baseUrl}${demoPath}`;
                   if (window.parent && window.parent !== window) {
                     window.parent.location.href = cattlerUrl;
                   } else {
@@ -1335,7 +1349,11 @@ export default function Component() {
                 variant="outline"
                 className="border-2 border-white text-white hover:bg-white hover:text-cattler-navy font-lato font-bold px-8 py-3 bg-white/10 backdrop-blur-sm hover:shadow-lg transition-all duration-300"
                 onClick={() => {
-                  const cattlerUrl = "https://www.cattler.com.ar/contact";
+                  const baseUrl =
+                    selectedCountry === "BR"
+                      ? "https://www.cattler.agr.br"
+                      : "https://www.cattler.com.ar";
+                  const cattlerUrl = `${baseUrl}/contact`;
                   if (window.parent && window.parent !== window) {
                     window.parent.location.href = cattlerUrl;
                   } else {
