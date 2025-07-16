@@ -427,7 +427,7 @@ export default function Component() {
     }
 
     // Redirigir a la URL específica de Cattler para add-ons
-    const cattlerUrl = "https://www.cattler.com.ar/form-addon";
+    const cattlerUrl = "https://www.cattler.com.ar/addon";
 
     // Si estamos en un iframe, cambiar la URL del padre
     if (window.parent && window.parent !== window) {
