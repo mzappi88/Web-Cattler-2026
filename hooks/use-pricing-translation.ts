@@ -1320,11 +1320,21 @@ export function usePricingTranslation() {
   // Initialize from localStorage on mount
   useEffect(() => {
     const savedCountry = localStorage.getItem("cattler-country") as Country
-    if (savedCountry && Object.keys(countryCurrencyMap).includes(savedCountry)) {
+    const hasBeenDetected = localStorage.getItem("cattler-country-detected") === "true"
+    
+    if (detectedCountry && !isDetecting) {
+      // Si es la primera vez o no hay país guardado, usar el detectado automáticamente
+      if (!hasBeenDetected || !savedCountry) {
+        setSelectedCountry(detectedCountry)
+        localStorage.setItem("cattler-country", detectedCountry)
+        localStorage.setItem("cattler-country-detected", "true")
+      } else if (savedCountry && Object.keys(countryCurrencyMap).includes(savedCountry)) {
+        // Si ya se ha detectado antes, usar el guardado
+        setSelectedCountry(savedCountry)
+      }
+    } else if (savedCountry && Object.keys(countryCurrencyMap).includes(savedCountry)) {
+      // Fallback: usar el guardado si no hay detección
       setSelectedCountry(savedCountry)
-    } else if (detectedCountry && !isDetecting) {
-      // Si no hay país guardado, usar el detectado automáticamente
-      setSelectedCountry(detectedCountry)
     }
     setIsHydrated(true)
   }, [detectedCountry, isDetecting])
