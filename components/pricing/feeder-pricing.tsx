@@ -394,7 +394,25 @@ export default function Component() {
   };
 
   const handlePlanSelect = (plan: Plan) => {
-    router.push(`/pricing/checkout/${plan.id}?billing=${billingCycle}`);
+    // Determinar qué plan es basado en el índice o ID
+    let planNumber = 1;
+
+    // Buscar el plan en la lista de planes actuales
+    const planIndex = currentPlans.findIndex((p) => p.id === plan.id);
+    if (planIndex !== -1) {
+      planNumber = planIndex + 1;
+    }
+
+    // Redirigir a la URL específica de Cattler
+    const cattlerUrl = `https://www.cattler.com.ar/form-plan${planNumber}`;
+
+    // Si estamos en un iframe, cambiar la URL del padre
+    if (window.parent && window.parent !== window) {
+      window.parent.location.href = cattlerUrl;
+    } else {
+      // Si no estamos en iframe, redirigir directamente
+      window.location.href = cattlerUrl;
+    }
   };
 
   const handleAddOnSelect = (addOn: AddOn) => {
@@ -402,13 +420,16 @@ export default function Component() {
       return;
     }
 
-    const addonWithPromotion = {
-      ...addOn,
-      promotionalState: promotionalState,
-    };
+    // Redirigir a la URL específica de Cattler para add-ons
+    const cattlerUrl = "https://www.cattler.com.ar/form-addon";
 
-    const addonData = encodeURIComponent(JSON.stringify(addonWithPromotion));
-    router.push(`/pricing/addon/${addOn.id}?data=${addonData}`);
+    // Si estamos en un iframe, cambiar la URL del padre
+    if (window.parent && window.parent !== window) {
+      window.parent.location.href = cattlerUrl;
+    } else {
+      // Si no estamos en iframe, redirigir directamente
+      window.location.href = cattlerUrl;
+    }
   };
 
   const toggleBillingCycle = () => {
@@ -1284,6 +1305,14 @@ export default function Component() {
               <Button
                 size="lg"
                 className="bg-cattler-orange hover:bg-cattler-orange/90 text-white font-lato font-bold px-8 py-3"
+                onClick={() => {
+                  const cattlerUrl = "https://www.cattler.com.ar/demo";
+                  if (window.parent && window.parent !== window) {
+                    window.parent.location.href = cattlerUrl;
+                  } else {
+                    window.location.href = cattlerUrl;
+                  }
+                }}
               >
                 {selectedCountry === "BR"
                   ? "Iniciar Teste Gratuito"
@@ -1297,6 +1326,14 @@ export default function Component() {
                 size="lg"
                 variant="outline"
                 className="border-2 border-white text-white hover:bg-white hover:text-cattler-navy font-lato font-bold px-8 py-3 bg-white/10 backdrop-blur-sm hover:shadow-lg transition-all duration-300"
+                onClick={() => {
+                  const cattlerUrl = "https://www.cattler.com.ar/contact";
+                  if (window.parent && window.parent !== window) {
+                    window.parent.location.href = cattlerUrl;
+                  } else {
+                    window.location.href = cattlerUrl;
+                  }
+                }}
               >
                 {selectedCountry === "BR"
                   ? "Contatar Vendas"
