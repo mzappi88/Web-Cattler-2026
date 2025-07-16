@@ -1264,6 +1264,7 @@ export default function Component() {
                               ? "bg-cattler-amber hover:bg-cattler-amber/90"
                               : "bg-cattler-teal hover:bg-cattler-teal/90"
                           } text-white font-lato font-bold`}
+                          onClick={() => handleAddOnSelect(addon)}
                         >
                           {selectedCountry === "BR"
                             ? "Adicionar ao Plano"
