@@ -427,7 +427,7 @@ export default function Component() {
     }
 
     // Redirigir a la URL específica de Cattler para add-ons
-    const cattlerUrl = "https://www.cattler.com.ar/addon";
+    const cattlerUrl = "https://www.cattler.com.ar/form-addon";
 
     // Si estamos en un iframe, cambiar la URL del padre
     if (window.parent && window.parent !== window) {
@@ -845,7 +845,7 @@ export default function Component() {
                       className="mt-auto bg-cattler-amber hover:bg-cattler-amber/90 text-white font-lato font-bold py-3 shadow-md hover:shadow-lg transition-all duration-300"
                       onClick={() => {
                         const customFeederAddon = currentAddOns.find(
-                          (addon) => addon.id === "customFeeder-addon"
+                          (addon) => addon.id === "customFeeder"
                         );
                         if (customFeederAddon) {
                           handleAddOnSelect(customFeederAddon);
