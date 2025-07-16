@@ -462,7 +462,7 @@ export default function Component() {
   // Show loading state until hydrated (with timeout fallback)
   if (!isHydrated && !forceShow) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20 flex items-center justify-center">
+      <div className="bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20 flex items-center justify-center py-20">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cattler-green mx-auto mb-4"></div>
           <p className="text-cattler-navy font-lato">Cargando...</p>
@@ -540,9 +540,9 @@ export default function Component() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20">
+    <div className="bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-12">
         {/* Country Selector */}
         <div className="flex justify-end mb-4">
           <CountrySelector
@@ -564,7 +564,7 @@ export default function Component() {
             </div>
           </div>
         )}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold font-barlow text-cattler-navy mb-6">
             {t("pricingTitle")}
           </h1>
@@ -620,7 +620,7 @@ export default function Component() {
 
           {/* Plan Cards */}
           <div
-            className={`grid gap-6 mb-20 ${
+            className={`grid gap-6 mb-12 ${
               currentPlans.length === 3
                 ? "grid-cols-1 md:grid-cols-3 lg:grid-cols-3 justify-items-center"
                 : "grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
@@ -730,7 +730,7 @@ export default function Component() {
                   )}
                 </CardHeader>
                 <CardContent className="flex-grow">
-                  <div className="space-y-3 mb-6">
+                  <div className="space-y-3 mb-4">
                     <div className="flex justify-between">
                       <span className="text-sm font-medium font-lato text-cattler-navy">
                         {t("pens")}:
@@ -748,11 +748,11 @@ export default function Component() {
                       </span>
                     </div>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     <h4 className="font-semibold text-sm font-lato text-cattler-navy">
                       {t("mainFeatures")}:
                     </h4>
-                    <ul className="space-y-1">
+                    <ul className="space-y-0.5">
                       {plan.keyFeatures.map((feature, idx) => {
                         // Check if feature is a string and contains integration keywords
                         if (
@@ -801,7 +801,7 @@ export default function Component() {
           </div>
 
           {/* Custom Feeder Section */}
-          <div className="text-center mt-12 mb-20 bg-gradient-to-r from-cattler-amber/10 via-cattler-orange/10 to-cattler-amber/10 rounded-2xl p-12 border-2 border-cattler-amber/30">
+          <div className="text-center mt-8 mb-12 bg-gradient-to-r from-cattler-amber/10 via-cattler-orange/10 to-cattler-amber/10 rounded-2xl p-8 border-2 border-cattler-amber/30">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center justify-center mb-6">
                 <div className="w-16 h-16 bg-cattler-amber rounded-full flex items-center justify-center mr-4">
@@ -894,7 +894,7 @@ export default function Component() {
           </div>
 
           {/* Comparison Table */}
-          <div className="bg-white rounded-lg shadow-xl border border-cattler-teal/20 p-8">
+          <div className="bg-white rounded-lg shadow-xl border border-cattler-teal/20 p-6">
             <h2 className="text-3xl font-bold font-barlow text-cattler-navy text-center mb-8">
               {selectedCountry === "BR"
                 ? "Compare Todos os Planos"
@@ -904,7 +904,7 @@ export default function Component() {
                 ? "Compará Todos los Planes"
                 : "Compare All Plans"}
             </h2>
-            <div className="overflow-x-auto max-h-96 overflow-y-auto border border-cattler-teal/20 rounded-lg">
+            <div className="overflow-x-auto max-h-80 overflow-y-auto border border-cattler-teal/20 rounded-lg">
               <table className="w-full">
                 <thead className="sticky top-0 bg-white z-10 border-b-2 border-cattler-teal/30">
                   <tr>
@@ -1093,7 +1093,7 @@ export default function Component() {
           </div>
 
           {/* Add-ons Section */}
-          <div className="mt-16 bg-white rounded-lg shadow-xl border border-cattler-teal/20 p-8">
+          <div className="mt-12 bg-white rounded-lg shadow-xl border border-cattler-teal/20 p-6">
             <h3 className="text-2xl font-bold font-barlow text-cattler-navy text-center mb-6">
               {t("addOnsTitle")}
             </h3>
@@ -1307,7 +1307,7 @@ export default function Component() {
           </div>
 
           {/* CTA Section */}
-          <div className="text-center mt-16 bg-gradient-to-r from-cattler-navy to-cattler-teal rounded-2xl p-12 text-white">
+          <div className="text-center mt-12 bg-gradient-to-r from-cattler-navy to-cattler-teal rounded-2xl p-8 text-white">
             <h2 className="text-3xl font-bold font-barlow mb-4">
               {selectedCountry === "BR"
                 ? "Pronto para Começar?"
