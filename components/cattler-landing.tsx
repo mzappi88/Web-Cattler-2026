@@ -51,13 +51,13 @@ export default function CattlerLanding() {
 
   return (
     <div className="bg-gradient-to-b from-[#f0f1f7] to-[#d1d3e2] flex flex-col items-center justify-center px-0">
-      {/* Country Selector - Fixed Position */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Country Selector - Hidden for production, only available in debug */}
+      {/* <div className="fixed top-4 right-4 z-50">
         <CountrySelector
           selectedCountry={selectedCountry}
           onCountryChange={setSelectedCountry}
         />
-      </div>
+      </div> */}
 
       {/* Hero Video Section */}
       <div className="relative w-full bg-black">

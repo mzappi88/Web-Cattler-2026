@@ -284,13 +284,13 @@ export default function Checkout({ selectedPlan, onBack }: CheckoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20">
       <div className="container mx-auto px-4 py-8">
-        {/* Country Selector */}
-        <div className="flex justify-end mb-4">
+        {/* Country Selector - Hidden for production, only available in debug */}
+        {/* <div className="flex justify-end mb-4">
           <CountrySelector
             selectedCountry={selectedCountry}
             onCountryChange={setSelectedCountry}
           />
-        </div>
+        </div> */}
 
         {/* Header */}
         <div className="mb-8">

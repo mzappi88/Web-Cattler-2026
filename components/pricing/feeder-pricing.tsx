@@ -543,13 +543,13 @@ export default function Component() {
     <div className="bg-gradient-to-br from-cattler-light-teal/10 to-cattler-teal/20">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-12">
-        {/* Country Selector */}
-        <div className="flex justify-end mb-4">
+        {/* Country Selector - Hidden for production, only available in debug */}
+        {/* <div className="flex justify-end mb-4">
           <CountrySelector
             selectedCountry={selectedCountry}
             onCountryChange={setSelectedCountry}
           />
-        </div>
+        </div> */}
 
         {promotionalState.saleActive && (
           <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-center py-3 mb-8 rounded-lg shadow-lg">

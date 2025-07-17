@@ -78,10 +78,11 @@ export default function Header() {
               <Phone size={16} className="text-green-600 mr-2" />
               <span className="text-sm font-medium">+1 (531) 234-5882</span>
             </div>
-            <CountrySelector
+            {/* Country Selector - Hidden for production, only available in debug */}
+            {/* <CountrySelector
               selectedCountry={selectedCountry}
               onCountryChange={setSelectedCountry}
-            />
+            /> */}
             <Button
               variant="outline"
               className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white bg-transparent"
@@ -99,10 +100,11 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
-            <CountrySelector
+            {/* Country Selector - Hidden for production, only available in debug */}
+            {/* <CountrySelector
               selectedCountry={selectedCountry}
               onCountryChange={setSelectedCountry}
-            />
+            /> */}
             <button onClick={toggleMenu} className="text-gray-700">
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
