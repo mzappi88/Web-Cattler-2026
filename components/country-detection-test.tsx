@@ -8,17 +8,25 @@ import { useTranslation } from "@/hooks/use-translation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function CountryDetectionTest() {
   const { detectedCountry, isDetecting } = useCountryDetection();
   const { selectedCountry, language, t, setSelectedCountry } = useTranslation();
   const [apiResponse, setApiResponse] = useState<any>(null);
   const [testingApi, setTestingApi] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const clearStorageAndRedetect = () => {
-    clearCountryDetectionCache();
-    window.location.reload();
+    if (typeof window !== "undefined") {
+      clearCountryDetectionCache();
+      window.location.reload();
+    }
   };
 
   const testApiDirectly = async () => {
@@ -39,19 +47,50 @@ export function CountryDetectionTest() {
   };
 
   const getBrowserLanguage = () => {
+    if (typeof window === "undefined") return "unknown";
     return navigator.language || navigator.languages?.[0] || "unknown";
   };
 
   const getCachedCountry = () => {
+    if (typeof window === "undefined") return null;
     return localStorage.getItem("cattler-country");
   };
 
   const getLastDetectionTime = () => {
+    if (typeof window === "undefined") return "Never";
     const timestamp = localStorage.getItem("cattler-country-last-detection");
     if (!timestamp) return "Never";
     const date = new Date(parseInt(timestamp));
     return date.toLocaleString();
   };
+
+  const logCacheInfo = () => {
+    if (typeof window === "undefined") return;
+    console.log("🌍 Current localStorage items:");
+    console.log("cattler-country:", localStorage.getItem("cattler-country"));
+    console.log(
+      "cattler-country-detected:",
+      localStorage.getItem("cattler-country-detected")
+    );
+    console.log(
+      "cattler-country-last-detection:",
+      localStorage.getItem("cattler-country-last-detection")
+    );
+  };
+
+  // Don't render anything until we're on the client
+  if (!isClient) {
+    return (
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader>
+          <CardTitle>Detección Automática de País</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-gray-600">Cargando...</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -132,25 +171,7 @@ export function CountryDetectionTest() {
             {testingApi ? "Probando API..." : "Probar API Directamente"}
           </Button>
 
-          <Button
-            onClick={() => {
-              console.log("🌍 Current localStorage items:");
-              console.log(
-                "cattler-country:",
-                localStorage.getItem("cattler-country")
-              );
-              console.log(
-                "cattler-country-detected:",
-                localStorage.getItem("cattler-country-detected")
-              );
-              console.log(
-                "cattler-country-last-detection:",
-                localStorage.getItem("cattler-country-last-detection")
-              );
-            }}
-            variant="outline"
-            className="w-full"
-          >
+          <Button onClick={logCacheInfo} variant="outline" className="w-full">
             Log Cache Info (Console)
           </Button>
         </div>

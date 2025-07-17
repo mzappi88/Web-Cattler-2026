@@ -1319,6 +1319,12 @@ export function usePricingTranslation() {
 
   // Initialize from localStorage on mount
   useEffect(() => {
+    // Ensure we're on the client side
+    if (typeof window === 'undefined') {
+      setIsHydrated(true);
+      return;
+    }
+
     const savedCountry = localStorage.getItem("cattler-country") as Country
     const hasBeenDetected = localStorage.getItem("cattler-country-detected") === "true"
     
@@ -1341,7 +1347,7 @@ export function usePricingTranslation() {
 
   // Save to localStorage when country changes
   useEffect(() => {
-    if (isHydrated) {
+    if (isHydrated && typeof window !== 'undefined') {
       localStorage.setItem("cattler-country", selectedCountry)
     }
   }, [selectedCountry, isHydrated])

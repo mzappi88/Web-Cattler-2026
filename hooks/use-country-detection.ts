@@ -53,6 +53,8 @@ const englishSpeakingCountries = [
 
 // Function to detect country using browser language as fallback
 function detectCountryFromBrowser(): Country {
+  if (typeof window === 'undefined') return "OT-EN";
+  
   const browserLanguage = navigator.language.toLowerCase();
   console.log("🌍 Browser language:", browserLanguage);
   
@@ -65,6 +67,8 @@ function detectCountryFromBrowser(): Country {
 
 // Utility function to clear country detection cache
 export function clearCountryDetectionCache() {
+  if (typeof window === 'undefined') return;
+  
   localStorage.removeItem("cattler-country");
   localStorage.removeItem("cattler-country-last-detection");
   localStorage.removeItem("cattler-country-detected");
@@ -77,8 +81,8 @@ export function useCountryDetection() {
   const hasDetected = useRef(false);
 
   useEffect(() => {
-    // Prevent multiple detections
-    if (hasDetected.current) {
+    // Prevent multiple detections and ensure we're on client side
+    if (hasDetected.current || typeof window === 'undefined') {
       return;
     }
 

@@ -525,7 +525,7 @@ const translations = {
     accountManagementDesc:
       "Faturamento instantâneo com um clique—todos os custos e despesas estão perfeitamente integrados no Cattler. Alertas automatizados de contas a receber para manter-se em dia com os pagamentos. Supervisão financeira completa com rastreamento e relatórios em tempo real. Gestão de banco de grãos para rastrear estoques de grãos dos clientes com facilidade. Integração com QuickBooks em breve!",
 
-    advancedFeedingTitle: "Alimentação Avançada",
+    advancedFeedingTitle: "Alimentação Avanzada",
     advancedFeedingDesc:
       "Protocolos de Alimentação para planejar e ajustar ração para cada lote antecipadamente, com projeções de custos. Alertas de Aumento de Ração para se antecipar às transições. Gere automaticamente ordens de carga e entrega baseadas na capacidade do misturador e distribuição de currais para otimizar a entrega. Acelere o processo de chamada de cocho com pontuação personalizável e automação de chamadas. Ajuste Automático de Carga e Entrega",
 
@@ -611,6 +611,12 @@ export function useTranslation() {
 
   // Initialize from localStorage on mount
   useEffect(() => {
+    // Ensure we're on the client side
+    if (typeof window === 'undefined') {
+      setIsHydrated(true);
+      return;
+    }
+
     const savedCountry = localStorage.getItem("cattler-country") as Country
     const hasBeenDetected = localStorage.getItem("cattler-country-detected") === "true"
     
@@ -633,7 +639,7 @@ export function useTranslation() {
 
   // Save to localStorage when country changes
   useEffect(() => {
-    if (isHydrated) {
+    if (isHydrated && typeof window !== 'undefined') {
       localStorage.setItem("cattler-country", selectedCountry)
     }
   }, [selectedCountry, isHydrated])
