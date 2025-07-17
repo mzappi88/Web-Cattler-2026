@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import { useCountryDetection } from "./use-country-detection"
 
 
-export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT-EN" | "OT-ES"
+export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT$EN" | "OT$ES"
 
 type Language = "en" | "es" | "pt"
 
@@ -17,8 +17,8 @@ const countryLanguageMap: Record<Country, Language> = {
   BO: "es",
   BR: "pt",
   MX: "es",
-  "OT-EN":"en",
-  "OT-ES": "es",
+  "OT$EN":"en",
+  "OT$ES": "es",
 }
 
 const translations = {

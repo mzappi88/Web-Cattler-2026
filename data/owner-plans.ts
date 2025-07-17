@@ -225,8 +225,8 @@ export const PRICES_BY_COUNTRY: Record<
   US: {
     plan1: 165,
     plan2: 221,
-    plan3: 275,
-    plan4: 480,
+    plan3: 305,
+    plan4: 533,
     plan1pens: 15,
     plan2pens: 30,
     plan3pens: 40,
@@ -272,9 +272,9 @@ export const PRICES_BY_COUNTRY: Record<
   },
   CA: {
     plan1: 165,
-    plan2: 199,
-    plan3: 275,
-    plan4: 480,
+    plan2: 221,
+    plan3: 305,
+    plan4: 533,
     plan1pens: 15,
     plan2pens: 30,
     plan3pens: 40,
@@ -464,9 +464,9 @@ export const PRICES_BY_COUNTRY: Record<
   },
   MX: {
     plan1: 165,
-    plan2: 199,
-    plan3: 275,
-    plan4: 480,
+    plan2: 221,
+    plan3: 305,
+    plan4: 533,
     plan1pens: 15,
     plan2pens: 30,
     plan3pens: 40,
@@ -512,9 +512,9 @@ export const PRICES_BY_COUNTRY: Record<
   },
   OT$EN: {
     plan1: 165,
-    plan2: 199,
-    plan3: 275,
-    plan4: 480,
+    plan2: 221,
+    plan3: 305,
+    plan4: 533,
     plan1pens: 15,
     plan2pens: 30,
     plan3pens: 40,
@@ -560,9 +560,9 @@ export const PRICES_BY_COUNTRY: Record<
   },
   OT$ES: {
     plan1: 165,
-    plan2: 199,
-    plan3: 275,
-    plan4: 480,
+    plan2: 221,
+    plan3: 305,
+    plan4: 533,
     plan1pens: 15,
     plan2pens: 30,
     plan3pens: 40,
@@ -644,11 +644,11 @@ function getLocalizedPensUsersText(selectedCountry: string): { pens: string; use
     PY: { pens: "corrales", users: "usuarios" },
     UY: { pens: "corrales", users: "usuarios" },
     BO: { pens: "corrales", users: "usuarios" },
-    "OT-EN": { pens: "pens", users: "users" },
-    "OT-ES": { pens: "corrales", users: "usuarios" },
+    "OT$EN": { pens: "pens", users: "users" },
+    "OT$ES": { pens: "corrales", users: "usuarios" },
   };
 
-  return translations[selectedCountry] ?? translations["OT-EN"];
+  return translations[selectedCountry] ?? translations["OT$EN"];
 }
 
 // Function to get owner plans for a specific country

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react"
 import { useCountryDetection } from "./use-country-detection"
 
-export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT-EN" | "OT-ES"
+export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT$EN" | "OT$ES"
 
 const countryCurrencyMap: Record<Country, string> = {
   US: "$",
@@ -14,8 +14,8 @@ const countryCurrencyMap: Record<Country, string> = {
   BO: "US$",
   BR: "R$",
   MX: "US$",
-  "OT-EN": "US$",
-  "OT-ES": "US$",
+  "OT$EN": "US$",
+  "OT$ES": "US$",
 }
 
 const pricingTranslations = {
@@ -282,7 +282,7 @@ const pricingTranslations = {
     "hear.customer": "Existing Customer",
     "hear.other": "Other",
   },
-  "OT-EN": {
+  "OT$EN": {
     // Same as US for now - copy all US translations
     pricingTitle: "Choose Your Feedlot Plan",
     pricingSubtitle:
@@ -900,7 +900,7 @@ const pricingTranslations = {
     "hear.customer": "Cliente Existente",
     "hear.other": "Otro",
   },
-  "OT-ES": {
+  "OT$ES": {
     // Same as UY for now - copy all UY translations
     pricingTitle: "Elige Tu Plan de Confinamiento",
     pricingSubtitle:

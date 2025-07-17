@@ -53,15 +53,15 @@ const englishSpeakingCountries = [
 
 // Function to detect country using browser language as fallback
 function detectCountryFromBrowser(): Country {
-  if (typeof window === 'undefined') return "OT-EN";
+  if (typeof window === 'undefined') return "OT$EN";
   
   const browserLanguage = navigator.language.toLowerCase();
   console.log("🌍 Browser language:", browserLanguage);
   
   if (browserLanguage.startsWith("es")) {
-    return "OT-ES";
+    return "OT$ES";
   } else {
-    return "OT-EN";
+    return "OT$EN";
   }
 }
 
@@ -175,11 +175,11 @@ export function useCountryDetection() {
           console.log("🌍 Country not in supported list, checking language...");
           // Si no está en la lista soportada, determinar el idioma
           if (spanishSpeakingCountries.includes(userCountryCode)) {
-            console.log("🌍 Spanish speaking country detected, setting OT-ES");
-            finalCountry = "OT-ES";
+            console.log("🌍 Spanish speaking country detected, setting OT$ES");
+            finalCountry = "OT$ES";
           } else if (englishSpeakingCountries.includes(userCountryCode)) {
-            console.log("🌍 English speaking country detected, setting OT-EN");
-            finalCountry = "OT-EN";
+            console.log("🌍 English speaking country detected, setting OT$EN");
+            finalCountry = "OT$EN";
           } else {
             console.log("🌍 Using browser language as fallback");
             finalCountry = detectCountryFromBrowser();
@@ -188,9 +188,9 @@ export function useCountryDetection() {
 
         console.log("🌍 Final country decision:", finalCountry);
 
-        // Special case: If we're in the US but got OT-EN, check browser language
-        if (finalCountry === "OT-EN" && userCountryCode === "US") {
-          console.log("🌍 Special case: US detected but got OT-EN, checking browser language...");
+        // Special case: If we're in the US but got OT$EN, check browser language
+        if (finalCountry === "OT$EN" && userCountryCode === "US") {
+          console.log("🌍 Special case: US detected but got OT$EN, checking browser language...");
           const browserLanguage = navigator.language.toLowerCase();
           if (browserLanguage.startsWith("en")) {
             console.log("🌍 Browser language is English, setting to US");
