@@ -841,7 +841,7 @@ export function getPlanFeatures(
         "Incluye todo en Feedlot Inicial",
         "Sanidad animal (protocolos de tratamiento, registros de eventos y analytics)",
         "Manejo sanitario individual de animales",
-        "PLectura de comederos personalizada",
+        "Lectura de comederos personalizada",
       ],
       3: [
         "Incluye todo en Feedlot Esencial",
