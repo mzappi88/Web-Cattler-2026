@@ -32,27 +32,54 @@ export default function RootLayout({
                 }
               }
               
-              // Resize on load and when content changes
-              window.addEventListener('load', resizeIframe);
-              window.addEventListener('resize', resizeIframe);
-              
-              // Use ResizeObserver to detect content changes
-              if (window.ResizeObserver) {
-                const observer = new ResizeObserver(() => {
-                  setTimeout(resizeIframe, 100);
-                });
-                observer.observe(document.body);
+              // Wait for DOM to be ready before setting up observers
+              function setupResizeObservers() {
+                if (!document.body) {
+                  // If body is not ready, wait a bit and try again
+                  setTimeout(setupResizeObservers, 50);
+                  return;
+                }
+                
+                // Resize on load and when content changes
+                window.addEventListener('load', resizeIframe);
+                window.addEventListener('resize', resizeIframe);
+                
+                // Use ResizeObserver to detect content changes
+                if (window.ResizeObserver && document.body) {
+                  try {
+                    const resizeObserver = new ResizeObserver(() => {
+                      setTimeout(resizeIframe, 100);
+                    });
+                    resizeObserver.observe(document.body);
+                  } catch (error) {
+                    console.warn('ResizeObserver error:', error);
+                  }
+                }
+                
+                // Also resize when DOM changes
+                try {
+                  const mutationObserver = new MutationObserver(() => {
+                    setTimeout(resizeIframe, 100);
+                  });
+                  mutationObserver.observe(document.body, {
+                    childList: true,
+                    subtree: true,
+                    attributes: true
+                  });
+                } catch (error) {
+                  console.warn('MutationObserver error:', error);
+                }
+                
+                // Initial resize
+                setTimeout(resizeIframe, 100);
               }
               
-              // Also resize when DOM changes
-              const observer = new MutationObserver(() => {
-                setTimeout(resizeIframe, 100);
-              });
-              observer.observe(document.body, {
-                childList: true,
-                subtree: true,
-                attributes: true
-              });
+              // Start setup when DOM is ready
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', setupResizeObservers);
+              } else {
+                setupResizeObservers();
+              }
             `,
           }}
         />
