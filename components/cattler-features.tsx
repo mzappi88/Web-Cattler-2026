@@ -22,29 +22,40 @@ export default function CattlerFeatures() {
   const highlightedTitle = useMemo(() => {
     const fullTitle = t("featuresMainTitle");
 
-    if (language === "es") {
-      return (
-        <>
-          <span className="text-[#15B674]">Ahorra tiempo y dinero</span> con el
-          software de gestión ganadera más avanzado
-        </>
-      );
+    // Split the title to highlight the first part
+    if (language === "es" || language === "es-ar") {
+      const parts = fullTitle.split(" con el ");
+      if (parts.length === 2) {
+        return (
+          <>
+            <span className="text-[#15B674]">{parts[0]}</span> con el {parts[1]}
+          </>
+        );
+      }
     } else if (language === "pt") {
-      return (
-        <>
-          <span className="text-[#15B674]">Economize tempo e dinheiro</span> com
-          o software de gestão de gado mais avançado
-        </>
-      );
+      const parts = fullTitle.split(" com o ");
+      if (parts.length === 2) {
+        return (
+          <>
+            <span className="text-[#15B674]">{parts[0]}</span> com o {parts[1]}
+          </>
+        );
+      }
     } else {
       // English (default)
-      return (
-        <>
-          <span className="text-[#15B674]">Save time & money</span> with the
-          most advanced Cattle Management Software
-        </>
-      );
+      const parts = fullTitle.split(" with the ");
+      if (parts.length === 2) {
+        return (
+          <>
+            <span className="text-[#15B674]">{parts[0]}</span> with the{" "}
+            {parts[1]}
+          </>
+        );
+      }
     }
+
+    // Fallback to the full title if splitting doesn't work
+    return <span>{fullTitle}</span>;
   }, [language, t]);
 
   // Show loading state only during initial hydration
