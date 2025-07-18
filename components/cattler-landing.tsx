@@ -61,9 +61,46 @@ export default function CattlerLanding() {
 
       {/* Hero Video Section */}
       <div className="relative w-full bg-black">
+        {/* Mobile Video - Full height */}
+        <div className="relative w-full h-[50vh] md:hidden">
+          <video
+            className="absolute top-0 left-0 w-full h-full object-cover"
+            autoPlay
+            loop
+            muted
+            playsInline
+          >
+            <source
+              src="https://video.wixstatic.com/video/93f7fc_55b18a9715124be680e597e4a30bc548/720p/mp4/file.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
+
+          {/* Overlay Banner */}
+          <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+            <div className="text-center px-4">
+              <div className="mb-4 md:mb-6">
+                <img
+                  src="/Cattler-black.png"
+                  alt="Cattler"
+                  className="h-16 md:h-24 lg:h-32 w-auto brightness-0 invert mx-auto"
+                />
+              </div>
+              <h2 className="text-2xl md:text-4xl lg:text-6xl font-bold text-white mb-8 drop-shadow-lg">
+                {t("heroTitle")}
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Video */}
         <div
-          className="relative w-full"
-          style={{ paddingBottom: "56.25%" /* 16:9 aspect ratio */ }}
+          className="relative w-full hidden md:block"
+          style={{
+            paddingBottom:
+              "42.19%" /* 16:9 aspect ratio reducido 25% desde 56.25% */,
+          }}
         >
           <video
             className="absolute top-0 left-0 w-full h-full object-cover"
@@ -82,6 +119,13 @@ export default function CattlerLanding() {
           {/* Overlay Banner */}
           <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
             <div className="text-center px-4">
+              <div className="mb-4 md:mb-6">
+                <img
+                  src="/Cattler-black.png"
+                  alt="Cattler"
+                  className="h-8 md:h-12 lg:h-16 w-auto brightness-0 invert mx-auto"
+                />
+              </div>
               <h2 className="text-2xl md:text-4xl lg:text-6xl font-bold text-white mb-8 drop-shadow-lg">
                 {t("heroTitle")}
               </h2>
@@ -90,9 +134,9 @@ export default function CattlerLanding() {
         </div>
 
         {/* Get Started Button */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+        <div className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 z-10">
           <button
-            className="bg-[#f25f24] hover:bg-[#d14d1a] text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+            className="bg-[#f25f24] hover:bg-[#d14d1a] text-white font-bold py-2 px-4 md:py-4 md:px-8 rounded-full text-sm md:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             onClick={() => {
               const cattlerUrl = "https://www.cattler.com.ar/demo";
               if (window.parent && window.parent !== window) {
@@ -107,36 +151,44 @@ export default function CattlerLanding() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-4 flex flex-col items-center justify-center">
-        <h1 className="text-4xl font-bold text-[#121334] text-center my-5">
+      <div className="container mx-auto px-4 py-2 md:py-4 flex flex-col items-center justify-center">
+        <h1 className="text-2xl md:text-4xl font-bold text-[#121334] text-center my-3 md:my-5">
           {t("mainTitle")}
         </h1>
       </div>
-      <div className="container mx-auto py-4 px-9">
-        <div className="flex flex-col md:flex-row md:justify-between gap-12">
+      <div className="container mx-auto py-2 md:py-4 px-4 md:px-9">
+        <div className="flex flex-col md:flex-row md:justify-between gap-8 md:gap-12">
           <div className="md:w-1/2 flex-1">
-            <p className="text-[25px] text-[#121334] mb-6 text-center">
+            <p className="text-lg md:text-xl lg:text-[25px] text-[#121334] mb-4 md:mb-6 text-center">
               {t("mainSubtitle")}
             </p>
-            <div className="flex-1 items-center justify-center mt-10">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex-1 items-center justify-center mt-6 md:mt-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 <FeatureCard
-                  icon={<ClipboardList className="w-8 h-8 text-[#121334]" />}
+                  icon={
+                    <ClipboardList className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
+                  }
                   title={t("endPaperwork")}
                   description={t("endPaperworkDesc")}
                 />
                 <FeatureCard
-                  icon={<TrendingUp className="w-8 h-8 text-[#121334]" />}
+                  icon={
+                    <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
+                  }
                   title={t("boostProductivity")}
                   description={t("boostProductivityDesc")}
                 />
                 <FeatureCard
-                  icon={<Activity className="w-8 h-8 text-[#121334]" />}
+                  icon={
+                    <Activity className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
+                  }
                   title={t("preventHealth")}
                   description={t("preventHealthDesc")}
                 />
                 <FeatureCard
-                  icon={<DollarSign className="w-8 h-8 text-[#121334]" />}
+                  icon={
+                    <DollarSign className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
+                  }
                   title={t("maximizeProfits")}
                   description={t("maximizeProfitsDesc")}
                 />
@@ -144,30 +196,30 @@ export default function CattlerLanding() {
             </div>
           </div>
           <div className="md:w-1/2">
-            <div className="bg-white p-6 rounded-xl shadow-lg max-w-xl mx-auto">
+            <div className="bg-white p-4 md:p-6 rounded-xl shadow-lg max-w-xl mx-auto">
               {!submitted ? (
                 <>
-                  <h2 className="text-3xl font-bold text-[#121334] mb-4 text-center">
+                  <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-[#121334] mb-3 md:mb-4 text-center">
                     {t("formTitle")}
                   </h2>
-                  <p className="text-xl text-[#121334] mb-6">
+                  <p className="text-base md:text-lg lg:text-xl text-[#121334] mb-4 md:mb-6">
                     {version != "landing"
                       ? t("formSubtitleAds")
                       : t("formSubtitleLanding")}
                   </p>
                   {!formLoaded && (
-                    <div className="flex items-center justify-center h-30">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#121334]"></div>
+                    <div className="flex items-center justify-center h-24 md:h-30">
+                      <div className="animate-spin rounded-full h-8 w-8 md:h-12 md:w-12 border-b-2 border-[#121334]"></div>
                     </div>
                   )}
                   <div id="hubspot-form-container"></div>
                 </>
               ) : (
-                <div className="text-center py-8">
-                  <h2 className="text-2xl font-semibold text-[#121334] mb-4">
+                <div className="text-center py-6 md:py-8">
+                  <h2 className="text-xl md:text-2xl font-semibold text-[#121334] mb-3 md:mb-4">
                     {t("thankYou")}
                   </h2>
-                  <p className="text-[#121334]">
+                  <p className="text-sm md:text-base text-[#121334]">
                     {version == "landing"
                       ? t("thankYouLanding")
                       : t("thankYouAds")}
@@ -196,12 +248,16 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="flex items-center mb-4">
+    <div className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+      <div className="flex items-center mb-3 md:mb-4">
         {icon}
-        <h3 className="text-lg font-semibold text-[#121334] ml-3">{title}</h3>
+        <h3 className="text-base md:text-lg font-semibold text-[#121334] ml-2 md:ml-3">
+          {title}
+        </h3>
       </div>
-      <p className="text-[#121334]">{description}</p>
+      <p className="text-sm md:text-base text-[#121334] leading-relaxed">
+        {description}
+      </p>
     </div>
   );
 }

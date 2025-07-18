@@ -61,30 +61,31 @@ export default function CattlerFeatures() {
   // Show loading state only during initial hydration
   if (!isHydrated) {
     return (
-      <main className="font-sans max-w-6xl mx-auto px-5 py-10 text-gray-800">
+      <main className="font-sans max-w-6xl mx-auto px-4 md:px-5 py-6 md:py-10 text-gray-800">
         <div className="animate-pulse">
-          <div className="h-12 bg-gray-200 rounded mb-20 mx-auto max-w-4xl"></div>
-          <div className="h-32 bg-gray-100 rounded mb-20"></div>
+          <div className="h-12 bg-gray-200 rounded mb-16 md:mb-20 mx-auto max-w-4xl"></div>
+          <div className="h-32 bg-gray-100 rounded mb-16 md:mb-20"></div>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="font-sans max-w-6xl mx-auto px-5 py-10 text-gray-800">
-      <h1 className="font-bold text-center mb-20 text-gray-800 text-4xl lg:text-5xl">
+    <main className="font-sans max-w-6xl mx-auto px-4 md:px-5 py-6 md:py-10 text-gray-800">
+      <h1 className="font-bold text-center mb-12 md:mb-20 text-gray-800 text-2xl md:text-4xl lg:text-5xl">
         {highlightedTitle}
       </h1>
 
-      <div className="flex justify-around my-10 mb-20 flex-wrap bg-gray-50 rounded-xl p-8 shadow-md">
-        <div className="flex items-center font-bold text-lg text-gray-800 my-2.5 mx-5 transition-transform hover:-translate-y-1">
-          <span className="mr-4">
+      <div className="flex flex-col md:flex-row justify-around my-6 md:my-10 mb-12 md:mb-20 flex-wrap bg-gray-50 rounded-xl p-4 md:p-8 shadow-md">
+        <div className="flex items-center font-bold text-base md:text-lg text-gray-800 my-2 md:my-2.5 mx-2 md:mx-5 transition-transform hover:-translate-y-1">
+          <span className="mr-3 md:mr-4">
             <svg
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="md:w-6 md:h-6"
             >
               <circle cx="12" cy="12" r="11" stroke="#15B674" strokeWidth="2" />
               <path
@@ -96,19 +97,20 @@ export default function CattlerFeatures() {
               />
             </svg>
           </span>
-          <span className="font-medium leading-tight">
+          <span className="font-medium leading-tight text-sm md:text-base">
             {t("bulletMultipleIntegrations")}
           </span>
         </div>
 
-        <div className="flex items-center font-bold text-lg text-gray-800 my-2.5 mx-5 transition-transform hover:-translate-y-1">
-          <span className="mr-4">
+        <div className="flex items-center font-bold text-base md:text-lg text-gray-800 my-2 md:my-2.5 mx-2 md:mx-5 transition-transform hover:-translate-y-1">
+          <span className="mr-3 md:mr-4">
             <svg
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="md:w-6 md:h-6"
             >
               <circle cx="12" cy="12" r="11" stroke="#15B674" strokeWidth="2" />
               <path
@@ -120,19 +122,20 @@ export default function CattlerFeatures() {
               />
             </svg>
           </span>
-          <span className="font-medium leading-tight">
+          <span className="font-medium leading-tight text-sm md:text-base">
             {t("bulletAllDataOnePlace")}
           </span>
         </div>
 
-        <div className="flex items-center font-bold text-lg text-gray-800 my-2.5 mx-5 transition-transform hover:-translate-y-1">
-          <span className="mr-4">
+        <div className="flex items-center font-bold text-base md:text-lg text-gray-800 my-2 md:my-2.5 mx-2 md:mx-5 transition-transform hover:-translate-y-1">
+          <span className="mr-3 md:mr-4">
             <svg
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="md:w-6 md:h-6"
             >
               <circle cx="12" cy="12" r="11" stroke="#15B674" strokeWidth="2" />
               <path
@@ -144,7 +147,7 @@ export default function CattlerFeatures() {
               />
             </svg>
           </span>
-          <span className="font-medium leading-tight">
+          <span className="font-medium leading-tight text-sm md:text-base">
             {t("bulletUserFriendly")}
           </span>
         </div>
@@ -158,12 +161,12 @@ export default function CattlerFeatures() {
         isPhone={true}
         isReverse={true}
         phoneStyle={{
-          width: "270px",
-          height: "520px",
+          width: "200px",
+          height: "400px",
         }}
       />
 
-      <div className="w-0.5 h-15 bg-gray-300 mx-auto"></div>
+      <div className="w-0.5 h-10 md:h-15 bg-gray-300 mx-auto"></div>
 
       <FeatureSection
         title={t("cattleManagementTitle")}
@@ -173,12 +176,12 @@ export default function CattlerFeatures() {
         isPhone={true}
         isReverse={false}
         phoneStyle={{
-          width: "270px",
-          height: "560px",
+          width: "200px",
+          height: "400px",
         }}
       />
 
-      <div className="w-0.5 h-15 bg-gray-300 mx-auto"></div>
+      <div className="w-0.5 h-10 md:h-15 bg-gray-300 mx-auto"></div>
 
       <FeatureSection
         title={t("animalHealthTitle")}
@@ -188,12 +191,12 @@ export default function CattlerFeatures() {
         isPhone={true}
         isReverse={true}
         phoneStyle={{
-          width: "270px",
-          height: "560px",
+          width: "200px",
+          height: "400px",
         }}
       />
 
-      <div className="w-0.5 h-15 bg-gray-300 mx-auto"></div>
+      <div className="w-0.5 h-10 md:h-15 bg-gray-300 mx-auto"></div>
 
       <FeatureSection
         title={t("accountManagementTitle")}
@@ -203,7 +206,7 @@ export default function CattlerFeatures() {
         isReverse={false}
       />
 
-      <div className="w-0.5 h-15 bg-gray-300 mx-auto"></div>
+      <div className="w-0.5 h-10 md:h-15 bg-gray-300 mx-auto"></div>
 
       <FeatureSection
         title={t("advancedFeedingTitle")}
@@ -213,62 +216,66 @@ export default function CattlerFeatures() {
         isReverse={true}
       />
 
-      <div className="w-0.5 h-15 bg-gray-300 mx-auto"></div>
+      <div className="w-0.5 h-10 md:h-15 bg-gray-300 mx-auto"></div>
 
-      <section className="py-15 bg-gray-50 py-16">
-        <h2 className="font-bold text-4xl font-bold text-center mb-10 text-gray-800 mt-5">
+      <section className="py-10 md:py-15 bg-gray-50 py-12 md:py-16">
+        <h2 className="font-bold text-2xl md:text-4xl font-bold text-center mb-8 md:mb-10 text-gray-800 mt-4 md:mt-5">
           {t("whyChooseCattler")}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto px-5 py-8">
-          <div className="bg-white rounded-lg p-8 text-center shadow-md transition-transform hover:-translate-y-1">
-            <Info className="w-12 h-12 mx-auto mb-5 text-[#15B674]" />
-            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 max-w-6xl mx-auto px-4 md:px-5 py-6 md:py-8">
+          <div className="bg-white rounded-lg p-4 md:p-8 text-center shadow-md transition-transform hover:-translate-y-1">
+            <Info className="w-8 h-8 md:w-12 md:h-12 mx-auto mb-3 md:mb-5 text-[#15B674]" />
+            <h3 className="font-bold text-lg md:text-xl font-semibold mb-3 md:mb-4 text-gray-800">
               {t("comprehensiveSolution")}
             </h3>
-            <p className="text-base leading-relaxed text-gray-600">
+            <p className="text-sm md:text-base leading-relaxed text-gray-600">
               {t("comprehensiveSolutionDesc")}
             </p>
           </div>
-          <div className="bg-white rounded-lg p-8 text-center shadow-md transition-transform hover:-translate-y-1">
-            <Settings className="w-12 h-12 mx-auto mb-5 text-[#15B674]" />
-            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">
+          <div className="bg-white rounded-lg p-4 md:p-8 text-center shadow-md transition-transform hover:-translate-y-1">
+            <Settings className="w-8 h-8 md:w-12 md:h-12 mx-auto mb-3 md:mb-5 text-[#15B674]" />
+            <h3 className="font-bold text-lg md:text-xl font-semibold mb-3 md:mb-4 text-gray-800">
               {t("customizable")}
             </h3>
-            <p className="text-base leading-relaxed text-gray-600">
+            <p className="text-sm md:text-base leading-relaxed text-gray-600">
               {t("customizableDesc")}
             </p>
           </div>
-          <div className="bg-white rounded-lg p-8 text-center shadow-md transition-transform hover:-translate-y-1">
-            <Clock className="w-12 h-12 mx-auto mb-5 text-[#15B674]" />
-            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">
+          <div className="bg-white rounded-lg p-4 md:p-8 text-center shadow-md transition-transform hover:-translate-y-1">
+            <Clock className="w-8 h-8 md:w-12 md:h-12 mx-auto mb-3 md:mb-5 text-[#15B674]" />
+            <h3 className="font-bold text-lg md:text-xl font-semibold mb-3 md:mb-4 text-gray-800">
               {t("realTimeUpdates")}
             </h3>
-            <p className="text-base leading-relaxed text-gray-600">
+            <p className="text-sm md:text-base leading-relaxed text-gray-600">
               {t("realTimeUpdatesDesc")}
             </p>
           </div>
-          <div className="bg-white rounded-lg p-8 text-center shadow-md transition-transform hover:-translate-y-1">
-            <Users className="w-12 h-12 mx-auto mb-5 text-[#15B674]" />
-            <h3 className="font-bold text-xl font-semibold mb-4 text-gray-800">
+          <div className="bg-white rounded-lg p-4 md:p-8 text-center shadow-md transition-transform hover:-translate-y-1">
+            <Users className="w-8 h-8 md:w-12 md:h-12 mx-auto mb-3 md:mb-5 text-[#15B674]" />
+            <h3 className="font-bold text-lg md:text-xl font-semibold mb-3 md:mb-4 text-gray-800">
               {t("multiUserAccess")}
             </h3>
-            <p className="text-base leading-relaxed text-gray-600">
+            <p className="text-sm md:text-base leading-relaxed text-gray-600">
               {t("multiUserAccessDesc")}
             </p>
           </div>
         </div>
         {/* Pricing CTA Component */}
-        <div className="mt-16 bg-gradient-to-r from-[#15B674] to-[#12a066] rounded-2xl p-8 text-center text-white shadow-xl">
+        <div className="mt-12 md:mt-16 bg-gradient-to-r from-[#15B674] to-[#12a066] rounded-2xl p-6 md:p-8 text-center text-white shadow-xl">
           <div className="max-w-3xl mx-auto">
-            <h3 className="font-bold text-3xl mb-4">{t("pricingCtaTitle")}</h3>
-            <p className="text-lg mb-8 opacity-90">{t("pricingCtaSubtitle")}</p>
+            <h3 className="font-bold text-2xl md:text-3xl mb-3 md:mb-4">
+              {t("pricingCtaTitle")}
+            </h3>
+            <p className="text-base md:text-lg mb-6 md:mb-8 opacity-90">
+              {t("pricingCtaSubtitle")}
+            </p>
             <button
               onClick={() => router.push("/pricing")}
-              className="bg-white text-[#15B674] font-bold text-lg py-4 px-8 rounded-full hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center gap-3"
+              className="bg-white text-[#15B674] font-bold text-base md:text-lg py-3 px-6 md:py-4 md:px-8 rounded-full hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center gap-2 md:gap-3"
             >
               <span>{t("viewPlansAndPrices")}</span>
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4 md:w-5 md:h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -285,18 +292,22 @@ export default function CattlerFeatures() {
         </div>
       </section>
 
-      <div className="w-0.5 h-15 bg-gray-300 mx-auto"></div>
+      <div className="w-0.5 h-10 md:h-15 bg-gray-300 mx-auto"></div>
 
       {/* Testimonials Section */}
       <TestimonialsCarousel />
 
-      <div className="w-0.5 h-15 bg-gray-300 mx-auto"></div>
+      <div className="w-0.5 h-10 md:h-15 bg-gray-300 mx-auto"></div>
 
-      <section className="py-20 text-center bg-[#121334] text-white">
-        <h2 className="font-bold text-4xl font-bold mb-5">{t("ctaTitle")}</h2>
-        <p className="text-lg max-w-2xl mx-auto mb-8">{t("ctaSubtitle")}</p>
+      <section className="py-12 md:py-20 text-center bg-[#121334] text-white">
+        <h2 className="font-bold text-2xl md:text-4xl font-bold mb-4 md:mb-5">
+          {t("ctaTitle")}
+        </h2>
+        <p className="text-base md:text-lg max-w-2xl mx-auto mb-6 md:mb-8">
+          {t("ctaSubtitle")}
+        </p>
         <button
-          className="bg-[#f25f24] text-white font-bold text-lg font-semibold py-3 px-8 border-none rounded-full cursor-pointer transition-colors hover:bg-[#d14d1a]"
+          className="bg-[#f25f24] text-white font-bold text-base md:text-lg font-semibold py-2.5 px-6 md:py-3 md:px-8 border-none rounded-full cursor-pointer transition-colors hover:bg-[#d14d1a]"
           onClick={() => {
             const cattlerUrl = "https://www.cattler.com.ar/demo";
             if (window.parent && window.parent !== window) {

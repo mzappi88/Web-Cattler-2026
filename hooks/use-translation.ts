@@ -86,7 +86,7 @@ const translations = {
 
     // Main Content
     mainTitle: "Transform Your Cattle Operation",
-    mainTitleWithCattler: "Transform your cattle operation with",
+    mainTitleWithCattler: "Transform your cattle operation",
     mainSubtitle:
       "Cattler is a livestock management software that centralizes all your feedlot operations in one platform.",
     mainSubtitleLine2:
@@ -275,7 +275,7 @@ const translations = {
 
     // Main Content
     mainTitle: "Transforma Tu Operación Ganadera",
-    mainTitleWithCattler: "Transforma tu operación ganadera con",
+    mainTitleWithCattler: "Transforma tu operación ganadera",
     mainSubtitle:
       "Cattler es un software de gestión ganadera que centraliza toda la operación del feedlot en una sola plataforma — desde la alimentación y la salud hasta el procesamiento y el inventario.",
 
@@ -654,7 +654,7 @@ const translations = {
 
     // Main Content
     mainTitle: "Transformá Tu Operación Ganadera",
-    mainTitleWithCattler: "Transformá tu operación ganadera con",
+    mainTitleWithCattler: "Transformá tu operación ganadera",
     mainSubtitle:
       "Cattler es un software de gestión ganadera que centraliza toda la operación del feedlot en una sola plataforma — desde la alimentación y la salud hasta el procesamiento y el inventario.",
 

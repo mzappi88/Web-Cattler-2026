@@ -57,11 +57,14 @@ export default function LogoCarousel() {
 
   if (!isHydrated || logos.length === 0) {
     return (
-      <div className="w-full py-12 bg-gray-50">
+      <div className="w-full py-8 md:py-12 bg-gray-50">
         <div className="animate-pulse">
-          <div className="flex gap-8 justify-center">
+          <div className="flex gap-4 md:gap-8 justify-center">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-16 w-32 bg-gray-200 rounded"></div>
+              <div
+                key={i}
+                className="h-12 md:h-16 w-24 md:w-32 bg-gray-200 rounded"
+              ></div>
             ))}
           </div>
         </div>
@@ -70,7 +73,7 @@ export default function LogoCarousel() {
   }
 
   return (
-    <div className="w-full py-12 bg-gray-50 overflow-hidden">
+    <div className="w-full py-8 md:py-12 bg-gray-50 overflow-hidden">
       {/* Carousel Container */}
       <div
         ref={carouselRef}
@@ -79,8 +82,8 @@ export default function LogoCarousel() {
         }`}
       >
         {/* Gradient overlays for smooth fade effect */}
-        <div className="absolute left-0 top-0 w-20 h-full carousel-fade-left z-10"></div>
-        <div className="absolute right-0 top-0 w-20 h-full carousel-fade-right z-10"></div>
+        <div className="absolute left-0 top-0 w-12 md:w-20 h-full carousel-fade-left z-10"></div>
+        <div className="absolute right-0 top-0 w-12 md:w-20 h-full carousel-fade-right z-10"></div>
 
         {/* Carousel track */}
         <div
@@ -90,13 +93,13 @@ export default function LogoCarousel() {
           {logos.map((logo, index) => (
             <div
               key={`${logo.id}-${index}`}
-              className="flex-shrink-0 mx-6 md:mx-8 flex items-center justify-center"
+              className="flex-shrink-0 mx-3 md:mx-6 lg:mx-8 flex items-center justify-center"
             >
               <div className="logo-item group cursor-pointer">
                 <img
                   src={logo.logoUrl || "/placeholder.svg"}
                   alt={logo.name}
-                  className="h-10 md:h-12 w-auto max-w-[100px] md:max-w-[120px] object-contain"
+                  className="h-8 md:h-10 lg:h-12 w-auto max-w-[80px] md:max-w-[100px] lg:max-w-[120px] object-contain"
                   loading="lazy"
                   onError={(e) => {
                     e.currentTarget.src =
@@ -106,10 +109,10 @@ export default function LogoCarousel() {
                 />
 
                 {/* Tooltip on hover */}
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-20">
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 md:px-3 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-20">
                   {logo.name}
                   {logo.category && (
-                    <span className="ml-2 px-1 py-0.5 bg-white/20 rounded text-xs">
+                    <span className="ml-1 md:ml-2 px-1 py-0.5 bg-white/20 rounded text-xs">
                       {logo.category}
                     </span>
                   )}
