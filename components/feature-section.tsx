@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useLearnMoreClick } from "@/hooks/use-learn-more-click"
-import { useTranslation } from "@/hooks/use-translation"
-import { ArrowRight } from "lucide-react"
+import type React from "react";
+import { useLearnMoreClick } from "@/hooks/use-learn-more-click";
+import { useTranslation } from "@/hooks/use-translation";
+import { ArrowRight } from "lucide-react";
 
 interface FeatureSectionProps {
-  title: string
-  description: string | React.ReactNode
-  learnMoreUrl: string
-  videoSrc: string
-  isReverse?: boolean
-  isPhone?: boolean
-  videoFit?: "contain" | "cover"
-  videoStyle?: React.CSSProperties
-  phoneStyle?: React.CSSProperties
-  tabletStyle?: React.CSSProperties
-  videoScale?: number
+  title: string;
+  description: string | React.ReactNode;
+  learnMoreUrl: string;
+  videoSrc: string;
+  isReverse?: boolean;
+  isPhone?: boolean;
+  videoFit?: "contain" | "cover";
+  videoStyle?: React.CSSProperties;
+  phoneStyle?: React.CSSProperties;
+  tabletStyle?: React.CSSProperties;
+  videoScale?: number;
 }
 
 export function FeatureSection({
@@ -32,10 +32,10 @@ export function FeatureSection({
   tabletStyle,
   videoScale = 1.0,
 }: FeatureSectionProps) {
-  const handleLearnMoreClick = useLearnMoreClick()
-  const { t } = useTranslation()
+  const handleLearnMoreClick = useLearnMoreClick();
+  const { t } = useTranslation();
 
-  console.log(`Rendering ${title} section with video source:`, videoSrc)
+  console.log(`Rendering ${title} section with video source:`, videoSrc);
 
   const VideoComponent = () => (
     <div
@@ -87,7 +87,7 @@ export function FeatureSection({
         )}
       </div>
     </div>
-  )
+  );
 
   const ContentComponent = () => (
     <div className="flex-1 max-w-[50%] px-10">
@@ -105,25 +105,35 @@ export function FeatureSection({
           </ul>
         </div>
       ) : (
-        <div className="text-base leading-relaxed text-gray-600 mb-5">{description}</div>
+        <div className="text-base leading-relaxed text-gray-600 mb-5">
+          {description}
+        </div>
       )}
-      <a
-        href="#"
-        data-url={learnMoreUrl}
-        className="text-blue-600 no-underline font-medium hover:underline font-bold"
-        onClick={handleLearnMoreClick}
+      {/* Request Free Demo button */}
+      <button
+        onClick={() => {
+          const cattlerUrl = "https://www.cattler.com.ar/demo";
+          if (window.parent && window.parent !== window) {
+            window.parent.location.href = cattlerUrl;
+          } else {
+            window.location.href = cattlerUrl;
+          }
+        }}
+        className="bg-[#15B674] hover:bg-[#12a066] text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center gap-2"
       >
-        {t("learnMore")} <ArrowRight className="inline-block ml-1 w-4 h-4" />
-      </a>
+        {t("requestFreeDemo")} <ArrowRight className="w-4 h-4" />
+      </button>
     </div>
-  )
+  );
 
   return (
     <section
-      className={`flex flex-row items-center justify-between mb-15 gap-10 my-5 py-5 ${isReverse ? "flex-row-reverse" : ""} max-[768px]:flex-col max-[768px]:items-center`}
+      className={`flex flex-row items-center justify-between mb-15 gap-10 my-5 py-5 ${
+        isReverse ? "flex-row-reverse" : ""
+      } max-[768px]:flex-col max-[768px]:items-center`}
     >
       <ContentComponent />
       <VideoComponent />
     </section>
-  )
+  );
 }

@@ -6,12 +6,12 @@ import { useCountryDetection } from "./use-country-detection"
 
 export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT$EN" | "OT$ES"
 
-type Language = "en" | "es" | "pt"
+type Language = "en" | "es" | "pt" | "es-ar"
 
 const countryLanguageMap: Record<Country, Language> = {
   US: "en",
   CA: "en",
-  AR: "es",
+  AR: "es-ar",
   PY: "es",
   UY: "es",
   BO: "es",
@@ -86,8 +86,11 @@ const translations = {
 
     // Main Content
     mainTitle: "Transform Your Cattle Operation",
+    mainTitleWithCattler: "Transform your cattle operation with",
     mainSubtitle:
-      "Join thousands of ranchers who trust Cattler to streamline their operations, increase productivity, and maximize profits.",
+      "Cattler is a livestock management software that centralizes all your feedlot operations in one platform.",
+    mainSubtitleLine2:
+      "From feeding and health to processing and inventory — everything you need in one place.",
 
     // Features
     endPaperwork: "End Paperwork",
@@ -165,36 +168,6 @@ const translations = {
     // Testimonials
     testimonialsTitle: "What Our Customers Say",
     watchVideo: "Watch Video",
-    testimonials: [
-      {
-        id: "1",
-        name: "Tim",
-        location: "Hulk, Kansas",
-        quote:
-          "Cattler is great! I love it all the time. It has completely transformed how we manage our cattle operation and made everything so much more efficient.",
-        image:
-          "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/104CMT20240408LIMBAL.jpg-s9CtaxVQ4IkYrzBwKALTN6aPJAv0RH.jpeg",
-        videoUrl: "https://youtu.be/NhVJQT8Yw98",
-      },
-      {
-        id: "2",
-        name: "Sarah Johnson",
-        location: "Texas Ranch",
-        quote:
-          "The real-time tracking and automated reporting have saved us countless hours. Cattler is an essential tool for modern ranching.",
-        image: "/placeholder-user.jpg",
-        videoUrl: "https://youtube.com/watch?v=example2",
-      },
-      {
-        id: "3",
-        name: "Mike Rodriguez",
-        location: "Colorado Feedlot",
-        quote:
-          "Since implementing Cattler, our feed efficiency has improved by 15% and our record-keeping is flawless. Highly recommend!",
-        image: "/placeholder-user.jpg",
-        videoUrl: "https://youtube.com/watch?v=example3",
-      },
-    ],
 
     // Countries
     "countries.US": "United States",
@@ -212,6 +185,30 @@ const translations = {
     pricingCtaSubtitle:
       "Choose the perfect plan for your operation. From small ranches to large feedlots, we have a solution that fits your needs and budget.",
     viewPlansAndPrices: "View Plans & Prices",
+
+    // Video CTA Section
+    videoCtaTitle: "Discover Cattler in Action",
+    videoCtaSubtitle: "See how thousands of producers are transforming their cattle management",
+    watchPresentationVideo: "Watch Presentation Video",
+    presentationVideoUrl: "https://www.youtube.com/watch?v=cqYQBYMDLGU",
+    videoNotAvailable: "Video not available",
+
+    // Enhanced CTA Section
+    enhancedCtaTitle: "Join the Cattle Revolution",
+    enhancedCtaSubtitle: "Thousands of producers already trust Cattler to optimize their operations. Discover why we are the leading platform in cattle management.",
+    cattleHeadCount: "1,200,000+",
+    cattleHead: "Cattle Head per year",
+    feedTon: "Feed Ton per day",
+    feedTonCount: "7,000+",
+    timeSaved: "Time saved per month",
+    timeSavedCount: "40+",
+    implementation24h: "Implementation in 24 hours",
+    specializedSupport: "Specialized technical support",
+    automaticUpdates: "New updates every month",
+    systemIntegration: "Integration with existing systems",
+    explorePlansAndPrices: "Explore Plans & Prices",
+    requestFreeDemo: "Request Free Demo",
+    close: "Close",
   },
   es: {
     // Navigation
@@ -278,8 +275,9 @@ const translations = {
 
     // Main Content
     mainTitle: "Transforma Tu Operación Ganadera",
+    mainTitleWithCattler: "Transforma tu operación ganadera con",
     mainSubtitle:
-      "Únete a miles de ganaderos que confían en Cattler para optimizar sus operaciones, aumentar la productividad y maximizar las ganancias.",
+      "Cattler es un software de gestión ganadera que centraliza toda la operación del feedlot en una sola plataforma — desde la alimentación y la salud hasta el procesamiento y el inventario.",
 
     // Features
     endPaperwork: "Elimina el Papeleo",
@@ -359,36 +357,6 @@ const translations = {
     // Testimonials
     testimonialsTitle: "Lo Que Dicen Nuestros Clientes",
     watchVideo: "Ver Video",
-    testimonials: [
-      {
-        id: "1",
-        name: "Carlos Mendoza",
-        location: "Córdoba, Argentina",
-        quote:
-          "Cattler es increíble! Lo uso todo el tiempo. Ha transformado completamente cómo manejamos nuestra operación ganadera y ha hecho todo mucho más eficiente.",
-        image:
-          "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/104CMT20240408LIMBAL.jpg-s9CtaxVQ4IkYrzBwKALTN6aPJAv0RH.jpeg",
-        videoUrl: "https://youtu.be/lNY3g69e_lE",
-      },
-      {
-        id: "2",
-        name: "María González",
-        location: "Estancia La Pampa",
-        quote:
-          "El seguimiento en tiempo real y los reportes automatizados nos han ahorrado incontables horas. Cattler es una herramienta esencial para la ganadería moderna.",
-        image: "/placeholder-user.jpg",
-        videoUrl: "https://youtube.com/watch?v=example2",
-      },
-      {
-        id: "3",
-        name: "Roberto Silva",
-        location: "Feedlot Uruguay",
-        quote:
-          "Desde que implementamos Cattler, nuestra eficiencia alimentaria mejoró un 15% y nuestros registros son impecables. ¡Altamente recomendado!",
-        image: "/placeholder-user.jpg",
-        videoUrl: "https://youtube.com/watch?v=example3",
-      },
-    ],
 
     // Countries
     "countries.US": "Estados Unidos",
@@ -399,13 +367,37 @@ const translations = {
     "countries.BO": "Bolivia",
     "countries.BR": "Brasil",
     "countries.MX": "México",
-    "countries.OT": "Otro",
+    "countries.OT": "Otros",
 
     // Pricing CTA
     pricingCtaTitle: "¿Listo para Comenzar?",
     pricingCtaSubtitle:
       "Elige el plan perfecto para tu operación. Desde pequeños ranchos hasta grandes feedlots, tenemos una solución que se adapta a tus necesidades y presupuesto.",
     viewPlansAndPrices: "Ver Planes y Precios",
+
+    // Video CTA Section
+    videoCtaTitle: "Descubre Cattler en Acción",
+    videoCtaSubtitle: "Mira cómo miles de productores están transformando su gestión ganadera",
+    watchPresentationVideo: "Ver Video de Presentación",
+    presentationVideoUrl: "https://youtu.be/gQGAclpnnBo",
+
+    // Enhanced CTA Section
+    enhancedCtaTitle: "Unite a la Revolución Ganadera",
+    enhancedCtaSubtitle: "Cada vez más ganaderos confían en Cattler para optimizar sus operaciones, aumentar la productividad y maximizar las ganancias.",
+    cattleHeadCount: "1.200.000+",
+    cattleHead: "Cabezas de Ganado al año",
+    feedTon: "Toneladas de alimento por día",
+    feedTonCount: "7.000+",
+    timeSaved: "Tiempo ahorrado por mes",
+    timeSavedCount: "40+",
+    implementation24h: "Implementación en 24 horas",
+    specializedSupport: "Soporte técnico especializado",
+    automaticUpdates: "Actualizaciones todos los meses",
+    systemIntegration: "Integración con sistemas existentes",
+    explorePlansAndPrices: "Explorar Planes y Precios",
+    requestFreeDemo: "Solicitar Demo Gratuita",
+    close: "Cerrar",
+    videoNotAvailable: "Video no disponible",
   },
   pt: {
     // Navigation
@@ -472,8 +464,9 @@ const translations = {
 
     // Main Content
     mainTitle: "Transforme Sua Operação Pecuária",
+    mainTitleWithCattler: "Transforme sua operação pecuária com",
     mainSubtitle:
-      "Junte-se a milhares de pecuaristas que confiam no Cattler para otimizar suas operações, aumentar a produtividade e maximizar os lucros.",
+      "Cattler é um software de gestão pecuária que centraliza toda a operação do confinamento em uma única plataforma — da alimentação e saúde ao processamento e estoque.",
 
     // Features
     endPaperwork: "Elimine a Papelada",
@@ -554,36 +547,6 @@ const translations = {
     // Testimonials
     testimonialsTitle: "O Que Nossos Clientes Dizem",
     watchVideo: "Assistir Vídeo",
-    testimonials: [
-      {
-        id: "1",
-        name: "João Silva",
-        location: "Fazenda Mato Grosso",
-        quote:
-          "O Cattler é incrível! Eu uso o tempo todo. Transformou completamente como gerenciamos nossa operação pecuária e tornou tudo muito mais eficiente.",
-        image:
-          "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/104CMT20240408LIMBAL.jpg-s9CtaxVQ4IkYrzBwKALTN6aPJAv0RH.jpeg",
-        videoUrl: "https://studio.youtube.com/video/JFxY4Oo92E8/edit",
-      },
-      {
-        id: "2",
-        name: "Ana Santos",
-        location: "Confinamento São Paulo",
-        quote:
-          "O rastreamento em tempo real e os relatórios automatizados nos pouparam inúmeras horas. O Cattler é uma ferramenta essencial para a pecuária moderna.",
-        image: "/placeholder-user.jpg",
-        videoUrl: "https://youtube.com/watch?v=example2",
-      },
-      {
-        id: "3",
-        name: "Pedro Oliveira",
-        location: "Fazenda Rio Grande",
-        quote:
-          "Desde que implementamos o Cattler, nossa eficiência alimentar melhorou 15% e nossos registros são impecáveis. Altamente recomendado!",
-        image: "/placeholder-user.jpg",
-        videoUrl: "https://youtube.com/watch?v=example3",
-      },
-    ],
 
     // Countries
     "countries.US": "Estados Unidos",
@@ -601,6 +564,219 @@ const translations = {
     pricingCtaSubtitle:
       "Escolha o plano perfeito para sua operação. De pequenas fazendas a grandes confinamentos, temos uma solução que se adapta às suas necessidades e orçamento.",
     viewPlansAndPrices: "Ver Planos e Preços",
+
+    // Video CTA Section
+    videoCtaTitle: "Descubra o Cattler em Ação",
+    videoCtaSubtitle: "Veja como milhares de produtores estão transformando sua gestão de gado",
+    watchPresentationVideo: "Assistir Vídeo de Apresentação",
+    presentationVideoUrl: "https://youtu.be/gQGAclpnnBo",
+
+    // Enhanced CTA Section
+    enhancedCtaTitle: "Junte-se à Revolução Pecuária",
+    enhancedCtaSubtitle: "Milhares de produtores já confiam no Cattler para otimizar suas operações. Descubra por que somos a plataforma líder em gestão de gado.",
+    cattleHeadCount: "1.200.000+",
+    cattleHead: "Cabeças de gado por ano",
+    feedTon: "Toneladas de ração por dia",
+    feedTonCount: "7.000+",
+    timeSaved: "Tempo economizado por mês",
+    timeSavedCount: "40+",
+    implementation24h: "Implementação em 24 horas",
+    specializedSupport: "Suporte técnico especializado",
+    automaticUpdates: "Atualizações automáticas",
+    systemIntegration: "Integração com sistemas existentes",
+    explorePlansAndPrices: "Explorar Planos e Preços",
+    requestFreeDemo: "Solicitar Demo Gratuita",
+    close: "Fechar",
+    videoNotAvailable: "Vídeo não disponível",
+  },
+  "es-ar": {
+    // Navigation
+    "navigation.home": "Inicio",
+    "navigation.pricing": "Precios",
+    "navigation.aboutUs": "Sobre Nosotros",
+    "navigation.login": "Iniciar Sesión",
+    "navigation.requestDemo": "Solicitar Demo Gratuita",
+    "navigation.getStarted": "Comenzar",
+    "navigation.callUs": "Llámanos",
+
+    // Footer
+    "footer.company": "Empresa",
+    "footer.aboutCattler": "Sobre Cattler",
+    "footer.careers": "Carreras",
+    "footer.termsConditions": "Términos y Condiciones",
+    "footer.privacyPolicy": "Política de Privacidad",
+    "footer.termsOfService": "Términos de Servicio",
+    "footer.contact": "Contacto",
+    "footer.contactUs": "Contáctenos",
+    "footer.allRightsReserved": "Todos los derechos reservados",
+    "footer.companyDescription":
+      "Plataforma líder de gestión ganadera para ganaderos y operadores de feedlot modernos.",
+
+    // About Us Page
+    "aboutUs.ourStory.title": "Nuestra Historia",
+    "aboutUs.ourStory.paragraph1":
+      "Somos solucionadores de problemas, en constante búsqueda de soluciones. Hemos estado en esta búsqueda durante algún tiempo, comenzando en 2019 desarrollando un sistema automatizado de clasificación de ganado, así como un prototipo para un predictor de peso animal, utilizando imágenes.",
+    "aboutUs.ourStory.paragraph2":
+      "Fue durante estos proyectos que notamos un hecho clave: los datos en la industria ganadera son bastante difíciles de recopilar, los dispositivos están aislados y el flujo de información está fragmentado, complicando la gestión de muchas operaciones ganaderas.",
+    "aboutUs.ourStory.paragraph3":
+      "Fue en ese momento que decidimos enfocar nuestra atención en resolver esa falta de integración, con gran potencial de crecimiento.",
+
+    "aboutUs.founders.title": "Conoce a los Fundadores",
+    "aboutUs.founders.ignacio.name": "Ignacio Albornoz",
+    "aboutUs.founders.ignacio.title": "Co fundador y CEO",
+    "aboutUs.founders.ignacio.description":
+      "Ignacio ha sido productor ganadero durante algunos años, y luego ha pasado varios años innovando en el espacio ganadero y agrícola. Con una Maestría en Economía Industrial y un pasado como nerd depurando MS-DOS en los 90, Ignacio es una mezcla de diferentes cosas, pero más que nada, le gusta crear y diseñar productos, obtener retroalimentación directa de los usuarios, y luego tratar de hacerlo útil para los clientes.",
+
+    "aboutUs.founders.ezequiel.name": "Ezequiel Conti",
+    "aboutUs.founders.ezequiel.title": "Co fundador y CTO",
+    "aboutUs.founders.ezequiel.description":
+      "Ezequiel es un físico y tecnólogo integral que pasó siete años en la Agencia Espacial Nacional de Argentina desarrollando software para lanzadores de satélites. Así que sabe mucho sobre instalar software y hardware en condiciones extremas. También aprendió en un proyecto anterior a Cattler sobre el manejo de tecnología en el espacio ganadero, y también cómo desarrollar plataformas.",
+
+    "aboutUs.founders.martin.name": "Martín Garbulsky",
+    "aboutUs.founders.martin.title": "Co fundador y CIO",
+    "aboutUs.founders.martin.description":
+      "Martín es un ingeniero agrónomo experimentado enfocado en forrajes e imágenes satelitales. También es ganadero. Como PhD en ecología terrestre e investigador principal en CONICET (principal agencia nacional de investigación en Argentina), sabe mucho sobre investigación y desarrollo en esta área, y en Cattler está a cargo de todo lo relacionado con nuevos productos de sensores y calidad de datos en general.",
+
+    "aboutUs.investors.title": "Nuestros Inversores y Partidarios",
+    "aboutUs.investors.producers.title": "Productores Ganaderos-Inversores",
+    "aboutUs.investors.producers.description":
+      "Estamos orgullosos de tener más de 20 ganaderos de Estados Unidos y Argentina como nuestros inversores. Su confianza y consejo constante han sido esenciales en nuestro crecimiento y nos han empujado a traer constantemente soluciones innovadoras a los productores. Estamos más comprometidos que nunca a servir a los ganaderos con la ayuda de compañeros ganaderos.",
+
+    "aboutUs.investors.corporate.title": "VCs e Inversores Corporativos",
+    "aboutUs.investors.corporate.description1":
+      "Nuestro proyecto ha sido confiado por un grupo diverso de VCs y empresas que han apostado por nosotros. Sus recursos, mentoría y conexiones de la industria han sido invaluables para ayudarnos a crecer.",
+    "aboutUs.investors.corporate.description2":
+      "Nuestro potencial e innovación en la industria agtech han sido reconocidos a través de nuestros logros en competencias de startups como SVG Ventures -Thrive Agrifood y Plug and Play.",
+
+    // Hero Section
+    heroTitle: "La Solución Completa de Gestión Ganadera",
+    getStarted: "Comenzar Hoy",
+
+    // Main Content
+    mainTitle: "Transformá Tu Operación Ganadera",
+    mainTitleWithCattler: "Transformá tu operación ganadera con",
+    mainSubtitle:
+      "Cattler es un software de gestión ganadera que centraliza toda la operación del feedlot en una sola plataforma — desde la alimentación y la salud hasta el procesamiento y el inventario.",
+
+    // Features
+    endPaperwork: "Eliminá el Papeleo",
+    endPaperworkDesc: "Registros digitales y reportes automatizados eliminan el papeleo manual y reducen errores.",
+
+    boostProductivity: "Aumentá la Productividad",
+    boostProductivityDesc:
+      "Flujos de trabajo optimizados y datos en tiempo real te ayudan a tomar decisiones más rápidas y mejores.",
+
+    preventHealth: "Prevení Problemas de Salud",
+    preventHealthDesc: "Detección temprana y protocolos de tratamiento mantienen tu ganado saludable y productivo.",
+
+    maximizeProfits: "Maximizá las Ganancias",
+    maximizeProfitsDesc: "Optimiza costos de alimentación, rastrea el rendimiento y mejora tu rentabilidad.",
+
+    // Form
+    formTitle: "Iniciá Tu Prueba Gratuita",
+    formSubtitleLanding: "Mirá cómo Cattler puede transformar tu operación. Comienza con una demo personalizada.",
+    formSubtitleAds: "Cada vez más ganaderos confían en Cattler para optimizar sus operaciones, aumentar la productividad y maximizar las ganancias.",
+
+    // Thank You
+    thankYou: "¡Gracias!",
+    thankYouLanding: "Nos pondremos en contacto pronto para programar tu demo personalizada.",
+    thankYouAds: "¡Bienvenido a Cattler! Revisa tu email para los próximos pasos.",
+
+    // Cattler Features Page
+    featuresMainTitle: "Ahorra tiempo y dinero con el software de gestión ganadera más avanzado",
+
+    // Bullet Points
+    bulletMultipleIntegrations: "Múltiples Integraciones y Multiidioma (español incluido)",
+    bulletAllDataOnePlace: "Todos tus datos en un solo lugar",
+    bulletUserFriendly: "Interfaz fácil de usar",
+
+    // Feature Sections
+    feedingTitle: "Alimentación",
+    feedingDesc:
+      "Alimentá en cualquier momento (online/offline) con cualquier báscula o dispositivo (iOS o Android). Gestioná tus stocks de alimento y medicamentos sin problemas. Creá tus raciones, gestioná NEG, NEM y DM%, y establece planes de entrega para cada corral. Puntuación de comederos simple e informativa que funciona offline.",
+
+    cattleManagementTitle: "Gestión de Ganado",
+    cattleManagementDesc:
+      "Tomá control de tus operaciones de engorde con seguimiento en tiempo real de movimientos, alimentación y ganancias de peso. Gestioná tareas diarias sin esfuerzo. Mezclá lotes entre corrales manteniendo supervisión individual o por lote. Accedé a información en vivo de cierre y punto de equilibrio.",
+
+    animalHealthTitle: "Salud Animal y Manga",
+    animalHealthDesc:
+      "El recorredor puede rastrear y tratar animales en tiempo real desde un teléfono. Conectá sin problemas a lectores EID principales, ya sea en el corral o manga. Procesá ganado online u offline para mayor flexibilidad. Gestioná separaciones y el hospital animal con registros precisos. Implementá protocolos de tratamiento integrados para mejor control de salud.",
+
+    accountManagementTitle: "Gestión de Cuentas y Facturación",
+    accountManagementDesc:
+      "Facturación instantánea con un clic: todos los costos y gastos están integrados perfectamente en Cattler. Alertas automatizadas de cuentas por cobrar para mantenerte al día con los pagos. Supervisión financiera completa con seguimiento y reportes en tiempo real. Gestión de banco de granos para rastrear stocks de granos de clientes con facilidad. ¡Integración con QuickBooks próximamente!",
+
+    advancedFeedingTitle: "Alimentación Avanzada",
+    advancedFeedingDesc:
+      "Protocolos de Alimentación para planificar y ajustar alimento para cada lote por adelantado, con proyecciones de costos. Alertas de Incremento de Ración para adelantarse a las transiciones. Genera automáticamente órdenes de carga y entrega basadas en capacidad de mezcladora y distribución de corrales para optimizar la entrega. Acelera el proceso de llamada de comederos con puntuación personalizable y automatización de llamadas. Ajuste Automático de Carga y Entrega",
+
+    // Learn More
+    learnMore: "Saber más",
+
+    // Why Choose Cattler
+    whyChooseCattler: "Por Qué Elegir Cattler",
+    comprehensiveSolution: "Solución Integral",
+    comprehensiveSolutionDesc:
+      "Desde alimentación hasta facturación, Cattler ofrece un conjunto completo de herramientas para la gestión ganadera moderna.",
+    customizable: "Personalizable",
+    customizableDesc: "Cattler se adapta a la realidad de tu operación con flexibilidad y capacidad de conectarse a cualquier indicador.",
+    realTimeUpdates: "Actualizaciones en Tiempo Real",
+    realTimeUpdatesDesc:
+      "Mantené informado con actualizaciones instantáneas sobre salud del ganado, alimentación y datos financieros.",
+    multiUserAccess: "Acceso Multi-Usuario",
+    multiUserAccessDesc: "Colaborá eficientemente con acceso basado en roles para todo tu equipo.",
+
+    // CTA Section
+    ctaTitle: "¿Listo para Revolucionar tu Gestión Ganadera?",
+    ctaSubtitle:
+      "Cada vez más ganaderos confían en Cattler para optimizar sus operaciones, aumentar la productividad y maximizar las ganancias.",
+    requestDemo: "Solicitar Demo Gratuita",
+
+    // Testimonials
+    testimonialsTitle: "Lo Que Dicen Nuestros Clientes",
+    watchVideo: "Ver Video",
+
+    // Countries
+    "countries.US": "Estados Unidos",
+    "countries.CA": "Canadá",
+    "countries.AR": "Argentina",
+    "countries.PY": "Paraguay",
+    "countries.UY": "Uruguay",
+    "countries.BO": "Bolivia",
+    "countries.BR": "Brasil",
+    "countries.MX": "México",
+    "countries.OT": "Otros",
+
+    // Pricing CTA
+    pricingCtaTitle: "¿Listo para Comenzar?",
+    pricingCtaSubtitle:
+      "Eligí el plan perfecto para tu operación. Desde pequeñas operaciones hasta grandes feedlots, tenemos una solución que se adapta a tus necesidades y presupuesto.",
+    viewPlansAndPrices: "Ver Planes y Precios",
+
+    // Video CTA Section
+    videoCtaTitle: "Descubre Cattler en Acción",
+    videoCtaSubtitle: "Mirá cómo miles de productores están transformando su gestión ganadera",
+    watchPresentationVideo: "Ver Video de Presentación",
+    presentationVideoUrl: "https://youtu.be/gQGAclpnnBo",
+
+    // Enhanced CTA Section
+    enhancedCtaTitle: "Unite a la Revolución Ganadera",
+    enhancedCtaSubtitle: "Cada vez más ganaderos confían en Cattler para optimizar sus operaciones, aumentar la productividad y maximizar las ganancias.",
+    cattleHeadCount: "1.200.000+",
+    cattleHead: "Cabezas de Ganado al año",
+    feedTon: "Toneladas de alimento por día",
+    feedTonCount: "7.000+",
+    timeSaved: "Tiempo ahorrado por mes",
+    timeSavedCount: "40+",
+    implementation24h: "Implementación en 24 horas",
+    specializedSupport: "Soporte técnico especializado",
+    automaticUpdates: "Actualizaciones todos los meses",
+    systemIntegration: "Integración con sistemas existentes",
+    explorePlansAndPrices: "Explorar Planes y Precios",
+    requestFreeDemo: "Solicitar Demo Gratuita",
+    close: "Cerrar",
+    videoNotAvailable: "Video no disponible",
   },
 }
 

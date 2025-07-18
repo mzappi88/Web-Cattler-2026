@@ -1,11 +1,11 @@
-import CattlerLanding from "@/components/cattler-landing";
+import CattlerHome from "@/components/cattler-home";
 import CattlerFeatures from "@/components/cattler-features";
 import LogoCarousel from "@/components/logo-carousel";
 
 export default function Home() {
   return (
     <main>
-      <CattlerLanding />
+      <CattlerHome />
       <LogoCarousel />
       <CattlerFeatures />
     </main>

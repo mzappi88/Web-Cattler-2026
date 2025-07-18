@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { type PartnerLogo } from "@/hooks/use-partner-logos";
+import { allPartnerLogos, getLogosByCountry } from "@/data/partner-logos";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,7 +22,7 @@ export default function LogoManagement() {
   const [selectedCountry, setSelectedCountry] = useState<string>("US");
   const [editingLogo, setEditingLogo] = useState<PartnerLogo | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
-  const [logoData, setLogoData] = useState<CountryLogos>(PartnerLogo);
+  const [logoData, setLogoData] = useState<Record<string, PartnerLogo[]>>({});
 
   const [formData, setFormData] = useState({
     name: "",
@@ -32,9 +33,15 @@ export default function LogoManagement() {
 
   const countries = [
     { code: "US", name: "United States" },
+    { code: "CA", name: "Canada" },
     { code: "AR", name: "Argentina" },
+    { code: "PY", name: "Paraguay" },
+    { code: "UY", name: "Uruguay" },
+    { code: "BO", name: "Bolivia" },
     { code: "BR", name: "Brazil" },
-    { code: "default", name: "Default/Other Countries" },
+    { code: "MX", name: "Mexico" },
+    { code: "OT$EN", name: "Other English" },
+    { code: "OT$ES", name: "Other Spanish" },
   ];
 
   const categories = [
@@ -69,6 +76,7 @@ export default function LogoManagement() {
       logoUrl: formData.logoUrl,
       website: formData.website,
       category: formData.category,
+      countries: [selectedCountry],
     };
 
     const updatedLogos = { ...logoData };
@@ -126,7 +134,8 @@ export default function LogoManagement() {
     return categoryInfo?.color || "bg-gray-100 text-gray-800";
   };
 
-  const currentLogos = logoData[selectedCountry] || [];
+  const currentLogos =
+    logoData[selectedCountry] || getLogosByCountry(selectedCountry || "US");
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -144,7 +153,7 @@ export default function LogoManagement() {
         onValueChange={setSelectedCountry}
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           {countries.map((country) => (
             <TabsTrigger key={country.code} value={country.code}>
               {country.name}
@@ -178,8 +187,12 @@ export default function LogoManagement() {
                     >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-3">
-                          <Badge className={getCategoryStyle(logo.category)}>
-                            {logo.category}
+                          <Badge
+                            className={getCategoryStyle(
+                              logo.category || "producer"
+                            )}
+                          >
+                            {logo.category || "producer"}
                           </Badge>
                           <div className="flex gap-2">
                             <Button

@@ -1,0 +1,13 @@
+import CattlerLanding from "@/components/cattler-landing";
+import CattlerFeatures from "@/components/cattler-features";
+import LogoCarousel from "@/components/logo-carousel";
+
+export default function LandingPage() {
+  return (
+    <main>
+      <CattlerLanding />
+      <LogoCarousel />
+      <CattlerFeatures />
+    </main>
+  );
+}

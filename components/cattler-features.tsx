@@ -3,6 +3,7 @@
 import { FeatureSection } from "./feature-section";
 import { Settings, Clock, Users, Info } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
+import { useFeatureVideos } from "@/hooks/use-feature-videos";
 import { useMemo } from "react";
 import TestimonialsCarousel from "./testimonials-carousel";
 import { useRouter } from "next/navigation";
@@ -10,6 +11,7 @@ import { useRouter } from "next/navigation";
 export default function CattlerFeatures() {
   const { selectedCountry, setSelectedCountry, language, t, isHydrated } =
     useTranslation();
+  const videos = useFeatureVideos();
   const router = useRouter();
 
   const navigateToDemo = () => {
@@ -141,7 +143,7 @@ export default function CattlerFeatures() {
         title={t("feedingTitle")}
         description={t("feedingDesc")}
         learnMoreUrl="https://www.cattler.farm/feeder"
-        videoSrc="https://video.wixstatic.com/video/93f7fc_449a9d335f4546d18ac6336ec5755d9a/720p/mp4/file.mp4"
+        videoSrc={videos.feeding}
         isPhone={true}
         isReverse={true}
         phoneStyle={{
@@ -156,7 +158,7 @@ export default function CattlerFeatures() {
         title={t("cattleManagementTitle")}
         description={t("cattleManagementDesc")}
         learnMoreUrl="https://www.cattler.farm/cattle-management"
-        videoSrc="https://video.wixstatic.com/video/93f7fc_50076f9ae9784c11a97b4000e3d06e00/480p/mp4/file.mp4"
+        videoSrc={videos.cattleManagement}
         isPhone={true}
         isReverse={false}
         phoneStyle={{
@@ -171,7 +173,7 @@ export default function CattlerFeatures() {
         title={t("animalHealthTitle")}
         description={t("animalHealthDesc")}
         learnMoreUrl="https://www.cattler.farm/animal-health"
-        videoSrc="https://video.wixstatic.com/video/93f7fc_3abf23fd19d044e195dfa84a7eca55bf/1080p/mp4/file.mp4"
+        videoSrc={videos.animalHealth}
         isPhone={true}
         isReverse={true}
         phoneStyle={{
@@ -186,7 +188,7 @@ export default function CattlerFeatures() {
         title={t("accountManagementTitle")}
         description={t("accountManagementDesc")}
         learnMoreUrl="https://www.cattler.farm/account-management"
-        videoSrc="https://video.wixstatic.com/video/93f7fc_42cd75cbe9cf4230af581a1821c51623/720p/mp4/file.mp4"
+        videoSrc={videos.accountManagement}
         isReverse={false}
       />
 
@@ -196,7 +198,7 @@ export default function CattlerFeatures() {
         title={t("advancedFeedingTitle")}
         description={t("advancedFeedingDesc")}
         learnMoreUrl="https://www.cattler.farm/advanced-feeding"
-        videoSrc="https://video.wixstatic.com/video/93f7fc_ffa986ce4ad44915b28719917029acee/1080p/mp4/file.mp4"
+        videoSrc={videos.advancedFeeding}
         isReverse={true}
       />
 
