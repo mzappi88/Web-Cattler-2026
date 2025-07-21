@@ -15,6 +15,7 @@ export default function LogoCarousel() {
   const { selectedCountry, isHydrated } = useTranslation();
   const logos = usePartnerLogos();
   const [isPlaying, setIsPlaying] = useState(true);
+
   const [settings, setSettings] = useState<CarouselSettings>({
     speed: "normal",
     direction: "left",
@@ -53,6 +54,22 @@ export default function LogoCarousel() {
       return { animationPlayState: "paused" as const };
     }
     return {};
+  };
+
+  const getLogoSize = (logoName: string) => {
+    // Logos específicos que deben ser más grandes
+    const largeLogos = ["Rumen", "Vetifarma", "Crealab"];
+
+    if (
+      largeLogos.some((name) =>
+        logoName.toLowerCase().includes(name.toLowerCase())
+      )
+    ) {
+      return "h-12 md:h-16 lg:h-20 w-auto max-w-[120px] md:max-w-[160px] lg:max-w-[200px]";
+    }
+
+    // Tamaño normal para el resto
+    return "h-8 md:h-10 lg:h-12 w-auto max-w-[80px] md:max-w-[100px] lg:max-w-[120px]";
   };
 
   if (!isHydrated || logos.length === 0) {
@@ -99,7 +116,7 @@ export default function LogoCarousel() {
                 <img
                   src={logo.logoUrl || "/placeholder.svg"}
                   alt={logo.name}
-                  className="h-8 md:h-10 lg:h-12 w-auto max-w-[80px] md:max-w-[100px] lg:max-w-[120px] object-contain"
+                  className={`${getLogoSize(logo.name)} object-contain`}
                   loading="lazy"
                   onError={(e) => {
                     e.currentTarget.src =

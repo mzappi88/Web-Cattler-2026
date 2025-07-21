@@ -136,14 +136,6 @@ export const allPartnerLogos: PartnerLogo[] = [
     countries: ["US", "OT$EN", "OT$ES"],
   },
   {
-    id: "contryside-feed-alt",
-    name: "Countryside Feed",
-    logoUrl: "/Contryside-Feed.png",
-    website: "https://countrysidefeed.com",
-    category: "producer",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
-  },
-  {
     id: "agrifirm",
     name: "Agrifirm",
     logoUrl: "/logo-agrifirm.png",
