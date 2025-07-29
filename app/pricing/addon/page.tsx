@@ -4,6 +4,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import AddOnCheckout from "@/components/pricing/addon-checkout";
 import { getAddOns, getAddOnInfo } from "@/data/owner-addons";
+import { getPricingUrl } from "@/hooks/use-translation";
 
 export default function AddonCheckoutPage() {
   const params = useParams();
@@ -42,7 +43,15 @@ export default function AddonCheckoutPage() {
             setError("No addon ID provided");
             setTimeout(() => {
               if (mounted) {
-                router.push("/pricing");
+                const savedCountry = localStorage.getItem(
+                  "cattler-country"
+                ) as any;
+                const pricingUrl = getPricingUrl(savedCountry || "US");
+                if (window.parent && window.parent !== window) {
+                  window.parent.location.href = pricingUrl;
+                } else {
+                  window.location.href = pricingUrl;
+                }
               }
             }, 100);
           }
@@ -78,7 +87,15 @@ export default function AddonCheckoutPage() {
               setError("Este complemento ainda não está disponível");
               setTimeout(() => {
                 if (mounted) {
-                  router.push("/pricing");
+                  const savedCountry = localStorage.getItem(
+                    "cattler-country"
+                  ) as any;
+                  const pricingUrl = getPricingUrl(savedCountry || "US");
+                  if (window.parent && window.parent !== window) {
+                    window.parent.location.href = pricingUrl;
+                  } else {
+                    window.location.href = pricingUrl;
+                  }
                 }
               }, 2000);
             }
@@ -94,7 +111,15 @@ export default function AddonCheckoutPage() {
             setError(`Complemento "${addonId}" não encontrado`);
             setTimeout(() => {
               if (mounted) {
-                router.push("/pricing");
+                const savedCountry = localStorage.getItem(
+                  "cattler-country"
+                ) as any;
+                const pricingUrl = getPricingUrl(savedCountry || "US");
+                if (window.parent && window.parent !== window) {
+                  window.parent.location.href = pricingUrl;
+                } else {
+                  window.location.href = pricingUrl;
+                }
               }
             }, 2000);
           }
@@ -105,7 +130,15 @@ export default function AddonCheckoutPage() {
           setError("Erro ao carregar complemento");
           setTimeout(() => {
             if (mounted) {
-              router.push("/pricing");
+              const savedCountry = localStorage.getItem(
+                "cattler-country"
+              ) as any;
+              const pricingUrl = getPricingUrl(savedCountry || "US");
+              if (window.parent && window.parent !== window) {
+                window.parent.location.href = pricingUrl;
+              } else {
+                window.location.href = pricingUrl;
+              }
             }
           }, 2000);
         }
@@ -124,7 +157,13 @@ export default function AddonCheckoutPage() {
   }, [addonId, dataParam, router]);
 
   const handleBack = () => {
-    router.push("/pricing");
+    const savedCountry = localStorage.getItem("cattler-country") as any;
+    const pricingUrl = getPricingUrl(savedCountry || "US");
+    if (window.parent && window.parent !== window) {
+      window.parent.location.href = pricingUrl;
+    } else {
+      window.location.href = pricingUrl;
+    }
   };
 
   if (isLoading) {

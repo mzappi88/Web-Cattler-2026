@@ -2,7 +2,7 @@
 
 import { FeatureSection } from "./feature-section";
 import { Settings, Clock, Users, Info } from "lucide-react";
-import { useTranslation } from "@/hooks/use-translation";
+import { useTranslation, getPricingUrl } from "@/hooks/use-translation";
 import { useFeatureVideos } from "@/hooks/use-feature-videos";
 import { useMemo } from "react";
 import TestimonialsCarousel from "./testimonials-carousel";
@@ -270,7 +270,14 @@ export default function CattlerFeatures() {
               {t("pricingCtaSubtitle")}
             </p>
             <button
-              onClick={() => router.push("/pricing")}
+              onClick={() => {
+                const pricingUrl = getPricingUrl(selectedCountry);
+                if (window.parent && window.parent !== window) {
+                  window.parent.location.href = pricingUrl;
+                } else {
+                  window.location.href = pricingUrl;
+                }
+              }}
               className="bg-white text-[#15B674] font-bold text-base md:text-lg py-3 px-6 md:py-4 md:px-8 rounded-full hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center gap-2 md:gap-3"
             >
               <span>{t("viewPlansAndPrices")}</span>

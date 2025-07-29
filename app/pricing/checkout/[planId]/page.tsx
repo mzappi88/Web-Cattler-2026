@@ -5,6 +5,7 @@ import { useEffect, useState, useMemo } from "react";
 import Checkout from "@/components/pricing/checkout";
 import { getOwnerPlans, findPlanById } from "@/data/owner-plans";
 import { usePricingTranslation } from "@/hooks/use-pricing-translation";
+import { getPricingUrl } from "@/hooks/use-translation";
 
 // Simplified promotional state
 const PROMOTIONAL_STATE = {
@@ -64,7 +65,12 @@ export default function CheckoutPage() {
   }, [planId, billingCycle, selectedCountry]);
 
   const handleBack = () => {
-    router.push("/pricing");
+    const pricingUrl = getPricingUrl(selectedCountry);
+    if (window.parent && window.parent !== window) {
+      window.parent.location.href = pricingUrl;
+    } else {
+      window.location.href = pricingUrl;
+    }
   };
 
   if (isLoading) {

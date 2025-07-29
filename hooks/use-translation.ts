@@ -200,8 +200,8 @@ const translations = {
     cattleHead: "Cattle Head per year",
     feedTon: "Feed Ton per day",
     feedTonCount: "7,000+",
-    timeSaved: "Time saved per month",
-    timeSavedCount: "40+",
+    timeSaved: "Hours saved per month",
+    timeSavedCount: "48+",
     implementation24h: "Implementation in 24 hours",
     specializedSupport: "Specialized technical support",
     automaticUpdates: "New updates every month",
@@ -277,8 +277,9 @@ const translations = {
     mainTitle: "Transforma Tu Operación Ganadera",
     mainTitleWithCattler: "Transforma tu operación ganadera",
     mainSubtitle:
-      "Cattler es un software de gestión ganadera que centraliza toda la operación del feedlot en una sola plataforma — desde la alimentación y la salud hasta el procesamiento y el inventario.",
-
+      "Cattler es un software de gestión ganadera que centraliza toda la operación del feedlot en una sola plataforma.",
+    mainSubtitleLine2:
+      "Desde la alimentación y la salud hasta el procesamiento y el inventario, todo en un solo lugar.",
     // Features
     endPaperwork: "Elimina el Papeleo",
     endPaperworkDesc: "Registros digitales y reportes automatizados eliminan el papeleo manual y reducen errores.",
@@ -388,8 +389,8 @@ const translations = {
     cattleHead: "Cabezas de Ganado al año",
     feedTon: "Toneladas de alimento por día",
     feedTonCount: "7.000+",
-    timeSaved: "Tiempo ahorrado por mes",
-    timeSavedCount: "40+",
+    timeSaved: "Horas ahorradas por mes",
+    timeSavedCount: "48+",
     implementation24h: "Implementación en 24 horas",
     specializedSupport: "Soporte técnico especializado",
     automaticUpdates: "Actualizaciones todos los meses",
@@ -466,8 +467,9 @@ const translations = {
     mainTitle: "Transforme Sua Operação Pecuária",
     mainTitleWithCattler: "Transforme sua operação pecuária com",
     mainSubtitle:
-      "Cattler é um software de gestão pecuária que centraliza toda a operação do confinamento em uma única plataforma — da alimentação e saúde ao processamento e estoque.",
-
+      "Cattler é um software de gestão pecuária que centraliza toda a operação do confinamento em uma única plataforma.",
+    mainSubtitleLine2:
+      "Da alimentação e saúde ao processamento e estoque, tudo em um só lugar.",
     // Features
     endPaperwork: "Elimine a Papelada",
     endPaperworkDesc: "Registros digitais e relatórios automatizados eliminam a papelada manual e reduzem erros.",
@@ -578,8 +580,8 @@ const translations = {
     cattleHead: "Cabeças de gado por ano",
     feedTon: "Toneladas de ração por dia",
     feedTonCount: "7.000+",
-    timeSaved: "Tempo economizado por mês",
-    timeSavedCount: "40+",
+    timeSaved: "Horas economizadas por mês",
+    timeSavedCount: "48+",
     implementation24h: "Implementação em 24 horas",
     specializedSupport: "Suporte técnico especializado",
     automaticUpdates: "Atualizações automáticas",
@@ -656,8 +658,9 @@ const translations = {
     mainTitle: "Transformá Tu Operación Ganadera",
     mainTitleWithCattler: "Transformá tu operación ganadera",
     mainSubtitle:
-      "Cattler es un software de gestión ganadera que centraliza toda la operación del feedlot en una sola plataforma — desde la alimentación y la salud hasta el procesamiento y el inventario.",
-
+      "Cattler es un software de gestión ganadera que centraliza toda la operación del feedlot en una sola plataforma",
+    mainSubtitleLine2:
+      "Desde la alimentación y la salud hasta el procesamiento y el inventario, todo en un solo lugar.",
     // Features
     endPaperwork: "Eliminá el Papeleo",
     endPaperworkDesc: "Registros digitales y reportes automatizados eliminan el papeleo manual y reducen errores.",
@@ -767,8 +770,8 @@ const translations = {
     cattleHead: "Cabezas de Ganado al año",
     feedTon: "Toneladas de alimento por día",
     feedTonCount: "7.000+",
-    timeSaved: "Tiempo ahorrado por mes",
-    timeSavedCount: "40+",
+    timeSaved: "Horas ahorradas por mes",
+    timeSavedCount: "48+",
     implementation24h: "Implementación en 24 horas",
     specializedSupport: "Soporte técnico especializado",
     automaticUpdates: "Actualizaciones todos los meses",
@@ -849,5 +852,26 @@ export function useTranslation() {
     language,
     t,
     isHydrated,
+  }
+}
+
+// Helper function to get the appropriate pricing URL based on country
+export function getPricingUrl(country: Country): string {
+  switch (country) {
+    case "AR":
+    case "UY":
+    case "PY":
+    case "BO":
+    case "MX":
+    case "OT$ES":
+      return "https://www.cattler.com.ar/precios";
+    case "BR":
+      return "https://cattler.agr.br/precos";
+    case "US":
+    case "CA":
+    case "OT$EN":
+      return "https://cattler.farm/getstarted";
+    default:
+      return "https://cattler.farm/getstarted"; // Default fallback
   }
 }

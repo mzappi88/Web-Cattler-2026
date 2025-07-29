@@ -13,9 +13,10 @@ import {
   Zap,
   CheckCircle,
   X,
+  Clock,
 } from "lucide-react";
 import Image from "next/image";
-import { useTranslation } from "@/hooks/use-translation";
+import { useTranslation, getPricingUrl } from "@/hooks/use-translation";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
@@ -322,8 +323,8 @@ export default function CattlerHome() {
                 </div>
               </div>
               <div className="text-center">
-                <div className="bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center mx-auto mb-3 md:mb-4">
-                  <Zap className="w-6 h-6 md:w-8 md:h-8 text-white" />
+                <div className="bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] rounded-full w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mx-auto mb-3 md:mb-4">
+                  <Clock className="w-8 h-8 md:w-12 md:h-12 text-white" />
                 </div>
                 <div className="text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2">
                   {t("timeSavedCount")}
@@ -364,7 +365,14 @@ export default function CattlerHome() {
 
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center">
               <Button
-                onClick={() => router.push("/pricing")}
+                onClick={() => {
+                  const pricingUrl = getPricingUrl(selectedCountry);
+                  if (window.parent && window.parent !== window) {
+                    window.parent.location.href = pricingUrl;
+                  } else {
+                    window.location.href = pricingUrl;
+                  }
+                }}
                 className="bg-gradient-to-r from-[#15B674] to-[#12a066] hover:from-[#12a066] hover:to-[#0f8a56] text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-sm md:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl border-0 w-full sm:w-auto"
               >
                 {t("explorePlansAndPrices")}

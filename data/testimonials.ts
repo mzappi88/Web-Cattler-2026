@@ -71,7 +71,7 @@ export const testimonials: Testimonial[] = [
     image:
       "/testimonials/guillermo-vivas-AR.PNG",
     videoUrl: "",
-    countries: ["AR"],
+    countries: ["AR","BO","PY","UY"],
   },
   {
     id: "7",
@@ -141,7 +141,7 @@ export const testimonials: Testimonial[] = [
       "Cattler ha transformado completamente nuestra gestión ganadera. La eficiencia que hemos logrado es extraordinaria.",
     image: "/placeholder-user.jpg",
     videoUrl: "https://youtu.be/lNY3g69e_lE",
-    countries: ["BO"],
+    countries: [""],
   },
   {
     id: "14",
@@ -151,7 +151,7 @@ export const testimonials: Testimonial[] = [
       "Los reportes automatizados nos han ahorrado innumerables horas. Cattler es una herramienta esencial para la ganadería moderna.",
     image: "/placeholder-user.jpg",
     videoUrl: "https://youtube.com/watch?v=example2",
-    countries: ["BO"],
+    countries: [""],
   },
   {
     id: "15",
@@ -161,7 +161,7 @@ export const testimonials: Testimonial[] = [
       "Cattler es increíble! Lo uso todo el tiempo. Ha transformado completamente cómo manejamos nuestra operación ganadera.",
     image: "/placeholder-user.jpg",
     videoUrl: "https://youtu.be/lNY3g69e_lE",
-    countries: ["MX"],
+    countries: [""],
   },
   {
     id: "16",
@@ -171,30 +171,28 @@ export const testimonials: Testimonial[] = [
       "El seguimiento en tiempo real y los reportes automatizados nos han ahorrado incontables horas. Cattler es una herramienta esencial.",
     image: "/placeholder-user.jpg",
     videoUrl: "https://youtube.com/watch?v=example2",
-    countries: ["MX"],
+    countries: [""],
   },
 
   // Testimonios en portugués (BR)
   {
     id: "17",
-    name: "João Silva",
-    location: "Fazenda Mato Grosso",
+    name: "David Lilienfeld, Inducarne",
+    location: "Santa Cruz, Bolivia",
     quote:
-      "O Cattler é incrível! Eu uso o tempo todo. Transformou completamente como gerenciamos nossa operação pecuária e tornou tudo muito mais eficiente.",
-    image:
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/104CMT20240408LIMBAL.jpg-s9CtaxVQ4IkYrzBwKALTN6aPJAv0RH.jpeg",
-    videoUrl: "https://studio.youtube.com/video/JFxY4Oo92E8/edit",
+      "Testamos vários programas e o Cattler foi o que nos deu o que precisávamos: informações precisas e pontuais para tomar decisões. Gostamos da interface amigável e intuitiva, assim como das constantes melhorias e inovações. Sempre nos surpreendem com uma nova funcionalidade.",
+    image:"/testimonials/david-lilienfeld-BO.jpg",
+    videoUrl: "",
     countries: ["BR"],
   },
   {
     id: "18",
     name: "Ana Santos",
     location: "Confinamento São Paulo",
-    quote:
-      "O rastreamento em tempo real e os relatórios automatizados nos pouparam inúmeras horas. O Cattler é uma ferramenta essencial para a pecuária moderna.",
+    quote: "O rastreamento em tempo real e os relatórios automatizados nos pouparam inúmeras horas. O Cattler é uma ferramenta essencial para a pecuária moderna.",
     image: "/placeholder-user.jpg",
     videoUrl: "https://youtube.com/watch?v=example2",
-    countries: ["BR"],
+    countries: [""],
   },
   {
     id: "19",
@@ -204,7 +202,7 @@ export const testimonials: Testimonial[] = [
       "Desde que implementamos o Cattler, nossa eficiência alimentar melhorou 15% e nossos registros são impecáveis. Altamente recomendado!",
     image: "/placeholder-user.jpg",
     videoUrl: "https://youtube.com/watch?v=example3",
-    countries: ["BR"],
+    countries: [""],
   },
 ];
 

@@ -499,7 +499,7 @@ const FEATURE_CONFIG: FeatureConfig = {
         { name: "AutoAdjust", plan1: false, plan2: true, plan3: true, plan4: false }
       ]
     },
-    AnimalHealthChute: { plan1: false, plan2: "addon", plan3: "addon", plan4: false, isExpandable: true, expandedByDefault: false,
+    AnimalHealthChute: { plan1: false, plan2: true, plan3: true, plan4: false, isExpandable: true, expandedByDefault: true,
       subFeatures: [
         {name: "animalHealth",plan1: "", plan2: "", plan3:"",plan4:""},
         {name: "chuteCattleIn",plan1: "", plan2: "", plan3:"",plan4:""},
