@@ -55,7 +55,7 @@ export default function CattlerLanding() {
       {/* Hero Video Section */}
       <div className="relative w-full bg-black">
         {/* Mobile Video - Full height */}
-        <div className="relative w-full h-[50vh] md:hidden overflow-hidden">
+        <div className="relative w-full h-[50vh] md:hidden overflow-hidden bg-black">
           <video
             className="absolute top-0 left-0 w-full h-full"
             autoPlay
@@ -63,10 +63,12 @@ export default function CattlerLanding() {
             muted
             playsInline
             style={{
-              objectFit: "cover",
+              objectFit: "scale-down",
               objectPosition: "center",
-              width: "100%",
-              height: "100%",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              width: "auto",
+              height: "auto",
             }}
           >
             <source
@@ -95,7 +97,7 @@ export default function CattlerLanding() {
 
         {/* Desktop Video */}
         <div
-          className="relative w-full hidden md:block overflow-hidden"
+          className="relative w-full hidden md:block overflow-hidden bg-black"
           style={{
             paddingBottom:
               "42.19%" /* 16:9 aspect ratio reducido 25% desde 56.25% */,
@@ -108,10 +110,12 @@ export default function CattlerLanding() {
             muted
             playsInline
             style={{
-              objectFit: "cover",
+              objectFit: "scale-down",
               objectPosition: "center",
-              width: "100%",
-              height: "100%",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              width: "auto",
+              height: "auto",
             }}
           >
             <source
