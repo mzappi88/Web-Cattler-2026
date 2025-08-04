@@ -45,7 +45,14 @@ export default function CattlerLanding() {
   return (
     <div
       className="bg-gradient-to-b from-[#f0f1f7] to-[#d1d3e2] flex flex-col items-center justify-center px-0"
-      style={{ maxHeight: "100vh", overflow: "hidden" }}
+      style={{
+        height: "100vh",
+        maxHeight: "100vh",
+        overflow: "hidden",
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
       {/* Country Selector - Hidden for production, only available in debug */}
       {/* <div className="fixed top-4 right-4 z-50">
@@ -56,14 +63,22 @@ export default function CattlerLanding() {
       </div> */}
 
       {/* Hero Video Section */}
-      <div className="relative w-full bg-black" style={{ maxHeight: "30vh" }}>
+      <div
+        className="relative w-full bg-black"
+        style={{
+          height: "30vh",
+          maxHeight: "30vh",
+          minHeight: "30vh",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
         {/* Mobile Video - Limited height */}
         <div
-          className="relative w-full h-[30vh] md:hidden overflow-hidden bg-black"
+          className="relative w-full h-full md:hidden overflow-hidden bg-black"
           style={{
-            maxHeight: "30vh",
-            height: "30vh",
-            minHeight: "30vh",
+            height: "100%",
+            maxHeight: "100%",
             position: "relative",
             overflow: "hidden",
           }}
@@ -78,7 +93,7 @@ export default function CattlerLanding() {
               objectFit: "contain",
               objectPosition: "center",
               maxWidth: "100%",
-              maxHeight: "30vh",
+              maxHeight: "100%",
               width: "100%",
               height: "100%",
               transform: "scale(1)",
@@ -91,6 +106,7 @@ export default function CattlerLanding() {
               left: "0",
               right: "0",
               bottom: "0",
+              zIndex: "1",
             }}
           >
             <source
@@ -182,7 +198,14 @@ export default function CattlerLanding() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-2 md:py-4 flex flex-col items-center justify-center">
+      <div
+        className="container mx-auto px-4 py-2 md:py-4 flex flex-col items-center justify-center"
+        style={{
+          flex: "1",
+          overflow: "auto",
+          maxHeight: "calc(100vh - 30vh)",
+        }}
+      >
         <h1 className="text-2xl md:text-4xl font-bold text-[#121334] text-center my-3 md:my-5">
           {t("mainTitle")}
         </h1>
