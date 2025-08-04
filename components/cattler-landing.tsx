@@ -54,8 +54,8 @@ export default function CattlerLanding() {
 
       {/* Hero Video Section */}
       <div className="relative w-full bg-black">
-        {/* Mobile Video - Full height */}
-        <div className="relative w-full h-[50vh] md:hidden overflow-hidden bg-black">
+        {/* Mobile Video - Limited height */}
+        <div className="relative w-full h-[30vh] md:hidden overflow-hidden bg-black">
           <video
             className="absolute top-0 left-0 w-full h-full"
             autoPlay
@@ -63,12 +63,17 @@ export default function CattlerLanding() {
             muted
             playsInline
             style={{
-              objectFit: "scale-down",
+              objectFit: "contain",
               objectPosition: "center",
               maxWidth: "100%",
-              maxHeight: "100%",
-              width: "auto",
-              height: "auto",
+              maxHeight: "30vh",
+              width: "100%",
+              height: "100%",
+              transform: "scale(1)",
+              transformOrigin: "center center",
+              minHeight: "auto",
+              minWidth: "auto",
+              aspectRatio: "16/9",
             }}
           >
             <source
