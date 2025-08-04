@@ -81,7 +81,7 @@ export const testimonials: Testimonial[] = [
       "Probamos con varios programas y Cattler nos dio lo que necesitábamos: información precisa y puntual para tomar decisiones. Nos gusta la interfaz amigable e intuitiva, así com osu constante mejora y desarrollo. Siempre nos sorprenden con una nueva funcionalidad.",
     image: "/testimonials/david-lilienfeld-BO.jpg",
     videoUrl: "",
-    countries: ["BO"],
+    countries: ["BO","PY","OT$ES"],
   },
   {
     id: "8",
@@ -89,9 +89,9 @@ export const testimonials: Testimonial[] = [
     location: "San José, Uruguay",
     quote:
       "Cattler nos permite manejar el feedlot a distancia, reduciendo los tiempos entre la carga de raciones y la entrega en los comederos. La información es accesible para todo el equipo, lo que es fundamental para nosotros, ya que priorizamos el trabajo colaborativo y contamos con el software como reaspaldo. Además, Cattler Actualiza constantemente sus funcionalidades, mejorando la dinámica del feedlot",
-    image: "/testimonials/ramon-otazu-UY.jpg",
+    image: "/testimonials/ramon-otazu-UY.png",
     videoUrl: "",
-    countries: ["UY"],
+    countries: ["UY","BO"],
   },
   {
     id: "9",
@@ -101,7 +101,7 @@ export const testimonials: Testimonial[] = [
       "Con Cattler pudimos digitalizar todo el manejo de hacienda en los feedlots de Uruguay, y también va a ser nuestera aplicación pastoril. Para nosotros es una herramienta fundamental de eficiencia",
     image: "/testimonials/grupo-ceibos-UY.webp",
     videoUrl: "",
-    countries: ["AR","UY"],
+    countries: ["AR","UY","OT$ES"],
   },
   {
     id: "10",
@@ -111,7 +111,7 @@ export const testimonials: Testimonial[] = [
       "Cattler integra toda la parte de producción de campo junto con la parte que antes se hacía en escritorio y se pasaba de planillas a papel. Hoy eso lo superamos con Cattler, todo queda automáticamente registrado en el sistema.",
     image: "/testimonials/kiko-nazar-AR.png",
     videoUrl: "",
-    countries: ["AR"],
+    countries: ["AR","OT$ES"],
   },
   {
     id: "11",
@@ -121,7 +121,7 @@ export const testimonials: Testimonial[] = [
       "Con Cattler puedo monitorear lo que está pasanado en tiempo real desde el celular, sin estar en el campo todos los días. Veníamos trabajando con otra aplicación integrada al mixer, pero Cattler es mucho más completo y amigable. Nuestro mixero lo ama",
     image: "/testimonials/pancho-baumann-AR.jpg",
     videoUrl: "",
-    countries: ["AR"],
+    countries: ["AR","PY"],
   },
   {
     id: "12",
@@ -131,7 +131,7 @@ export const testimonials: Testimonial[] = [
       "Las funciones de reportes automatizados nos han ahorrado horas cada semana. Cattler es exactamente lo que necesitábamos.",
     image: "/placeholder-user.jpg",
     videoUrl: "https://youtube.com/watch?v=example2",
-    countries: ["UY"],
+    countries: [""],
   },
   {
     id: "13",

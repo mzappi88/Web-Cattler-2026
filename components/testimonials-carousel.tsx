@@ -73,12 +73,12 @@ export default function TestimonialsCarousel() {
                   <Card className="h-full shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
                     <CardContent className="p-0 flex flex-col h-full">
                       {/* Tall Image Section */}
-                      <div className="relative h-60 md:h-80 w-full">
+                      <div className="relative h-64 md:h-80 w-full">
                         <Image
                           src={testimonial.image || "/placeholder.svg"}
                           alt={testimonial.name}
                           fill
-                          className="object-cover object-center"
+                          className="object-cover object-top"
                         />
                         {/* Gradient overlay for text readability */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />

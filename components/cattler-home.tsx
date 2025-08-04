@@ -399,17 +399,22 @@ export default function CattlerHome() {
 
       {/* Video Popup */}
       {isVideoPopupOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
-          <div className="relative w-full max-w-4xl">
-            <button
-              onClick={() => setIsVideoPopupOpen(false)}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
-            >
-              <X className="w-8 h-8" />
-            </button>
-
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
+          onClick={() => setIsVideoPopupOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="bg-white rounded-lg overflow-hidden shadow-2xl">
-              <div className="p-4 md:p-6 text-center">
+              <div className="p-4 md:p-6 text-center relative">
+                <button
+                  onClick={() => setIsVideoPopupOpen(false)}
+                  className="absolute top-2 right-2 md:top-4 md:right-4 text-gray-500 hover:text-gray-700 transition-colors z-10 bg-white/80 hover:bg-white rounded-full p-1 md:p-2"
+                >
+                  <X className="w-5 h-5 md:w-6 md:h-6" />
+                </button>
                 <h3 className="text-xl md:text-2xl font-bold text-[#121334] mb-2">
                   {t("videoCtaTitle")}
                 </h3>

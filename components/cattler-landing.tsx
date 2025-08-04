@@ -9,11 +9,6 @@ import { useTranslation } from "@/hooks/use-translation";
 import { CountrySelector } from "./country-selector";
 import { useRouter } from "next/navigation";
 
-declare global {
-  interface Window {
-    hbspt: any;
-  }
-}
 export type Version = "landing" | "ads-a" | "ads-b";
 
 export default function CattlerLanding() {
@@ -43,8 +38,6 @@ export default function CattlerLanding() {
             : "302022b8-67fb-454c-86bf-d6f4b449f4e0",
         target: "#hubspot-form-container",
         region: "na1",
-        onFormReady: () => setFormLoaded(true),
-        onFormSubmitted: () => setSubmitted(true),
       });
     }
   }, [scriptLoaded, version]);

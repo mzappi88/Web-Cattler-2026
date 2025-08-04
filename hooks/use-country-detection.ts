@@ -58,9 +58,15 @@ function detectCountryFromBrowser(): Country {
   const browserLanguage = navigator.language.toLowerCase();
   console.log("🌍 Browser language:", browserLanguage);
   
-  if (browserLanguage.startsWith("es")) {
+  // Check for specific Spanish-speaking countries
+  if (browserLanguage.startsWith("es-ar")) {
+    console.log("🌍 Browser language is es-AR, setting to AR");
+    return "AR";
+  } else if (browserLanguage.startsWith("es")) {
+    console.log("🌍 Browser language is Spanish, setting to OT$ES");
     return "OT$ES";
   } else {
+    console.log("🌍 Browser language is not Spanish, setting to OT$EN");
     return "OT$EN";
   }
 }
@@ -198,7 +204,41 @@ export function useCountryDetection() {
           }
         }
 
-        console.log("🌍 Final country decision after special case check:", finalCountry);
+        console.log("🌍 Final country decision:", finalCountry);
+
+        // Special case: If API returned US but user is likely in Argentina
+        if (finalCountry === "US" && typeof window !== 'undefined') {
+          const browserLanguage = navigator.language.toLowerCase();
+          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          console.log("🌍 Checking if user is actually in Argentina...");
+          console.log("🌍 Browser language:", browserLanguage, "Timezone:", timezone);
+          console.log("🌍 Is browser language Spanish?", browserLanguage.startsWith("es"));
+          console.log("🌍 Is timezone from Argentina?", timezone.includes("America/Argentina") || timezone.includes("America/Buenos_Aires"));
+          
+          // If timezone is in Argentina, override to AR (regardless of browser language)
+          if (timezone.includes("America/Argentina") || 
+              timezone.includes("America/Buenos_Aires") ||
+              timezone.includes("America/Cordoba") ||
+              timezone.includes("America/Rosario") ||
+              timezone.includes("America/Mendoza") ||
+              timezone.includes("America/La_Rioja") ||
+              timezone.includes("America/San_Juan") ||
+              timezone.includes("America/Tucuman") ||
+              timezone.includes("America/Catamarca") ||
+              timezone.includes("America/Jujuy") ||
+              timezone.includes("America/Salta") ||
+              timezone.includes("America/Santiago_del_Estero")
+          ) {
+            console.log("🌍 Overriding to AR based on timezone (Argentina detected)");
+            finalCountry = "AR";
+          } else {
+            console.log("🌍 Not overriding - timezone is not from Argentina");
+          }
+        } else {
+          console.log("🌍 Not checking Argentina override - finalCountry is not US or window is undefined");
+        }
+
+        console.log("🌍 Final country decision after Argentina check:", finalCountry);
 
         // Cache the result
         localStorage.setItem("cattler-country", finalCountry);

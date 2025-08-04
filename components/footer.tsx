@@ -5,7 +5,7 @@ import { Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 
 export default function Footer() {
-  const { t, selectedCountry } = useTranslation();
+  const { t, selectedCountry, language } = useTranslation();
 
   // Custom TikTok icon since it's not in Lucide
   const TikTok = () => (
@@ -24,6 +24,77 @@ export default function Footer() {
       <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
     </svg>
   );
+
+  // Helper function to get contact info based on country and language
+  const getContactInfo = () => {
+    // For ES-AR only, show the specific address
+    if (selectedCountry === "AR" && language === "es-ar") {
+      return {
+        address: (
+          <>
+            <p>Delgado 377 2o B</p>
+            <p>CABA - 1428</p>
+          </>
+        ),
+        phone: "+54 11 5929 5601",
+        email: "ventas@cattler.farm"
+      };
+    }
+    
+    // For ES, ES-AR, and PT, show the new phone and email
+    if (language === "es" || language === "es-ar" || language === "pt") {
+      return {
+        address: (
+          <>
+            <p>2125 Transformation Drive</p>
+            <p>Suite 1000</p>
+            <p>Lincoln, NE 68508</p>
+          </>
+        ),
+        phone: "+54 11 5929 5601",
+        email: "ventas@cattler.farm"
+      };
+    }
+    
+    // Default for English
+    return {
+      address: (
+        <>
+          <p>2125 Transformation Drive</p>
+          <p>Suite 1000</p>
+          <p>Lincoln, NE 68508</p>
+        </>
+      ),
+      phone: "(531) 234-5882",
+      email: "support@cattler.farm"
+    };
+  };
+
+  // Helper function to get link URLs based on language
+  const getLinkUrls = () => {
+    if (language === "es" || language === "es-ar") {
+      return {
+        terms: "https://www.cattler.com.ar/terminos",
+        privacy: "https://www.cattler.com.ar/privacy-policy",
+        contact: "https://www.cattler.com.ar/contact"
+      };
+    } else if (language === "pt") {
+      return {
+        terms: "https://www.cattler.farm/terms",
+        privacy: "https://www.cattler.farm/privacy-policy",
+        contact: "https://www.cattler.agr.br/contato"
+      };
+    } else {
+      return {
+        terms: "https://www.cattler.farm/terms",
+        privacy: "https://www.cattler.farm/privacy-policy",
+        contact: "https://www.cattler.farm/contact"
+      };
+    }
+  };
+
+  const contactInfo = getContactInfo();
+  const linkUrls = getLinkUrls();
 
   return (
     <footer className="bg-gray-900 text-white pt-12 pb-6">
@@ -47,7 +118,7 @@ export default function Footer() {
                   selectedCountry === "UY" ||
                   selectedCountry === "BO" ||
                   selectedCountry === "MX" ||
-                  selectedCountry === "OT-ES"
+                  selectedCountry === "OT$ES"
                     ? "https://www.instagram.com/cattler_ar"
                     : selectedCountry === "BR"
                     ? "https://www.instagram.com/cattler_us"
@@ -67,7 +138,7 @@ export default function Footer() {
                   selectedCountry === "UY" ||
                   selectedCountry === "BO" ||
                   selectedCountry === "MX" ||
-                  selectedCountry === "OT-ES"
+                  selectedCountry === "OT$ES"
                     ? "https://x.com/CattlerLatam"
                     : selectedCountry === "BR"
                     ? "https://www.twitter.com/cattler2"
@@ -100,7 +171,7 @@ export default function Footer() {
               </a>
               {(selectedCountry === "US" ||
                 selectedCountry === "CA" ||
-                selectedCountry === "OT-EN" ||
+                selectedCountry === "OT$EN" ||
                 selectedCountry === "BR") && (
                 <a
                   href="https://www.facebook.com/cattler.farm"
@@ -114,7 +185,7 @@ export default function Footer() {
               )}
               {(selectedCountry === "US" ||
                 selectedCountry === "CA" ||
-                selectedCountry === "OT-EN" ||
+                selectedCountry === "OT$EN" ||
                 selectedCountry === "BR") && (
                 <a
                   href="https://www.tiktok.com/@cattler"
@@ -135,24 +206,48 @@ export default function Footer() {
               {t("footer.contactUs")}
             </h3>
             <address className="not-italic text-gray-400 space-y-3">
-              <p>2125 Transformation Drive</p>
-              <p>Suite 1000</p>
-              <p>Lincoln, NE 68508</p>
-              <p className="pt-2">(531) 234-5882</p>
+              {contactInfo.address}
+              <p className="pt-2">{contactInfo.phone}</p>
               <p>
                 <a
-                  href="mailto:support@cattler.farm"
+                  href={`mailto:${contactInfo.email}`}
                   className="hover:text-white"
                 >
-                  support@cattler.farm
+                  {contactInfo.email}
                 </a>
               </p>
             </address>
           </div>
         </div>
 
+        {/* Links Section */}
+        <div className="border-t border-gray-800 mt-8 pt-6">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div className="flex flex-wrap justify-center md:justify-start space-x-6">
+              <Link
+                href={linkUrls.terms}
+                className="text-gray-400 hover:text-white text-sm"
+              >
+                {t("footer.termsConditions")}
+              </Link>
+              <Link
+                href={linkUrls.privacy}
+                className="text-gray-400 hover:text-white text-sm"
+              >
+                {t("footer.privacyPolicy")}
+              </Link>
+              <Link
+                href={linkUrls.contact}
+                className="text-gray-400 hover:text-white text-sm"
+              >
+                {language === "es-ar" ? "Contáctanos" : t("footer.contact")}
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Copyright */}
-        <div className="border-t border-gray-800 mt-8 pt-6 text-center">
+        <div className="border-t border-gray-800 mt-6 pt-6 text-center">
           <p className="text-gray-400 text-sm">
             © 2022 by Cattler Corporation. {t("footer.allRightsReserved")}
           </p>

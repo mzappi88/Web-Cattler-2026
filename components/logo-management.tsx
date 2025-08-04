@@ -6,17 +6,16 @@ import { allPartnerLogos, getLogosByCountry } from "@/data/partner-logos";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, Plus, Edit } from "lucide-react";
+import { Trash2, Edit, Plus, ExternalLink } from "lucide-react";
+import { useTranslation } from "@/hooks/use-translation";
+import type { Country } from "@/hooks/use-translation";
+
+// Helper function to generate unique IDs
+const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
 export default function LogoManagement() {
   const [selectedCountry, setSelectedCountry] = useState<string>("US");
@@ -71,12 +70,12 @@ export default function LogoManagement() {
     if (!formData.name || !formData.logoUrl) return;
 
     const newLogo: PartnerLogo = {
-      id: editingLogo?.id || `${selectedCountry}-${Date.now()}`,
+      id: editingLogo?.id || generateId(),
       name: formData.name,
       logoUrl: formData.logoUrl,
       website: formData.website,
       category: formData.category,
-      countries: [selectedCountry],
+      countries: [selectedCountry as Country],
     };
 
     const updatedLogos = { ...logoData };

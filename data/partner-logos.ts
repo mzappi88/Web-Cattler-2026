@@ -1,4 +1,5 @@
 import { PartnerLogo } from "@/hooks/use-partner-logos";
+import type { Country } from "@/hooks/use-translation";
 
 // All available logos from public folder
 export const allPartnerLogos: PartnerLogo[] = [
@@ -258,7 +259,7 @@ export const allPartnerLogos: PartnerLogo[] = [
 ];
 
 // Helper function to get logos by country
-export function getLogosByCountry(country: string): PartnerLogo[] {
+export function getLogosByCountry(country: Country): PartnerLogo[] {
   return allPartnerLogos.filter(logo => logo.countries.includes(country));
 }
 
@@ -268,7 +269,7 @@ export function getLogosByCategory(category: string): PartnerLogo[] {
 }
 
 // Helper function to get logos by country and category
-export function getLogosByCountryAndCategory(country: string, category: string): PartnerLogo[] {
+export function getLogosByCountryAndCategory(country: Country, category: string): PartnerLogo[] {
   return allPartnerLogos.filter(logo => 
     logo.countries.includes(country) && logo.category === category
   );

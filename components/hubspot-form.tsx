@@ -5,12 +5,6 @@ import { useEffect, useState } from "react"
 import ThankYouContent from "./thank-you-content"
 import BackgroundWrapper from "./background-wrapper"
 
-declare global {
-  interface Window {
-    hbspt: any
-  }
-}
-
 const HubSpotForm: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
 
@@ -32,9 +26,7 @@ const HubSpotForm: React.FC = () => {
         portalId: "21027761",
         formId: "6cddcb2f-85ca-451b-a943-5642e3b7c1ae",
         target: "#hubspotForm",
-        onFormSubmitted: () => {
-          setIsSubmitted(true)
-        },
+        region: "na1",
       })
     }
   }
