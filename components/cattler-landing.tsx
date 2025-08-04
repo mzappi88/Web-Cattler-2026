@@ -55,13 +55,21 @@ export default function CattlerLanding() {
       {/* Hero Video Section */}
       <div className="relative w-full bg-black">
         {/* Mobile Video - Full height */}
-        <div className="relative w-full h-[50vh] md:hidden">
+        <div className="relative w-full h-[50vh] md:hidden overflow-hidden">
           <video
-            className="absolute top-0 left-0 w-full h-full object-cover"
+            className="absolute top-0 left-0 w-full h-full object-cover object-center"
             autoPlay
             loop
             muted
             playsInline
+            style={{
+              objectFit: "cover",
+              objectPosition: "center",
+              minWidth: "100%",
+              minHeight: "100%",
+              width: "auto",
+              height: "auto",
+            }}
           >
             <source
               src="https://video.wixstatic.com/video/93f7fc_55b18a9715124be680e597e4a30bc548/720p/mp4/file.mp4"
@@ -89,18 +97,26 @@ export default function CattlerLanding() {
 
         {/* Desktop Video */}
         <div
-          className="relative w-full hidden md:block"
+          className="relative w-full hidden md:block overflow-hidden"
           style={{
             paddingBottom:
               "42.19%" /* 16:9 aspect ratio reducido 25% desde 56.25% */,
           }}
         >
           <video
-            className="absolute top-0 left-0 w-full h-full object-cover"
+            className="absolute top-0 left-0 w-full h-full object-cover object-center"
             autoPlay
             loop
             muted
             playsInline
+            style={{
+              objectFit: "cover",
+              objectPosition: "center",
+              minWidth: "100%",
+              minHeight: "100%",
+              width: "auto",
+              height: "auto",
+            }}
           >
             <source
               src="https://video.wixstatic.com/video/93f7fc_55b18a9715124be680e597e4a30bc548/720p/mp4/file.mp4"
