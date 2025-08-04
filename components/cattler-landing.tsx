@@ -57,7 +57,7 @@ export default function CattlerLanding() {
         {/* Mobile Video - Full height */}
         <div className="relative w-full h-[50vh] md:hidden overflow-hidden">
           <video
-            className="absolute top-0 left-0 w-full h-full object-cover object-center"
+            className="absolute top-0 left-0 w-full h-full"
             autoPlay
             loop
             muted
@@ -65,10 +65,8 @@ export default function CattlerLanding() {
             style={{
               objectFit: "cover",
               objectPosition: "center",
-              minWidth: "100%",
-              minHeight: "100%",
-              width: "auto",
-              height: "auto",
+              width: "100%",
+              height: "100%",
             }}
           >
             <source
@@ -104,7 +102,7 @@ export default function CattlerLanding() {
           }}
         >
           <video
-            className="absolute top-0 left-0 w-full h-full object-cover object-center"
+            className="absolute top-0 left-0 w-full h-full"
             autoPlay
             loop
             muted
@@ -112,10 +110,8 @@ export default function CattlerLanding() {
             style={{
               objectFit: "cover",
               objectPosition: "center",
-              minWidth: "100%",
-              minHeight: "100%",
-              width: "auto",
-              height: "auto",
+              width: "100%",
+              height: "100%",
             }}
           >
             <source

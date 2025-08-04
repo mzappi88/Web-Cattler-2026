@@ -69,7 +69,7 @@ export const testimonials: Testimonial[] = [
     quote:
       "Probamos con otros software y nos costaba mucho adaptarnos, pero con Cattler andamos muy bien: es fácil, sencillo y práctico para todo el equipo. Nos permite manejar y monitorear de forma addecuada la alimentación del feedlot. Con muy poco tiempo al día podemos saber exactamente qué pasó el día anterior y lo que está ocurriendo en el momento y el stocok de insumos disponibles",
     image:
-      "/testimonials/guillermo-vivas-AR.PNG",
+      "/testimonials/guillermo-vivas-AR.png",
     videoUrl: "",
     countries: ["AR","BO","PY","UY"],
   },
@@ -123,57 +123,7 @@ export const testimonials: Testimonial[] = [
     videoUrl: "",
     countries: ["AR","PY"],
   },
-  {
-    id: "12",
-    name: "Lucía Fernández",
-    location: "Estancia Salto",
-    quote:
-      "Las funciones de reportes automatizados nos han ahorrado horas cada semana. Cattler es exactamente lo que necesitábamos.",
-    image: "/placeholder-user.jpg",
-    videoUrl: "https://youtube.com/watch?v=example2",
-    countries: [""],
-  },
-  {
-    id: "13",
-    name: "Luis Torres",
-    location: "Estancia Santa Cruz",
-    quote:
-      "Cattler ha transformado completamente nuestra gestión ganadera. La eficiencia que hemos logrado es extraordinaria.",
-    image: "/placeholder-user.jpg",
-    videoUrl: "https://youtu.be/lNY3g69e_lE",
-    countries: [""],
-  },
-  {
-    id: "14",
-    name: "Carmen Vargas",
-    location: "Estancia Beni",
-    quote:
-      "Los reportes automatizados nos han ahorrado innumerables horas. Cattler es una herramienta esencial para la ganadería moderna.",
-    image: "/placeholder-user.jpg",
-    videoUrl: "https://youtube.com/watch?v=example2",
-    countries: [""],
-  },
-  {
-    id: "15",
-    name: "Miguel Hernández",
-    location: "Rancho Sonora",
-    quote:
-      "Cattler es increíble! Lo uso todo el tiempo. Ha transformado completamente cómo manejamos nuestra operación ganadera.",
-    image: "/placeholder-user.jpg",
-    videoUrl: "https://youtu.be/lNY3g69e_lE",
-    countries: [""],
-  },
-  {
-    id: "16",
-    name: "Isabel Morales",
-    location: "Rancho Chihuahua",
-    quote:
-      "El seguimiento en tiempo real y los reportes automatizados nos han ahorrado incontables horas. Cattler es una herramienta esencial.",
-    image: "/placeholder-user.jpg",
-    videoUrl: "https://youtube.com/watch?v=example2",
-    countries: [""],
-  },
-
+  
   // Testimonios en portugués (BR)
   {
     id: "17",
@@ -187,12 +137,12 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: "18",
-    name: "Ana Santos",
-    location: "Confinamento São Paulo",
-    quote: "O rastreamento em tempo real e os relatórios automatizados nos pouparam inúmeras horas. O Cattler é uma ferramenta essencial para a pecuária moderna.",
-    image: "/placeholder-user.jpg",
-    videoUrl: "https://youtube.com/watch?v=example2",
-    countries: [""],
+    name: "Juan Pablo Durán, Grupo Ceibos",
+    location: "Río Negro, Uruguai",
+    quote: "Com a Cattler conseguimos digitalizar todo o manejo de gado nos confinamentos do Uruguai, e também será o nosso aplicativo para manejo a pasto. Para nós, é uma ferramenta fundamental de eficiência.",
+    image: "/testimonials/grupo-ceibos-UY.webp",
+    videoUrl: "",
+    countries: ["BR"],
   },
   {
     id: "19",
