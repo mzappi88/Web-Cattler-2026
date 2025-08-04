@@ -43,7 +43,10 @@ export default function CattlerLanding() {
   }, [scriptLoaded, version]);
 
   return (
-    <div className="bg-gradient-to-b from-[#f0f1f7] to-[#d1d3e2] flex flex-col items-center justify-center px-0">
+    <div
+      className="bg-gradient-to-b from-[#f0f1f7] to-[#d1d3e2] flex flex-col items-center justify-center px-0"
+      style={{ maxHeight: "100vh", overflow: "hidden" }}
+    >
       {/* Country Selector - Hidden for production, only available in debug */}
       {/* <div className="fixed top-4 right-4 z-50">
         <CountrySelector
@@ -53,9 +56,18 @@ export default function CattlerLanding() {
       </div> */}
 
       {/* Hero Video Section */}
-      <div className="relative w-full bg-black">
+      <div className="relative w-full bg-black" style={{ maxHeight: "30vh" }}>
         {/* Mobile Video - Limited height */}
-        <div className="relative w-full h-[30vh] md:hidden overflow-hidden bg-black">
+        <div
+          className="relative w-full h-[30vh] md:hidden overflow-hidden bg-black"
+          style={{
+            maxHeight: "30vh",
+            height: "30vh",
+            minHeight: "30vh",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
           <video
             className="absolute top-0 left-0 w-full h-full"
             autoPlay
@@ -74,6 +86,11 @@ export default function CattlerLanding() {
               minHeight: "auto",
               minWidth: "auto",
               aspectRatio: "16/9",
+              position: "absolute",
+              top: "0",
+              left: "0",
+              right: "0",
+              bottom: "0",
             }}
           >
             <source
