@@ -95,7 +95,7 @@ const FEATURE_CONFIG: FeatureConfig = {
     AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
       subFeatures: [
         {name: "purchases", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
-        {name: "inputTransformation", plan1: true, plan2: "addon", plan3: true, plan4: true },
+        {name: "inputTransformation", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
         {name: "MicroingredientesManagement", plan1: false, plan2: false, plan3: "addon", plan4: true },
         
       ]
