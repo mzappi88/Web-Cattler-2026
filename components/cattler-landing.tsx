@@ -14,12 +14,21 @@ export type Version = "landing" | "ads-a" | "ads-b";
 export default function CattlerLanding() {
   const { selectedCountry, setSelectedCountry, language, t } = useTranslation();
   const [version, setVersion] = useState<Version>("landing");
+  const [isWixIframe, setIsWixIframe] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const ver = params.get("ver") as Version | null;
     setVersion(ver || "landing");
+
+    // Detect if we're in a Wix iframe
+    const isInIframe = window !== window.top;
+    const isWix =
+      window.location.hostname.includes("wix") ||
+      window.location.hostname.includes("wixsite") ||
+      document.referrer.includes("wix");
+    setIsWixIframe(isInIframe && isWix);
   }, []);
 
   const [submitted, setSubmitted] = useState(false);
@@ -46,13 +55,15 @@ export default function CattlerLanding() {
     <div
       className="bg-gradient-to-b from-[#f0f1f7] to-[#d1d3e2] flex flex-col items-center justify-center px-0"
       style={{
-        minHeight: "100vh",
-        maxHeight: "100vh",
-        height: "100vh",
+        minHeight: isWixIframe ? "800px" : "100vh",
+        maxHeight: isWixIframe ? "800px" : "100vh",
+        height: isWixIframe ? "800px" : "100vh",
         overflow: "hidden",
         position: "relative",
         display: "flex",
         flexDirection: "column",
+        transform: isWixIframe ? "scale(1)" : "none",
+        transformOrigin: "top left",
       }}
     >
       {/* Country Selector - Hidden for production, only available in debug */}
@@ -67,11 +78,13 @@ export default function CattlerLanding() {
       <div
         className="relative w-full bg-black"
         style={{
-          height: "30vh",
-          maxHeight: "30vh",
+          height: isWixIframe ? "180px" : "30vh",
+          maxHeight: isWixIframe ? "180px" : "30vh",
           minHeight: "180px",
           position: "relative",
           overflow: "hidden",
+          transform: isWixIframe ? "scale(1)" : "none",
+          transformOrigin: "top left",
         }}
       >
         {/* Mobile Video - Limited height */}
@@ -91,13 +104,13 @@ export default function CattlerLanding() {
             muted
             playsInline
             style={{
-              objectFit: "contain",
+              objectFit: isWixIframe ? "cover" : "contain",
               objectPosition: "center",
               maxWidth: "100%",
               maxHeight: "100%",
               width: "100%",
               height: "100%",
-              transform: "scale(1)",
+              transform: isWixIframe ? "scale(1)" : "scale(1)",
               transformOrigin: "center center",
               minHeight: "auto",
               minWidth: "auto",
