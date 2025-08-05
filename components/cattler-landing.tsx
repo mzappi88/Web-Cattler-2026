@@ -46,8 +46,8 @@ export default function CattlerLanding() {
     <div
       className="bg-gradient-to-b from-[#f0f1f7] to-[#d1d3e2] flex flex-col items-center justify-center px-0"
       style={{
-        height: "100vh",
-        maxHeight: "100vh",
+        height: "800px",
+        maxHeight: "800px",
         overflow: "hidden",
         position: "relative",
         display: "flex",
@@ -66,9 +66,9 @@ export default function CattlerLanding() {
       <div
         className="relative w-full bg-black"
         style={{
-          height: "30vh",
-          maxHeight: "30vh",
-          minHeight: "30vh",
+          height: "180px",
+          maxHeight: "180px",
+          minHeight: "180px",
           position: "relative",
           overflow: "hidden",
         }}
@@ -203,7 +203,7 @@ export default function CattlerLanding() {
         style={{
           flex: "1",
           overflow: "auto",
-          maxHeight: "calc(100vh - 30vh)",
+          maxHeight: "calc(800px - 180px)",
         }}
       >
         <h1 className="text-2xl md:text-4xl font-bold text-[#121334] text-center my-3 md:my-5">
