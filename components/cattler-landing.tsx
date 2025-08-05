@@ -91,14 +91,14 @@ export default function CattlerLanding() {
     <div
       className="bg-gradient-to-b from-[#f0f1f7] to-[#d1d3e2] flex flex-col items-center justify-center px-0"
       style={{
-        minHeight: isWixMobile ? "600px" : isWixIframe ? "800px" : "100vh",
-        maxHeight: isWixMobile ? "600px" : isWixIframe ? "800px" : "100vh",
-        height: isWixMobile ? "600px" : isWixIframe ? "800px" : "100vh",
-        overflow: "hidden",
+        minHeight: isWixMobile ? "auto" : isWixIframe ? "800px" : "100vh",
+        maxHeight: isWixMobile ? "none" : isWixIframe ? "800px" : "100vh",
+        height: isWixMobile ? "auto" : isWixIframe ? "800px" : "100vh",
+        overflow: isWixMobile ? "visible" : "hidden",
         position: "relative",
         display: "flex",
         flexDirection: "column",
-        transform: isWixMobile ? "scale(1)" : isWixIframe ? "scale(1)" : "none",
+        transform: isWixMobile ? "none" : isWixIframe ? "scale(1)" : "none",
         transformOrigin: "top left",
         boxSizing: "border-box",
         flexShrink: isWixMobile ? "0" : isWixIframe ? "0" : "1",
@@ -117,16 +117,12 @@ export default function CattlerLanding() {
       <div
         className="relative w-full bg-black"
         style={{
-          height: isWixMobile ? "150px" : isWixIframe ? "180px" : "30vh",
-          maxHeight: isWixMobile ? "150px" : isWixIframe ? "180px" : "30vh",
-          minHeight: isWixMobile ? "150px" : isWixIframe ? "180px" : "180px",
+          height: isWixMobile ? "30vh" : isWixIframe ? "180px" : "30vh",
+          maxHeight: isWixMobile ? "30vh" : isWixIframe ? "180px" : "30vh",
+          minHeight: isWixMobile ? "180px" : isWixIframe ? "180px" : "180px",
           position: "relative",
           overflow: "hidden",
-          transform: isWixMobile
-            ? "scale(1)"
-            : isWixIframe
-            ? "scale(1)"
-            : "none",
+          transform: isWixMobile ? "none" : isWixIframe ? "scale(1)" : "none",
           transformOrigin: "top left",
           flexShrink: isWixMobile ? "0" : isWixIframe ? "0" : "1",
           flexGrow: isWixMobile ? "0" : isWixIframe ? "0" : "1",
@@ -269,12 +265,16 @@ export default function CattlerLanding() {
       <div
         className="container mx-auto px-4 py-2 md:py-4 flex flex-col items-center justify-center"
         style={{
-          flex: isWixIframe ? "1" : "1",
-          overflow: "auto",
-          maxHeight: isWixIframe ? "calc(800px - 180px)" : "calc(100vh - 30vh)",
-          minHeight: isWixIframe ? "620px" : "auto",
-          flexShrink: isWixIframe ? "1" : "1",
-          flexGrow: isWixIframe ? "1" : "1",
+          flex: isWixMobile ? "1" : isWixIframe ? "1" : "1",
+          overflow: isWixMobile ? "visible" : "auto",
+          maxHeight: isWixMobile
+            ? "none"
+            : isWixIframe
+            ? "calc(800px - 180px)"
+            : "calc(100vh - 30vh)",
+          minHeight: isWixMobile ? "auto" : isWixIframe ? "620px" : "auto",
+          flexShrink: isWixMobile ? "0" : isWixIframe ? "1" : "1",
+          flexGrow: isWixMobile ? "0" : isWixIframe ? "1" : "1",
         }}
       >
         <h1 className="text-2xl md:text-4xl font-bold text-[#121334] text-center my-3 md:my-5">
