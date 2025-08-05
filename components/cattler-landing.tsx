@@ -64,6 +64,9 @@ export default function CattlerLanding() {
         flexDirection: "column",
         transform: isWixIframe ? "scale(1)" : "none",
         transformOrigin: "top left",
+        boxSizing: "border-box",
+        flexShrink: isWixIframe ? "0" : "1",
+        flexGrow: isWixIframe ? "0" : "1",
       }}
     >
       {/* Country Selector - Hidden for production, only available in debug */}
@@ -80,11 +83,14 @@ export default function CattlerLanding() {
         style={{
           height: isWixIframe ? "180px" : "30vh",
           maxHeight: isWixIframe ? "180px" : "30vh",
-          minHeight: "180px",
+          minHeight: isWixIframe ? "180px" : "180px",
           position: "relative",
           overflow: "hidden",
           transform: isWixIframe ? "scale(1)" : "none",
           transformOrigin: "top left",
+          flexShrink: isWixIframe ? "0" : "1",
+          flexGrow: isWixIframe ? "0" : "1",
+          boxSizing: "border-box",
         }}
       >
         {/* Mobile Video - Limited height */}
@@ -215,9 +221,12 @@ export default function CattlerLanding() {
       <div
         className="container mx-auto px-4 py-2 md:py-4 flex flex-col items-center justify-center"
         style={{
-          flex: "1",
+          flex: isWixIframe ? "1" : "1",
           overflow: "auto",
-          maxHeight: "calc(100vh - 30vh)",
+          maxHeight: isWixIframe ? "calc(800px - 180px)" : "calc(100vh - 30vh)",
+          minHeight: isWixIframe ? "620px" : "auto",
+          flexShrink: isWixIframe ? "1" : "1",
+          flexGrow: isWixIframe ? "1" : "1",
         }}
       >
         <h1 className="text-2xl md:text-4xl font-bold text-[#121334] text-center my-3 md:my-5">
