@@ -29,11 +29,42 @@ export default function CattlerLanding() {
       window.location.hostname.includes("wixsite") ||
       document.referrer.includes("wix");
     setIsWixIframe(isInIframe && isWix);
+
+    // Debug information
+    console.log("🌐 Debug Info:", {
+      isInIframe,
+      isWix,
+      isWixIframe: isInIframe && isWix,
+      windowHeight: window.innerHeight,
+      windowWidth: window.innerWidth,
+      documentHeight: document.documentElement.scrollHeight,
+      userAgent: navigator.userAgent,
+      hostname: window.location.hostname,
+      referrer: document.referrer,
+    });
+  }, []);
+
+  // Monitor dimensions
+  useEffect(() => {
+    const updateDimensions = () => {
+      setDebugDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
   const [submitted, setSubmitted] = useState(false);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [formLoaded, setFormLoaded] = useState(false);
+  const [debugDimensions, setDebugDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
 
   useEffect(() => {
     if (scriptLoaded && typeof window.hbspt !== "undefined") {
