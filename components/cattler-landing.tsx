@@ -15,6 +15,7 @@ export default function CattlerLanding() {
   const { selectedCountry, setSelectedCountry, language, t } = useTranslation();
   const [version, setVersion] = useState<Version>("landing");
   const [isWixIframe, setIsWixIframe] = useState(false);
+  const [isWixMobile, setIsWixMobile] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +29,9 @@ export default function CattlerLanding() {
       window.location.hostname.includes("wix") ||
       window.location.hostname.includes("wixsite") ||
       document.referrer.includes("wix");
+    const isMobile = window.innerWidth <= 768;
     setIsWixIframe(isInIframe && isWix);
+    setIsWixMobile(isInIframe && isWix && isMobile);
 
     // Debug information
     console.log("🌐 Debug Info:", {
@@ -41,6 +44,8 @@ export default function CattlerLanding() {
       userAgent: navigator.userAgent,
       hostname: window.location.hostname,
       referrer: document.referrer,
+      isMobile: window.innerWidth <= 768,
+      isWixMobile: isInIframe && isWix && window.innerWidth <= 768,
     });
   }, []);
 
@@ -86,18 +91,18 @@ export default function CattlerLanding() {
     <div
       className="bg-gradient-to-b from-[#f0f1f7] to-[#d1d3e2] flex flex-col items-center justify-center px-0"
       style={{
-        minHeight: isWixIframe ? "800px" : "100vh",
-        maxHeight: isWixIframe ? "800px" : "100vh",
-        height: isWixIframe ? "800px" : "100vh",
+        minHeight: isWixMobile ? "600px" : isWixIframe ? "800px" : "100vh",
+        maxHeight: isWixMobile ? "600px" : isWixIframe ? "800px" : "100vh",
+        height: isWixMobile ? "600px" : isWixIframe ? "800px" : "100vh",
         overflow: "hidden",
         position: "relative",
         display: "flex",
         flexDirection: "column",
-        transform: isWixIframe ? "scale(1)" : "none",
+        transform: isWixMobile ? "scale(1)" : isWixIframe ? "scale(1)" : "none",
         transformOrigin: "top left",
         boxSizing: "border-box",
-        flexShrink: isWixIframe ? "0" : "1",
-        flexGrow: isWixIframe ? "0" : "1",
+        flexShrink: isWixMobile ? "0" : isWixIframe ? "0" : "1",
+        flexGrow: isWixMobile ? "0" : isWixIframe ? "0" : "1",
       }}
     >
       {/* Country Selector - Hidden for production, only available in debug */}
@@ -112,15 +117,19 @@ export default function CattlerLanding() {
       <div
         className="relative w-full bg-black"
         style={{
-          height: isWixIframe ? "180px" : "30vh",
-          maxHeight: isWixIframe ? "180px" : "30vh",
-          minHeight: isWixIframe ? "180px" : "180px",
+          height: isWixMobile ? "150px" : isWixIframe ? "180px" : "30vh",
+          maxHeight: isWixMobile ? "150px" : isWixIframe ? "180px" : "30vh",
+          minHeight: isWixMobile ? "150px" : isWixIframe ? "180px" : "180px",
           position: "relative",
           overflow: "hidden",
-          transform: isWixIframe ? "scale(1)" : "none",
+          transform: isWixMobile
+            ? "scale(1)"
+            : isWixIframe
+            ? "scale(1)"
+            : "none",
           transformOrigin: "top left",
-          flexShrink: isWixIframe ? "0" : "1",
-          flexGrow: isWixIframe ? "0" : "1",
+          flexShrink: isWixMobile ? "0" : isWixIframe ? "0" : "1",
+          flexGrow: isWixMobile ? "0" : isWixIframe ? "0" : "1",
           boxSizing: "border-box",
         }}
       >
@@ -141,13 +150,21 @@ export default function CattlerLanding() {
             muted
             playsInline
             style={{
-              objectFit: isWixIframe ? "cover" : "contain",
+              objectFit: isWixMobile
+                ? "cover"
+                : isWixIframe
+                ? "cover"
+                : "contain",
               objectPosition: "center",
               maxWidth: "100%",
               maxHeight: "100%",
               width: "100%",
               height: "100%",
-              transform: isWixIframe ? "scale(1)" : "scale(1)",
+              transform: isWixMobile
+                ? "scale(1)"
+                : isWixIframe
+                ? "scale(1)"
+                : "scale(1)",
               transformOrigin: "center center",
               minHeight: "auto",
               minWidth: "auto",
