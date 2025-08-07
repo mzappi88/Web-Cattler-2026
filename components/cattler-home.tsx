@@ -400,7 +400,7 @@ export default function CattlerHome() {
       {/* Video Popup */}
       {isVideoPopupOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-2 md:p-4 -pt-20 md:pt-0"
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-start justify-center z-50 p-2 md:p-4 pt-12 md:pt-0"
           onClick={() => setIsVideoPopupOpen(false)}
         >
           <div

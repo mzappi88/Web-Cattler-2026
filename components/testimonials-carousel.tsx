@@ -154,20 +154,61 @@ export default function TestimonialsCarousel() {
 
       {/* Video Modal */}
       {selectedVideo && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-          <div className="relative w-full max-w-4xl aspect-video bg-black rounded-lg overflow-hidden">
-            <button
-              onClick={closeVideoModal}
-              className="absolute top-2 md:top-4 right-2 md:right-4 z-10 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-1.5 md:p-2 rounded-full transition-all duration-200"
-            >
-              <X className="w-4 h-4 md:w-6 md:h-6" />
-            </button>
-            <iframe
-              src={getEmbedUrl(selectedVideo)}
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-start justify-center z-50 p-2 md:p-4 pt-12 md:pt-0"
+          onClick={closeVideoModal}
+        >
+          <div
+            className="relative w-full max-w-4xl max-h-[90vh] md:max-h-[80vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bg-white rounded-lg overflow-hidden shadow-2xl flex flex-col max-h-full">
+              {/* Header */}
+              <div className="p-3 md:p-6 text-center relative flex-shrink-0">
+                <button
+                  onClick={closeVideoModal}
+                  className="absolute top-2 right-2 md:top-4 md:right-4 text-gray-500 hover:text-gray-700 transition-colors z-10 bg-white/80 hover:bg-white rounded-full p-1 md:p-2"
+                >
+                  <X className="w-4 h-4 md:w-6 md:h-6" />
+                </button>
+                <h3 className="text-lg md:text-2xl font-bold text-[#121334] mb-1 md:mb-2 pr-8">
+                  {t("testimonialsTitle")}
+                </h3>
+                <p className="text-xs md:text-base text-gray-600">
+                  {t("watchVideo")}
+                </p>
+              </div>
+
+              {/* Video Container */}
+              <div className="flex-1 min-h-0">
+                <div
+                  className="relative bg-gray-200 w-full h-full"
+                  style={{
+                    paddingBottom: "56.25%",
+                    maxHeight: "calc(90vh - 120px)",
+                    minHeight: "200px",
+                  }}
+                >
+                  <iframe
+                    src={getEmbedUrl(selectedVideo)}
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="p-3 md:p-6 text-center flex-shrink-0">
+                <Button
+                  onClick={closeVideoModal}
+                  variant="outline"
+                  className="border-[#121334] text-[#121334] hover:bg-[#121334] hover:text-white text-sm md:text-base"
+                >
+                  {t("close")}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       )}
