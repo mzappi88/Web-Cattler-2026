@@ -400,67 +400,76 @@ export default function CattlerHome() {
       {/* Video Popup */}
       {isVideoPopupOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-2 md:p-4"
           onClick={() => setIsVideoPopupOpen(false)}
         >
           <div
-            className="relative w-full max-w-4xl"
+            className="relative w-full max-w-4xl max-h-[90vh] md:max-h-[80vh]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-white rounded-lg overflow-hidden shadow-2xl">
-              <div className="p-4 md:p-6 text-center relative">
+            <div className="bg-white rounded-lg overflow-hidden shadow-2xl flex flex-col max-h-full">
+              {/* Header */}
+              <div className="p-3 md:p-6 text-center relative flex-shrink-0">
                 <button
                   onClick={() => setIsVideoPopupOpen(false)}
                   className="absolute top-2 right-2 md:top-4 md:right-4 text-gray-500 hover:text-gray-700 transition-colors z-10 bg-white/80 hover:bg-white rounded-full p-1 md:p-2"
                 >
-                  <X className="w-5 h-5 md:w-6 md:h-6" />
+                  <X className="w-4 h-4 md:w-6 md:h-6" />
                 </button>
-                <h3 className="text-xl md:text-2xl font-bold text-[#121334] mb-2">
+                <h3 className="text-lg md:text-2xl font-bold text-[#121334] mb-1 md:mb-2 pr-8">
                   {t("videoCtaTitle")}
                 </h3>
-                <p className="text-sm md:text-base text-gray-600 mb-4">
+                <p className="text-xs md:text-base text-gray-600">
                   {t("videoCtaSubtitle")}
                 </p>
               </div>
 
-              <div
-                className="relative bg-gray-200"
-                style={{ paddingBottom: "56.25%" }}
-              >
-                {(() => {
-                  const videoUrl = t("presentationVideoUrl");
-                  const videoId = getVideoId(videoUrl);
-                  console.log("Video URL:", videoUrl);
-                  console.log("Video ID:", videoId);
+              {/* Video Container */}
+              <div className="flex-1 min-h-0">
+                <div
+                  className="relative bg-gray-200 w-full h-full"
+                  style={{
+                    paddingBottom: "56.25%",
+                    maxHeight: "calc(90vh - 120px)",
+                    minHeight: "200px",
+                  }}
+                >
+                  {(() => {
+                    const videoUrl = t("presentationVideoUrl");
+                    const videoId = getVideoId(videoUrl);
+                    console.log("Video URL:", videoUrl);
+                    console.log("Video ID:", videoId);
 
-                  if (!videoId) {
+                    if (!videoId) {
+                      return (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <p className="text-gray-500">
+                            {t("videoNotAvailable")}
+                          </p>
+                          <p className="text-gray-400 text-sm mt-2">
+                            URL: {videoUrl}
+                          </p>
+                        </div>
+                      );
+                    }
                     return (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <p className="text-gray-500">
-                          {t("videoNotAvailable")}
-                        </p>
-                        <p className="text-gray-400 text-sm mt-2">
-                          URL: {videoUrl}
-                        </p>
-                      </div>
+                      <iframe
+                        src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
+                        className="absolute inset-0 w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
                     );
-                  }
-                  return (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
-                      className="absolute inset-0 w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  );
-                })()}
+                  })()}
+                </div>
               </div>
 
-              <div className="p-4 md:p-6 text-center">
+              {/* Footer */}
+              <div className="p-3 md:p-6 text-center flex-shrink-0">
                 <Button
                   onClick={() => setIsVideoPopupOpen(false)}
                   variant="outline"
-                  className="border-[#121334] text-[#121334] hover:bg-[#121334] hover:text-white"
+                  className="border-[#121334] text-[#121334] hover:bg-[#121334] hover:text-white text-sm md:text-base"
                 >
                   {t("close")}
                 </Button>
