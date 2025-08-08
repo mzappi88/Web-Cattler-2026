@@ -98,8 +98,8 @@ export function useCountryDetection() {
       const lastDetection = localStorage.getItem("cattler-country-last-detection");
       const now = Date.now();
       
-      // If we have a recent detection (within 1 hour), use cached result
-      if (cachedCountry && lastDetection && (now - parseInt(lastDetection)) < 3600000) {
+      // If we have a recent detection (within 24 hours), use cached result
+      if (cachedCountry && lastDetection && (now - parseInt(lastDetection)) < 86400000) {
         console.log("🌍 Using cached country detection:", cachedCountry);
         setDetectedCountry(cachedCountry as Country);
         setIsDetecting(false);
@@ -238,11 +238,25 @@ export function useCountryDetection() {
           console.log("🌍 Not checking Argentina override - finalCountry is not US or window is undefined");
         }
 
+        // Additional stability check: If we previously detected AR and are still in Argentina, keep AR
+        const previousCountry = localStorage.getItem("cattler-country");
+        if (previousCountry === "AR" && finalCountry !== "AR" && typeof window !== 'undefined') {
+          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          if (timezone.includes("America/Argentina") || timezone.includes("America/Buenos_Aires")) {
+            console.log("🌍 Stability check: Keeping AR as previously detected and still in Argentina");
+            finalCountry = "AR";
+          }
+        }
+
         console.log("🌍 Final country decision after Argentina check:", finalCountry);
 
         // Cache the result
         localStorage.setItem("cattler-country", finalCountry);
         localStorage.setItem("cattler-country-last-detection", now.toString());
+        
+        // Log the final decision for debugging
+        console.log("🌍 Final cached country:", finalCountry);
+        console.log("🌍 Cache timestamp:", now);
         
         setDetectedCountry(finalCountry);
         hasDetected.current = true;

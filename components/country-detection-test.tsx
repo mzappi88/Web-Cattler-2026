@@ -57,17 +57,6 @@ export function CountryDetectionTest() {
     window.location.reload();
   };
 
-  const forceArgentina = () => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cattler-country", "AR");
-      localStorage.setItem(
-        "cattler-country-last-detection",
-        Date.now().toString()
-      );
-      window.location.reload();
-    }
-  };
-
   const testApiDirectly = async () => {
     try {
       setApiTestResult({ status: "loading", message: "Testing API..." });
@@ -186,13 +175,6 @@ export function CountryDetectionTest() {
           <div className="flex flex-wrap gap-2">
             <Button onClick={handleClearCache} variant="outline">
               Limpiar Cache y Redetectar País
-            </Button>
-            <Button
-              onClick={forceArgentina}
-              variant="outline"
-              className="bg-blue-500 text-white hover:bg-blue-600"
-            >
-              Forzar Argentina
             </Button>
             <Button onClick={testApiDirectly} variant="outline">
               Test API Directamente

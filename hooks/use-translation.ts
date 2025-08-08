@@ -133,7 +133,7 @@ const translations = {
     requestDemo: "Request Free Demo",
 
     // Testimonials
-    testimonialsTitle: "What Our Customers Say",
+    testimonialsTitle: "What Our Members Say",
     watchVideo: "Watch Video",
 
     // Countries
@@ -246,7 +246,7 @@ const translations = {
     // Feature Sections
     feedingTitle: "Alimentación",
     feedingDesc:
-      "Alimenta en cualquier momento (online/offline) con cualquier báscula o dispositivo (iOS o Android). Gestiona tus stocks de alimento y medicamentos sin problemas. Crea tus raciones, gestiona NEG, NEM y DM%, y establece planes de entrega para cada corral. Puntuación de comederos simple e informativa que funciona offline.",
+      "Alimenta en cualquier momento (online/offline) con cualquier báscula o dispositivo (iOS o Android). Gestiona tus stocks de alimento y medicamentos sin problemas. Crea tus raciones, gestiona ENG, ENM y MS%, y establece planes de entrega para cada corral. Lectura de comederos simple y ágil que funciona offline.",
 
     cattleManagementTitle: "Gestión de Ganado",
     cattleManagementDesc:
@@ -262,7 +262,7 @@ const translations = {
 
     advancedFeedingTitle: "Alimentación Avanzada",
     advancedFeedingDesc:
-      "Protocolos de Alimentación para planificar y ajustar alimento para cada lote por adelantado, con proyecciones de costos. Alertas de Incremento de Ración para adelantarse a las transiciones. Genera automáticamente órdenes de carga y entrega basadas en capacidad de mezcladora y distribución de corrales para optimizar la entrega. Acelera el proceso de llamada de comederos con puntuación personalizable y automatización de llamadas. Ajuste Automático Objetivos entre Entrega y Entregas durante el día respetando la meta del corral.",
+      "Protocolos de Alimentación para planificar y ajustar alimento para cada lote por adelantado, con proyecciones de costos. Alertas de Incremento de Ración para adelantarse a las transiciones. Genera automáticamente órdenes de carga y entrega basadas en capacidad de mezcladora y distribución de corrales para optimizar la entrega. Acelera el proceso de lectura de comederos con puntuación personalizada y automatización de ajustes. Ajuste Automático Objetivos entre Entrega y Entregas durante el día respetando la meta del corral.",
 
     // Learn More
     learnMore: "Conocer más",
@@ -401,7 +401,7 @@ const translations = {
     // Feature Sections
     feedingTitle: "Alimentação",
     feedingDesc:
-      "Alimente a qualquer momento (online/offline) com qualquer balança ou dispositivo (iOS ou Android). Gerencie seus estoques de ração e medicamentos sem problemas. Crie suas rações, gerencie NEG, NEM e DM%, e defina planos de entrega para cada curral. Pontuação de cocho simples e informativa que funciona offline.",
+      "Alimente a qualquer momento (online/offline) com qualquer balança ou dispositivo (iOS ou Android). Gerencie seus estoques de ração e medicamentos sem problemas. Crie suas rações, gerencie ENG, ENM e MS%, e defina planos de entrega para cada curral. Leitura de cocho simples e agil que funciona offline.",
 
     cattleManagementTitle: "Gestão de Gado",
     cattleManagementDesc:
@@ -555,7 +555,7 @@ const translations = {
     // Feature Sections
     feedingTitle: "Alimentación",
     feedingDesc:
-      "Alimentá en cualquier momento (online/offline) con cualquier báscula o dispositivo (iOS o Android). Gestioná tus stocks de alimento y medicamentos sin problemas. Creá tus raciones, gestioná NEG, NEM y DM%, y establece planes de entrega para cada corral. Puntuación de comederos simple e informativa que funciona offline.",
+      "Alimentá en cualquier momento (online/offline) con cualquier báscula o dispositivo (iOS o Android). Gestioná tus stocks de alimento y medicamentos sin problemas. Creá tus raciones, gestioná ENG, ENM y MS%, y establece planes de entrega para cada corral. Lectura de comederos simple y ágil que funciona offline.",
 
     cattleManagementTitle: "Gestión de Ganado",
     cattleManagementDesc:
@@ -571,7 +571,7 @@ const translations = {
 
     advancedFeedingTitle: "Alimentación Avanzada",
     advancedFeedingDesc:
-      "Protocolos de Alimentación para planificar y ajustar alimento para cada lote por adelantado, con proyecciones de costos. Alertas de Incremento de Ración para adelantarse a las transiciones. Genera automáticamente órdenes de carga y entrega basadas en capacidad de mezcladora y distribución de corrales para optimizar la entrega. Acelera el proceso de llamada de comederos con puntuación personalizable y automatización de llamadas. Ajuste Automático Objetivos entre Entrega y Entregas durante el día respetando la meta del corral.",
+      "Protocolos de Alimentación para planificar y ajustar alimento para cada lote por adelantado, con proyecciones de costos. Alertas de Incremento de Ración para adelantarse a las transiciones. Genera automáticamente órdenes de carga y entrega basadas en capacidad de mezcladora y distribución de corrales para optimizar la entrega. Acelera el proceso lectura de comederos con puntuación personalizada y automatización de ajustes. Ajuste Automático Objetivos entre Entrega y Entregas durante el día respetando la meta del corral.",
 
 
     // Learn More

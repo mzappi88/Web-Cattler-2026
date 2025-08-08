@@ -47,6 +47,14 @@ export default function CattlerLanding() {
       isMobile: window.innerWidth <= 768,
       isWixMobile: isInIframe && isWix && window.innerWidth <= 768,
     });
+
+    // Mostrar información de país en la consola
+    console.log("🌍 País detectado:", selectedCountry);
+    console.log("🌍 Idioma del navegador:", navigator.language);
+    console.log(
+      "🌍 Zona horaria:",
+      Intl.DateTimeFormat().resolvedOptions().timeZone
+    );
   }, []);
 
   // Monitor dimensions
@@ -359,6 +367,14 @@ export default function CattlerLanding() {
         src="//js.hsforms.net/forms/embed/v2.js"
         onLoad={() => setScriptLoaded(true)}
       />
+
+      {/* Debug Banner - Temporal para verificar país */}
+      <div className="fixed top-4 left-4 z-50 bg-blue-500 text-white px-3 py-1 rounded text-sm">
+        País: {selectedCountry} | Cache:{" "}
+        {typeof window !== "undefined"
+          ? localStorage.getItem("cattler-country")
+          : "N/A"}
+      </div>
     </div>
   );
 }
