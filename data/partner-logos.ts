@@ -36,15 +36,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     category: "technology",
     countries: ["US", "CA", "OT$EN", "OT$ES"],
   },
-  {
-    id: "digistar",
-    name: "Digistar",
-    logoUrl: "/digistar.png",
-    website: "https://digistar.com",
-    category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
-  },
-  {
+   {
     id: "incutex",
     name: "Incutex",
     logoUrl: "/incutex logo.png",
@@ -67,6 +59,30 @@ export const allPartnerLogos: PartnerLogo[] = [
     website: "https://startupist.com",
     category: "technology",
     countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+  },
+  {
+    id: "inia",
+    name: "INIA",
+    logoUrl: "/INIA.png",
+    website: "https://inia.uy/Converge/Producci%C3%B3n-animal/Ganader%C3%ADa/Cattler",
+    category: "technology",
+    countries: ["AR", "PY", "UY", "BO", "BR"],
+  },
+  {
+    id: "converge",
+    name: "Converge",
+    logoUrl: "/Converge.png",
+    website: "https://inia.uy/Converge/Producci%C3%B3n-animal/Ganader%C3%ADa/Cattler",
+    category: "technology",
+    countries: ["AR", "PY", "UY", "BO", "BR"],
+  },
+  {
+    id: "bidlab",
+    name: "BID Lab",
+    logoUrl: "/BID LAB.png",
+    website: "https://inia.uy/Converge/Producci%C3%B3n-animal/Ganader%C3%ADa/Cattler",
+    category: "technology",
+    countries: ["AR", "PY", "UY", "BO", "BR"],
   },
 
   // Equipment & Hardware Partners
@@ -123,6 +139,14 @@ export const allPartnerLogos: PartnerLogo[] = [
     name: "TruTest",
     logoUrl: "/trutest.png",
     website: "https://trutest.com",
+    category: "technology",
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+  },
+  {
+    id: "digistar",
+    name: "Digistar",
+    logoUrl: "/digistar.png",
+    website: "https://digistar.com",
     category: "technology",
     countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
   },
