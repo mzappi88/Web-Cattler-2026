@@ -161,7 +161,7 @@ const translations = {
     videoNotAvailable: "Video not available",
 
     // Enhanced CTA Section
-    enhancedCtaTitle: "Join the Cattle Digital Revolution",
+    enhancedCtaTitle: "Join the CattleR Digital Revolution",
     enhancedCtaSubtitle: "Producers everywhere are turning to Cattler to optimize their operations. Discover why we are the most innovative platform in cattle management.",
     cattleHeadCount: "1.2 million +",
     cattleHead: "Cattle Head per year",
