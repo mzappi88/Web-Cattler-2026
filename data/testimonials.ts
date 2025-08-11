@@ -28,6 +28,7 @@ export const testimonials: Testimonial[] = [
     quote:
       "Cattler makes every day a little bit easier: keeps all your records, has your closeouts, your bunk scores, cattle movements are simple. It's so much easier to communicate with the guy in the feed truck. We have also been able to mark our cattle better, specially on the weight side, you have the average daily gain projection and the intent, and it keeps the weight to a pretty darn close number",
     image: "/testimonials/Matt-Rezac-US.jpg",
+    videoUrl: "https://youtu.be/DnQuFMfoCcU",
     countries: ["US", "CA", "OT$EN"],
   },
   {

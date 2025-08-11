@@ -55,7 +55,7 @@ const translations = {
     mainTitle: "Transform Your Cattle Operation",
     mainTitleWithCattler: "Transform your cattle operation",
     mainSubtitle:
-      "Cattler is a livestock management software that centralizes all your feedlot operations in one platform.",
+      "Cattle management software that centralizes all your feedlot operations in one platform.",
     mainSubtitleLine2:
       "From feeding and health to processing and inventory — everything you need in one place.",
 
@@ -75,7 +75,7 @@ const translations = {
     // Form
     formTitle: "Start Your Free Trial",
     formSubtitleLanding: "See how Cattler can transform your operation. Get started with a personalized demo.",
-    formSubtitleAds: "Join thousands of successful ranchers. Start your free trial today.",
+    formSubtitleAds: "Join cattlemen transforming their operations. Start your free trial today.",
 
     // Thank You
     thankYou: "Thank You!",
