@@ -32,15 +32,15 @@ export default function Footer() {
       return {
         address: (
           <>
-            <p>Delgado 377 2o B</p>
-            <p>CABA - 1428</p>
+            <p>Teniente Benjamín Matienzo 3132</p>
+            <p>, CABA, Argentina - CP 1426</p>
           </>
         ),
-        phone: "+54 11 5929 5601",
-        email: "ventas@cattler.farm"
+        phone: "+549 11 5929 5601",
+        email: "ventas@cattler.farm",
       };
     }
-    
+
     // For ES, ES-AR, and PT, show the new phone and email
     if (language === "es" || language === "es-ar" || language === "pt") {
       return {
@@ -51,11 +51,11 @@ export default function Footer() {
             <p>Lincoln, NE 68508</p>
           </>
         ),
-        phone: "+54 11 5929 5601",
-        email: "ventas@cattler.farm"
+        phone: "+549 11 5929 5601",
+        email: "ventas@cattler.farm",
       };
     }
-    
+
     // Default for English
     return {
       address: (
@@ -65,8 +65,8 @@ export default function Footer() {
           <p>Lincoln, NE 68508</p>
         </>
       ),
-      phone: "(531) 234-5882",
-      email: "support@cattler.farm"
+      phone: "+1(531) 234-5882",
+      email: "support@cattler.farm",
     };
   };
 
@@ -76,19 +76,19 @@ export default function Footer() {
       return {
         terms: "https://www.cattler.com.ar/terminos",
         privacy: "https://www.cattler.com.ar/privacy-policy",
-        contact: "https://www.cattler.com.ar/contact"
+        contact: "https://www.cattler.com.ar/contact",
       };
     } else if (language === "pt") {
       return {
         terms: "https://www.cattler.farm/terms",
         privacy: "https://www.cattler.farm/privacy-policy",
-        contact: "https://www.cattler.agr.br/contato"
+        contact: "https://www.cattler.agr.br/contato",
       };
     } else {
       return {
         terms: "https://www.cattler.farm/terms",
         privacy: "https://www.cattler.farm/privacy-policy",
-        contact: "https://www.cattler.farm/contact"
+        contact: "https://www.cattler.farm/contact",
       };
     }
   };
