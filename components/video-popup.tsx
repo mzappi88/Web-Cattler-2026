@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { X } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
+import { useWixIframe } from "@/hooks/use-wix-iframe";
 import { Button } from "@/components/ui/button";
 
 interface VideoPopupProps {
@@ -29,16 +30,25 @@ const getVideoId = (url: string) => {
 
 export default function VideoPopup({ isOpen, onClose }: VideoPopupProps) {
   const { t } = useTranslation();
+  const { getModalClasses, scrollToTopForModal } = useWixIframe();
+  const modalClasses = getModalClasses();
+
+  // Scroll to top when modal opens in Wix iframe
+  useEffect(() => {
+    if (isOpen) {
+      scrollToTopForModal();
+    }
+  }, [isOpen, scrollToTopForModal]);
 
   if (!isOpen) return null;
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-80 flex items-start md:items-center justify-center z-50 p-2 md:p-4 pt-16 md:pt-4"
+      className={`fixed inset-0 bg-black bg-opacity-80 flex justify-center z-50 p-2 md:p-4 ${modalClasses.container}`}
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl max-h-[70vh] md:max-h-[80vh]"
+        className={`relative w-full max-w-4xl ${modalClasses.modal}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="bg-white rounded-lg overflow-hidden shadow-2xl flex flex-col max-h-full">
@@ -64,7 +74,7 @@ export default function VideoPopup({ isOpen, onClose }: VideoPopupProps) {
               className="relative bg-gray-200 w-full h-full"
               style={{
                 paddingBottom: "56.25%",
-                maxHeight: "calc(70vh - 160px)",
+                maxHeight: modalClasses.videoContainer,
                 minHeight: "200px",
               }}
             >

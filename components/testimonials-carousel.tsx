@@ -2,6 +2,7 @@
 
 import { useTranslation } from "@/hooks/use-translation";
 import { useTestimonials } from "@/hooks/use-testimonials";
+import { useWixIframe } from "@/hooks/use-wix-iframe";
 import {
   Carousel,
   CarouselContent,
@@ -13,12 +14,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, Quote, X } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function TestimonialsCarousel() {
   const { t } = useTranslation();
   const testimonials = useTestimonials();
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const { getModalClasses, scrollToTopForModal } = useWixIframe();
+  const modalClasses = getModalClasses();
 
   const handleVideoClick = (videoUrl: string | undefined) => {
     if (videoUrl) {
@@ -29,6 +32,13 @@ export default function TestimonialsCarousel() {
   const closeVideoModal = () => {
     setSelectedVideo(null);
   };
+
+  // Scroll to top when modal opens in Wix iframe
+  useEffect(() => {
+    if (selectedVideo) {
+      scrollToTopForModal();
+    }
+  }, [selectedVideo, scrollToTopForModal]);
 
   const getEmbedUrl = (url: string) => {
     // Handle youtu.be format
@@ -155,11 +165,11 @@ export default function TestimonialsCarousel() {
       {/* Video Modal */}
       {selectedVideo && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-start justify-center z-50 p-2 md:p-4 pt-12 md:pt-0"
+          className={`fixed inset-0 bg-black bg-opacity-80 flex justify-center z-50 p-2 md:p-4 ${modalClasses.container}`}
           onClick={closeVideoModal}
         >
           <div
-            className="relative w-full max-w-4xl max-h-[90vh] md:max-h-[80vh]"
+            className={`relative w-full max-w-4xl ${modalClasses.modal}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="bg-white rounded-lg overflow-hidden shadow-2xl flex flex-col max-h-full">
@@ -185,7 +195,7 @@ export default function TestimonialsCarousel() {
                   className="relative bg-gray-200 w-full h-full"
                   style={{
                     paddingBottom: "56.25%",
-                    maxHeight: "calc(90vh - 120px)",
+                    maxHeight: modalClasses.videoContainer,
                     minHeight: "200px",
                   }}
                 >
