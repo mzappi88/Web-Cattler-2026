@@ -2,7 +2,11 @@
 
 import { FeatureSection } from "./feature-section";
 import { Settings, Clock, Users, Info } from "lucide-react";
-import { useTranslation, getPricingUrl } from "@/hooks/use-translation";
+import {
+  useTranslation,
+  getPricingUrl,
+  getDemoUrl,
+} from "@/hooks/use-translation";
 import { useFeatureVideos } from "@/hooks/use-feature-videos";
 import { useMemo } from "react";
 import TestimonialsCarousel from "./testimonials-carousel";
@@ -316,7 +320,7 @@ export default function CattlerFeatures() {
         <button
           className="bg-[#f25f24] text-white font-bold text-base md:text-lg font-semibold py-2.5 px-6 md:py-3 md:px-8 border-none rounded-full cursor-pointer transition-colors hover:bg-[#d14d1a]"
           onClick={() => {
-            const cattlerUrl = "https://www.cattler.com.ar/demo";
+            const cattlerUrl = getDemoUrl(selectedCountry);
             if (window.parent && window.parent !== window) {
               window.parent.location.href = cattlerUrl;
             } else {

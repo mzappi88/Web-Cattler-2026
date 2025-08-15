@@ -48,6 +48,12 @@ export const PLAN_NAME_BY_COUNTRY: Record<
     plan3: "Confinamiento Total",
     plan4: "Confinamiento Máximo",
   },
+  CH: {
+    plan1: "Feedlot Esencial",
+    plan2: "Feedlot Núcleo",
+    plan3: "Feedlot Integral",
+    plan4: "Feedlot Avanzado",
+  },
   BO: {
     plan1: "Confinamiento START",
     plan2: "Confinamiento CORE",
@@ -414,6 +420,54 @@ export const PRICES_BY_COUNTRY: Record<
     pastureBasic: 0,
     pastureAdvanced: 0,
   },
+  CH: {
+    plan1: 200,
+    plan2: 275,
+    plan3: 375,
+    plan4: 500,
+    plan1pens: 10,
+    plan2pens: 20,
+    plan3pens: 30,
+    plan4pens: 50,
+    plan1users: 2,
+    plan2users: 3,
+    plan3users: 4,
+    plan4usesr: 6,
+    ExtraUsers: 20,
+    ExtraPens: 5,
+    customFeeder: 100,
+    billing: 0,
+    grainBank: 0,
+    clientUsers: 20,
+    AnimalHealth: 100,
+    AnimalHealthbasic: 0,
+    AnimalHealthadvanced: 0,
+    animalHealthChute: 100,
+    Chute: 50,
+    ChuteQuickStart: 25,
+    ChuteCattleIN: 0,
+    ChuteNewOrder: 0,
+    EIDIntegration: 50,
+    AdvancedFeeding: 0,
+    FeedingProtocols: 25,
+    AutoAdjust: 25,
+    BunkScoreCustomization: 25,
+    FeedingAutomation: 25,
+    AdvancedInventory: 100,
+    InputTransformation: 25,
+    Purchases: 25,
+    MicroingredientesManagement: 0,
+    Analytics: 0,
+    MarketValueReport: 25,
+    TruckScaleIntegration: 0,
+    DumpBoxIntegration: 0,
+    MicroMachineIntegration: 0,
+    informeCuota481: 0,
+    cowCalfBasic: 0,
+    cowCalfAdvanced: 0,
+    pastureBasic: 0,
+    pastureAdvanced: 0,
+  },
   BO: {
     plan1: 200,
     plan2: 300,
@@ -624,6 +678,7 @@ export const getComingSoonText = (selectedCountry: string) => {
     case "UY":
     case "BO":
     case "MX":
+    case "CH":
     case "OT$ES":
       return "Proximamente";
     case "BR":
@@ -644,6 +699,7 @@ function getLocalizedPensUsersText(selectedCountry: string): { pens: string; use
     PY: { pens: "corrales", users: "usuarios" },
     UY: { pens: "corrales", users: "usuarios" },
     BO: { pens: "corrales", users: "usuarios" },
+    CH: { pens: "corrales", users: "usuarios" },
     "OT$EN": { pens: "pens", users: "users" },
     "OT$ES": { pens: "corrales", users: "usuarios" },
   };
@@ -760,6 +816,12 @@ export function getPlanDescription(country: string, planNumber: number): string 
       2: "Planifica mejor tu alimentación con protocolos y herramientas de premix.",
       3: "Llevá tu operación al siguiente nivel con lectura de batea personalizada y entrada de animales desde la manga.",
       4: "Manejo completo de sanidad y trabajo en manga en un solo plan.",
+    },
+    CH: {
+      1: "Para quienes quieren enfocarse en lo fundamental de la gestión de hacienda y alimentación.",
+      2: "Ideal para quienes buscan una gestión completa de sanidad.",
+      3: "Llevá tu operación al siguiente nivel con manejo de manga completo y automatizaciones en la alimentación.",
+      4: "Pensado para feedlots con gestión avanzada de alimentación e inventarios.",
     },
     UY: {
       1: "Para quienes quieren enfocarse en lo fundamental de la gestión de hacienda y alimentación.",
@@ -933,6 +995,31 @@ export function getPlanFeatures(
         "Incluye todo en Confinamiento Total",
         "Sanidad animal (protocolos de tratamiento, registros de eventos y analytics)",
         "Trabajo de manga completo y conexión con lectores caravanas electrónicas",
+        "Inventario avanzado",
+      ],
+    },
+    CH: {
+      1: [
+        "Gestión completa de Alimentación",
+        "Manejo de Haciendad y Mapa de Corrales",
+        "Manejo de Inventarios",
+      ],
+      2: [
+        "Incluye todo en Feedlot Esencial",
+        "Sanidad animal (protocolos de tratamiento, registros de eventos y analytics)",
+        "Manga Inicial",
+      ],
+      3: [
+        "Incluye todo en Feedlot Núcleo",
+        "Trabajo de Manga Completo",
+        "Integración con lectores de caravanas electrónicas",
+        "Autogeneración de órdenes de alimentación y Autoajuste de entregas",
+        "Creación de Premixes",
+      ],
+      4: [
+        "Incluye todo en Feedlot Integral",
+        "Protocolos de alimentación",
+        "Lectura de Comedero Personalizada",
         "Inventario avanzado",
       ],
     },

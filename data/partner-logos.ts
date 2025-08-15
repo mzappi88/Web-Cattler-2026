@@ -10,7 +10,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/Grit-Road-Partners.png",
     website: "https://gritroadpartners.com",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "plug-and-play-agtech",
@@ -18,7 +18,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/plug-and-play-agtech.jpeg",
     website: "https://www.plugandplaytechcenter.com/agtech/",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "herdx",
@@ -26,7 +26,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/herdx.png",
     website: "https://herdx.com",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "stockguard",
@@ -42,7 +42,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/incutex logo.png",
     website: "https://incutex.com",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "crealab",
@@ -58,7 +58,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/Startupist (2).webp",
     website: "https://startupist.com",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "inia",
@@ -100,7 +100,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/gallagher.png",
     website: "https://gallagher.com",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "avery",
@@ -108,7 +108,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/avery.png",
     website: "https://avery.com",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "scaletec",
@@ -116,7 +116,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/ScaleTec.webp",
     website: "https://scaletec.com",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "allflex",
@@ -124,7 +124,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/allflex.png",
     website: "https://allflex.com",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "dinamica-generale",
@@ -132,7 +132,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/dinamica-generale.png",
     website: "https://dinamicagenerale.com",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "trutest",
@@ -140,7 +140,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/trutest.png",
     website: "https://trutest.com",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "digistar",
@@ -148,7 +148,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/digistar.png",
     website: "https://digistar.com",
     category: "technology",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
 
   // Feed & Nutrition Partners
@@ -166,7 +166,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/logo-agrifirm.png",
     website: "https://agrifirm.com",
     category: "producer",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "rumen",
@@ -192,7 +192,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/elanco.png",
     website: "https://elanco.com",
     category: "producer",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
 
   // Producer Partners
@@ -228,7 +228,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/FBN.png",
     website: "https://fbn.com",
     category: "investor",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "tlg-ventures",
@@ -236,7 +236,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/tlg-Ventures.png",
     website: "https://tlgventures.com",
     category: "investor",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "caf",
@@ -252,7 +252,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/thrive.png",
     website: "https://thrive.com",
     category: "investor",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
 
   // Service & Consulting Partners
@@ -262,7 +262,7 @@ export const allPartnerLogos: PartnerLogo[] = [
     logoUrl: "/benco.png",
     website: "https://benco.com",
     category: "partner",
-    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "OT$EN", "OT$ES"],
+    countries: ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"],
   },
   {
     id: "edp-agro",

@@ -5,7 +5,7 @@ import { useCountryDetection } from "./use-country-detection"
 import { aboutUsTranslations } from "./use-about-us"
 
 
-export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT$EN" | "OT$ES"
+export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "CH" | "OT$EN" | "OT$ES"
 
 type Language = "en" | "es" | "pt" | "es-ar"
 
@@ -18,6 +18,7 @@ const countryLanguageMap: Record<Country, Language> = {
   BO: "es",
   BR: "pt",
   MX: "es",
+  CH: "es",
   "OT$EN":"en",
   "OT$ES": "es",
 }
@@ -145,6 +146,7 @@ const translations = {
     "countries.BO": "Bolivia",
     "countries.BR": "Brazil",
     "countries.MX": "Mexico",
+    "countries.CH": "Chile",
     "countries.OT": "Other",
 
     // Pricing CTA
@@ -227,7 +229,7 @@ const translations = {
 
     // Form
     formTitle: "Inicia Tu Prueba Gratuita",
-    formSubtitleLanding: "Ve cómo Cattler puede transformar tu operación. Comienza con una demo personalizada.",
+    formSubtitleLanding: "Comienza con una demo personalizada.",
     formSubtitleAds: "Únete a miles de ganaderos exitosos. Inicia tu prueba gratuita hoy.",
 
     // Thank You
@@ -316,12 +318,12 @@ const translations = {
     // Enhanced CTA Section
     enhancedCtaTitle: "Unite a la Revolución Ganadera",
     enhancedCtaSubtitle: "Cada vez más ganaderos confían en Cattler para optimizar sus operaciones, aumentar la productividad y maximizar las ganancias.",
-    cattleHeadCount: "1,2 millones +",
+    cattleHeadCount: "+1,2 millones",
     cattleHead: "Cabezas de Ganado al año",
     feedTon: "Toneladas de alimento por día",
-    feedTonCount: "7 mil +",
+    feedTonCount: "+7 mil",
     timeSaved: "Horas ahorradas por mes",
-    timeSavedCount: "48+",
+    timeSavedCount: "+48",
     implementation24h: "Implementación en 24 horas",
     specializedSupport: "Soporte técnico especializado",
     automaticUpdates: "Actualizaciones todos los meses",
@@ -471,12 +473,12 @@ const translations = {
     // Enhanced CTA Section
     enhancedCtaTitle: "Junte-se à Revolução Pecuária",
     enhancedCtaSubtitle: "Milhares de produtores já confiam no Cattler para otimizar suas operações. Descubra por que somos a plataforma líder em gestão de gado.",
-    cattleHeadCount: "1,2 milhões +",
+    cattleHeadCount: "+1,2 milhões",
     cattleHead: "Cabeças de gado por ano",
     feedTon: "Toneladas de ração por dia",
-    feedTonCount: "7 mil +",
+    feedTonCount: "+7 mil",
     timeSaved: "Horas economizadas por mês",
-    timeSavedCount: "48+",
+    timeSavedCount: "+48",
     implementation24h: "Implementação em 24 horas",
     specializedSupport: "Suporte técnico especializado",
     automaticUpdates: "Atualizações automáticas",
@@ -536,7 +538,7 @@ const translations = {
 
     // Form
     formTitle: "Iniciá Tu Prueba Gratuita",
-    formSubtitleLanding: "Mirá cómo Cattler puede transformar tu operación. Comienza con una demo personalizada.",
+    formSubtitleLanding: "Comienza con una demo personalizada.",
     formSubtitleAds: "Cada vez más ganaderos confían en Cattler para optimizar sus operaciones, aumentar la productividad y maximizar las ganancias.",
 
     // Thank You
@@ -626,12 +628,12 @@ const translations = {
     // Enhanced CTA Section
     enhancedCtaTitle: "Unite a la Revolución Ganadera",
     enhancedCtaSubtitle: "Cada vez más ganaderos confían en Cattler para optimizar sus operaciones, aumentar la productividad y maximizar las ganancias.",
-    cattleHeadCount: "1.2 millones +",
+    cattleHeadCount: "+1,2 millones",
     cattleHead: "Cabezas de Ganado al año",
     feedTon: "Toneladas de alimento por día",
-    feedTonCount: "7 mil +",
+    feedTonCount: "+7 mil",
     timeSaved: "Horas ahorradas por mes",
-    timeSavedCount: "48+",
+    timeSavedCount: "+48",
     implementation24h: "Implementación en 24 horas",
     specializedSupport: "Soporte técnico especializado",
     automaticUpdates: "Actualizaciones todos los meses",
@@ -744,6 +746,7 @@ export function getPricingUrl(country: Country): string {
     case "PY":
     case "BO":
     case "MX":
+    case "CH":
     case "OT$ES":
       return "https://www.cattler.com.ar/precios";
     case "BR":
@@ -754,5 +757,27 @@ export function getPricingUrl(country: Country): string {
       return "https://cattler.farm/getstarted";
     default:
       return "https://cattler.farm/getstarted"; // Default fallback
+  }
+}
+
+// Helper function to get the appropriate demo URL based on country
+export function getDemoUrl(country: Country): string {
+  switch (country) {
+    case "AR":
+    case "UY":
+    case "PY":
+    case "BO":
+    case "MX":
+    case "CH":
+    case "OT$ES":
+      return "https://cattler.com.ar/demo";
+    case "BR":
+      return "https://cattler.agr.br/demo";
+    case "US":
+    case "CA":
+    case "OT$EN":
+      return "https://cattler.farm/demo";
+    default:
+      return "https://cattler.farm/demo"; // Default fallback
   }
 }

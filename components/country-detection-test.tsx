@@ -199,6 +199,7 @@ export function CountryDetectionTest() {
                 "BO",
                 "BR",
                 "MX",
+                "CH",
                 "OT$EN",
                 "OT$ES",
               ].map((country) => (

@@ -33,7 +33,7 @@ export default function Footer() {
         address: (
           <>
             <p>Teniente Benjamín Matienzo 3132</p>
-            <p>, CABA, Argentina - CP 1426</p>
+            <p>CABA, Argentina - CP 1426</p>
           </>
         ),
         phone: "+549 11 5929 5601",

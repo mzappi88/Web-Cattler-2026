@@ -25,6 +25,7 @@ const spanishSpeakingCountries = [
   "GQ", // Guinea Ecuatorial
   "MX", // México (ya está en el selector)
   "AR", // Argentina (ya está en el selector)
+  "CH", // Chile (ya está en el selector)
 ];
 
 // Lista de países de habla inglesa (excluyendo los que ya están en el selector)
@@ -167,7 +168,7 @@ export function useCountryDetection() {
         console.log("🌍 Full API data:", data);
         
         // Verificar si el país está en la lista de países soportados
-        const supportedCountries: Country[] = ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX"];
+        const supportedCountries: Country[] = ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH"];
         
         console.log("🌍 Supported Countries:", supportedCountries);
         console.log("🌍 Is userCountryCode in supported countries?", supportedCountries.includes(userCountryCode as Country));

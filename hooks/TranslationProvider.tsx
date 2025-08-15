@@ -19,6 +19,7 @@ export type Country =
   | "BO"
   | "BR"
   | "MX"
+  | "CH"
   | "OT";
 type Language = "en" | "es" | "pt" | "es-ar";
 
@@ -31,6 +32,7 @@ const countryLanguageMap: Record<Country, Language> = {
   BO: "es",
   BR: "pt",
   MX: "es",
+  CH: "es",
   OT: "en",
 };
 

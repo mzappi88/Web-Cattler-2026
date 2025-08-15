@@ -6,7 +6,13 @@ import { allPartnerLogos, getLogosByCountry } from "@/data/partner-logos";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +21,8 @@ import { useTranslation } from "@/hooks/use-translation";
 import type { Country } from "@/hooks/use-translation";
 
 // Helper function to generate unique IDs
-const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+const generateId = () =>
+  `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
 export default function LogoManagement() {
   const [selectedCountry, setSelectedCountry] = useState<string>("US");
@@ -36,6 +43,7 @@ export default function LogoManagement() {
     { code: "AR", name: "Argentina" },
     { code: "PY", name: "Paraguay" },
     { code: "UY", name: "Uruguay" },
+    { code: "CH", name: "Chile" },
     { code: "BO", name: "Bolivia" },
     { code: "BR", name: "Brazil" },
     { code: "MX", name: "Mexico" },
@@ -134,7 +142,8 @@ export default function LogoManagement() {
   };
 
   const currentLogos =
-    logoData[selectedCountry] || getLogosByCountry(selectedCountry || "US");
+    logoData[selectedCountry] ||
+    getLogosByCountry((selectedCountry || "US") as Country);
 
   return (
     <div className="max-w-6xl mx-auto p-6">

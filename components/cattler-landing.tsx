@@ -5,24 +5,21 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import Script from "next/script";
 import { ClipboardList, TrendingUp, Activity, DollarSign } from "lucide-react";
-import { useTranslation } from "@/hooks/use-translation";
+import { useTranslation, getDemoUrl } from "@/hooks/use-translation";
 import { CountrySelector } from "./country-selector";
 import { useRouter } from "next/navigation";
-
-export type Version = "landing" | "ads-a" | "ads-b";
+import VideoCtaSection from "@/components/video-cta-section";
+import VideoPopup from "@/components/video-popup";
+import EnhancedCtaSection from "./enhanced-cta-section";
 
 export default function CattlerLanding() {
   const { selectedCountry, setSelectedCountry, language, t } = useTranslation();
-  const [version, setVersion] = useState<Version>("landing");
   const [isWixIframe, setIsWixIframe] = useState(false);
   const [isWixMobile, setIsWixMobile] = useState(false);
   const router = useRouter();
+  const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const ver = params.get("ver") as Version | null;
-    setVersion(ver || "landing");
-
     // Detect if we're in a Wix iframe
     const isInIframe = window !== window.top;
     const isWix =
@@ -80,106 +77,87 @@ export default function CattlerLanding() {
   });
 
   useEffect(() => {
+    console.log("🔍 Form Debug:", { scriptLoaded, formLoaded, submitted });
+
     if (scriptLoaded && typeof window.hbspt !== "undefined") {
+      // Determine which form to use based on language and country
+      let formId = "ea412564-b4e0-4514-8d3a-2f1117acd27f"; // Default form
+
+      if (language === "en") {
+        switch (selectedCountry) {
+          case "CA":
+            formId = "36487514-58d0-497a-afec-65dbd0be2875";
+            break;
+          case "US":
+            formId = "503c575b-28c0-44f3-9272-0fdcb0ff5e05";
+            break;
+          default:
+            formId = "ea412564-b4e0-4514-8d3a-2f1117acd27f";
+        }
+      } else if (language === "pt") {
+        // Portuguese forms (Brazil)
+        formId = "bff83772-d203-45df-9702-11a9d6e748da";
+      } else if (language === "es" || language === "es-ar") {
+        // Spanish forms based on country
+        switch (selectedCountry) {
+          case "AR":
+            formId = "8d18975e-6eeb-4cdc-8d15-5035c15eb05b";
+            break;
+          case "UY":
+            formId = "2819f746-41bd-434a-9788-36ac763f137c";
+            break;
+          case "PY":
+            formId = "052428bd-5926-422a-83e4-4d621969eb57";
+            break;
+          case "BO":
+            formId = "99ed3c56-c96b-4af5-92c1-bc0462e67afd";
+            break;
+          case "CH":
+            formId = "458e2f99-595b-4fba-98ac-c75571a90e89";
+            break;
+          case "MX":
+            formId = "372755d3-04bd-47bb-8eda-c279f4a7ce4c";
+            break;
+          default:
+            // For other Spanish-speaking countries (not AR, PY, UY, BO, CH, MX)
+            formId = "ea595d2e-dbf9-45a7-b3f1-66bc40fd00cc";
+            break;
+        }
+      }
+
+      console.log(
+        `Creating HubSpot form for ${language}/${selectedCountry} with formId: ${formId}`
+      );
+
       window.hbspt.forms.create({
         portalId: "21027761",
-        formId:
-          version == "ads-a"
-            ? "36487514-58d0-497a-afec-65dbd0be2875"
-            : version == "ads-b"
-            ? "307e5904-2059-4a40-8f24-fd1a8c3e98e8"
-            : "302022b8-67fb-454c-86bf-d6f4b449f4e0",
+        formId: formId,
         target: "#hubspot-form-container",
         region: "na1",
+        onFormReady: () => {
+          setFormLoaded(true);
+        },
+        onFormSubmitted: () => {
+          setSubmitted(true);
+        },
       });
     }
-  }, [scriptLoaded, version]);
+  }, [scriptLoaded, language, selectedCountry]);
+
+  // Remove the preload effect as it might be causing delays
 
   return (
-    <div
-      className="bg-gradient-to-b from-[#f0f1f7] to-[#d1d3e2] flex flex-col items-center justify-center px-0"
-      style={{
-        minHeight: isWixMobile ? "auto" : isWixIframe ? "800px" : "100vh",
-        maxHeight: isWixMobile ? "none" : isWixIframe ? "800px" : "100vh",
-        height: isWixMobile ? "auto" : isWixIframe ? "800px" : "100vh",
-        overflow: isWixMobile ? "visible" : "hidden",
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        transform: isWixMobile ? "none" : isWixIframe ? "scale(1)" : "none",
-        transformOrigin: "top left",
-        boxSizing: "border-box",
-        flexShrink: isWixMobile ? "0" : isWixIframe ? "0" : "1",
-        flexGrow: isWixMobile ? "0" : isWixIframe ? "0" : "1",
-      }}
-    >
-      {/* Country Selector - Hidden for production, only available in debug */}
-      {/* <div className="fixed top-4 right-4 z-50">
-        <CountrySelector
-          selectedCountry={selectedCountry}
-          onCountryChange={setSelectedCountry}
-        />
-      </div> */}
-
-      {/* Hero Video Section */}
-      <div
-        className="relative w-full bg-black"
-        style={{
-          height: isWixMobile ? "30vh" : isWixIframe ? "180px" : "30vh",
-          maxHeight: isWixMobile ? "30vh" : isWixIframe ? "180px" : "30vh",
-          minHeight: isWixMobile ? "180px" : isWixIframe ? "180px" : "180px",
-          position: "relative",
-          overflow: "hidden",
-          transform: isWixMobile ? "none" : isWixIframe ? "scale(1)" : "none",
-          transformOrigin: "top left",
-          flexShrink: isWixMobile ? "0" : isWixIframe ? "0" : "1",
-          flexGrow: isWixMobile ? "0" : isWixIframe ? "0" : "1",
-          boxSizing: "border-box",
-        }}
-      >
-        {/* Mobile Video - Limited height */}
-        <div
-          className="relative w-full h-full md:hidden overflow-hidden bg-black"
-          style={{
-            height: "100%",
-            maxHeight: "100%",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
+    <div className="bg-[#499E80] flex flex-col items-center justify-center px-0">
+      {/* Hero Video Section - Same dimensions as home */}
+      <div className="relative w-full bg-black">
+        {/* Mobile Video - Full height like home */}
+        <div className="relative w-full h-[50vh] md:hidden">
           <video
-            className="absolute top-0 left-0 w-full h-full"
+            className="absolute top-0 left-0 w-full h-full object-cover"
             autoPlay
             loop
             muted
             playsInline
-            style={{
-              objectFit: isWixMobile
-                ? "cover"
-                : isWixIframe
-                ? "cover"
-                : "contain",
-              objectPosition: "center",
-              maxWidth: "100%",
-              maxHeight: "100%",
-              width: "100%",
-              height: "100%",
-              transform: isWixMobile
-                ? "scale(1)"
-                : isWixIframe
-                ? "scale(1)"
-                : "scale(1)",
-              transformOrigin: "center center",
-              minHeight: "auto",
-              minWidth: "auto",
-              aspectRatio: "16/9",
-              position: "absolute",
-              top: "0",
-              left: "0",
-              right: "0",
-              bottom: "0",
-              zIndex: "1",
-            }}
           >
             <source
               src="https://video.wixstatic.com/video/93f7fc_55b18a9715124be680e597e4a30bc548/720p/mp4/file.mp4"
@@ -205,28 +183,20 @@ export default function CattlerLanding() {
           </div>
         </div>
 
-        {/* Desktop Video */}
+        {/* Desktop Video - Same aspect ratio as home */}
         <div
-          className="relative w-full hidden md:block overflow-hidden bg-black"
+          className="relative w-full hidden md:block"
           style={{
             paddingBottom:
               "42.19%" /* 16:9 aspect ratio reducido 25% desde 56.25% */,
           }}
         >
           <video
-            className="absolute top-0 left-0 w-full h-full"
+            className="absolute top-0 left-0 w-full h-full object-cover"
             autoPlay
             loop
             muted
             playsInline
-            style={{
-              objectFit: "scale-down",
-              objectPosition: "center",
-              maxWidth: "100%",
-              maxHeight: "100%",
-              width: "auto",
-              height: "auto",
-            }}
           >
             <source
               src="https://video.wixstatic.com/video/93f7fc_55b18a9715124be680e597e4a30bc548/720p/mp4/file.mp4"
@@ -242,7 +212,7 @@ export default function CattlerLanding() {
                 <img
                   src="/Cattler-black.png"
                   alt="Cattler"
-                  className="h-8 md:h-12 lg:h-16 w-auto brightness-0 invert mx-auto"
+                  className="h-16 md:h-24 lg:h-32 w-auto brightness-0 invert mx-auto"
                 />
               </div>
               <h2 className="text-2xl md:text-4xl lg:text-6xl font-bold text-white mb-8 drop-shadow-lg">
@@ -257,7 +227,8 @@ export default function CattlerLanding() {
           <button
             className="bg-[#f25f24] hover:bg-[#d14d1a] text-white font-bold py-2 px-4 md:py-4 md:px-8 rounded-full text-sm md:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             onClick={() => {
-              const cattlerUrl = "https://www.cattler.com.ar/demo";
+              const cattlerUrl = getDemoUrl(selectedCountry);
+
               if (window.parent && window.parent !== window) {
                 window.parent.location.href = cattlerUrl;
               } else {
@@ -270,111 +241,122 @@ export default function CattlerLanding() {
         </div>
       </div>
 
-      <div
-        className="container mx-auto px-4 py-2 md:py-4 flex flex-col items-center justify-center"
-        style={{
-          flex: isWixMobile ? "1" : isWixIframe ? "1" : "1",
-          overflow: isWixMobile ? "visible" : "auto",
-          maxHeight: isWixMobile
-            ? "none"
-            : isWixIframe
-            ? "calc(800px - 180px)"
-            : "calc(100vh - 30vh)",
-          minHeight: isWixMobile ? "auto" : isWixIframe ? "620px" : "auto",
-          flexShrink: isWixMobile ? "0" : isWixIframe ? "1" : "1",
-          flexGrow: isWixMobile ? "0" : isWixIframe ? "1" : "1",
-        }}
-      >
-        <h1 className="text-2xl md:text-4xl font-bold text-[#121334] text-center my-3 md:my-5">
-          {t("mainTitle")}
-        </h1>
+      {/* Title and Subtitle Section */}
+      <div className="py-4 md:py-8">
+        <div className="container mx-auto px-4 flex flex-col items-center justify-center">
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white text-center my-3 md:my-5 leading-tight pt-4 md:pt-8">
+            {t("mainTitleWithCattler")}
+          </h1>
+        </div>
       </div>
+
+      {/* Main Content Section */}
       <div className="container mx-auto py-2 md:py-4 px-4 md:px-9">
-        <div className="flex flex-col md:flex-row md:justify-between gap-8 md:gap-12">
-          <div className="md:w-1/2 flex-1">
-            <p className="text-lg md:text-xl lg:text-[25px] text-[#121334] mb-4 md:mb-6 text-center">
-              {t("mainSubtitle")}
-            </p>
-            <div className="flex-1 items-center justify-center mt-6 md:mt-10">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                <FeatureCard
-                  icon={
-                    <ClipboardList className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
-                  }
-                  title={t("endPaperwork")}
-                  description={t("endPaperworkDesc")}
-                />
-                <FeatureCard
-                  icon={
-                    <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
-                  }
-                  title={t("boostProductivity")}
-                  description={t("boostProductivityDesc")}
-                />
-                <FeatureCard
-                  icon={
-                    <Activity className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
-                  }
-                  title={t("preventHealth")}
-                  description={t("preventHealthDesc")}
-                />
-                <FeatureCard
-                  icon={
-                    <DollarSign className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
-                  }
-                  title={t("maximizeProfits")}
-                  description={t("maximizeProfitsDesc")}
-                />
-              </div>
+        <div className="flex flex-col">
+          <div className="w-full">
+            <div className="text-center mb-4 md:mb-6">
+              <p className="text-lg md:text-xl lg:text-[25px] text-white mb-1 md:mb-2">
+                {t("mainSubtitle")}
+              </p>
+              <p className="text-lg md:text-xl lg:text-[25px] text-white/90">
+                {t("mainSubtitleLine2")}
+              </p>
             </div>
-          </div>
-          <div className="md:w-1/2">
-            <div className="bg-white p-4 md:p-6 rounded-xl shadow-lg max-w-xl mx-auto">
-              {!submitted ? (
-                <>
-                  <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-[#121334] mb-3 md:mb-4 text-center">
-                    {t("formTitle")}
-                  </h2>
-                  <p className="text-base md:text-lg lg:text-xl text-[#121334] mb-4 md:mb-6">
-                    {version != "landing"
-                      ? t("formSubtitleAds")
-                      : t("formSubtitleLanding")}
-                  </p>
-                  {!formLoaded && (
-                    <div className="flex items-center justify-center h-24 md:h-30">
-                      <div className="animate-spin rounded-full h-8 w-8 md:h-12 md:w-12 border-b-2 border-[#121334]"></div>
+
+            {/* Features and Form Section */}
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start mt-6 md:mt-10 mb-10">
+              {/* Left side - Features */}
+              <div className="lg:w-1/2 order-1 lg:order-1 mt-8 lg:mt-20">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                  <FeatureCard
+                    icon={
+                      <ClipboardList className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
+                    }
+                    title={t("endPaperwork")}
+                    description={t("endPaperworkDesc")}
+                  />
+                  <FeatureCard
+                    icon={
+                      <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
+                    }
+                    title={t("boostProductivity")}
+                    description={t("boostProductivityDesc")}
+                  />
+                  <FeatureCard
+                    icon={
+                      <Activity className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
+                    }
+                    title={t("preventHealth")}
+                    description={t("preventHealthDesc")}
+                  />
+                  <FeatureCard
+                    icon={
+                      <DollarSign className="w-6 h-6 md:w-8 md:h-8 text-[#121334]" />
+                    }
+                    title={t("maximizeProfits")}
+                    description={t("maximizeProfitsDesc")}
+                  />
+                </div>
+              </div>
+
+              {/* Right side - Form */}
+              <div className="lg:w-1/2 order-2 lg:order-2">
+                <div className="bg-white p-6 md:p-8 rounded-xl shadow-lg max-w-md mx-auto lg:mx-0 sticky top-4">
+                  {!submitted ? (
+                    <>
+                      <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-[#121334] mb-4 text-center">
+                        {t("formTitle")}
+                      </h2>
+                      <p className="text-base md:text-lg text-[#121334] mb-6 text-center">
+                        {t("formSubtitleLanding")}
+                      </p>
+                      {!formLoaded && (
+                        <div className="flex items-center justify-center h-32">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#121334]"></div>
+                        </div>
+                      )}
+                      <div
+                        id="hubspot-form-container"
+                        className={formLoaded ? "block" : "hidden"}
+                      ></div>
+                    </>
+                  ) : (
+                    <div className="text-center py-8">
+                      <h2 className="text-xl md:text-2xl font-semibold text-[#121334] mb-4">
+                        {t("thankYou")}
+                      </h2>
+                      <p className="text-sm md:text-base text-[#121334]">
+                        {t("thankYouLanding")}
+                      </p>
                     </div>
                   )}
-                  <div id="hubspot-form-container"></div>
-                </>
-              ) : (
-                <div className="text-center py-6 md:py-8">
-                  <h2 className="text-xl md:text-2xl font-semibold text-[#121334] mb-3 md:mb-4">
-                    {t("thankYou")}
-                  </h2>
-                  <p className="text-sm md:text-base text-[#121334]">
-                    {version == "landing"
-                      ? t("thankYouLanding")
-                      : t("thankYouAds")}
-                  </p>
                 </div>
-              )}
+              </div>
             </div>
+
+            {/* Video CTA Section */}
+            <VideoCtaSection />
           </div>
         </div>
       </div>
+
+      {/* Spacing before Enhanced CTA Section */}
+      <div className="py-8 md:py-12"></div>
+
+      <EnhancedCtaSection />
+
       <Script
         src="//js.hsforms.net/forms/embed/v2.js"
         onLoad={() => setScriptLoaded(true)}
       />
 
-      {/* Debug Banner - Temporal para verificar país */}
-      <div className="fixed top-4 left-4 z-50 bg-blue-500 text-white px-3 py-1 rounded text-sm">
+      {/* Debug Banner - Comentado para producción */}
+      {/* <div className="fixed top-4 left-4 z-50 bg-blue-500 text-white px-3 py-1 rounded text-sm">
         País: {selectedCountry} | Cache:{" "}
         {typeof window !== "undefined"
           ? localStorage.getItem("cattler-country")
           : "N/A"}
-      </div>
+      </div> */}
     </div>
   );
 }

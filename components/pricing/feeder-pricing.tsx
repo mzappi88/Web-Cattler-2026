@@ -494,6 +494,7 @@ export default function Component() {
       case "PY":
       case "UY":
       case "BO":
+      case "CH":
       case "OT$ES":
         return "Hotelería";
       default:
@@ -510,6 +511,7 @@ export default function Component() {
       case "PY":
       case "UY":
       case "BO":
+      case "CH":
       case "OT$ES":
         return "Gestión completa para operaciones de Hotelería con múltiples clientes";
       case "US":
@@ -705,9 +707,15 @@ export default function Component() {
                       ? `,  ${
                           selectedCountry === "BR"
                             ? "cobrado anualmente"
-                            : ["AR", "UY", "PY", "BO", "MX", "OT$ES"].includes(
-                                selectedCountry
-                              )
+                            : [
+                                "AR",
+                                "UY",
+                                "PY",
+                                "BO",
+                                "MX",
+                                "CH",
+                                "OT$ES",
+                              ].includes(selectedCountry)
                             ? "cobrado anualmente"
                             : "billed annually"
                         }`
@@ -718,7 +726,7 @@ export default function Component() {
                       {formatPrice(plan.annualPrice!)} {t("perYear")} (
                       {selectedCountry === "BR"
                         ? "Economize"
-                        : ["UY", "PY", "BO", "MX", "OT$ES"].includes(
+                        : ["UY", "PY", "BO", "MX", "CH", "OT$ES"].includes(
                             selectedCountry
                           )
                         ? "Ahorre"
@@ -812,7 +820,7 @@ export default function Component() {
                     ? `Você faz Bôitel?`
                     : ["AR"].includes(selectedCountry)
                     ? "¿Hacés Hotelería?"
-                    : ["UY", "PY", "BO", "MX", "OT$ES"].includes(
+                    : ["UY", "PY", "BO", "MX", "CH", "OT$ES"].includes(
                         selectedCountry
                       )
                     ? "¿Hace Hotelería?"
@@ -825,7 +833,9 @@ export default function Component() {
                   ? "Aprimore suas operações de Bôitel com recursos especializados projetados para gerenciar múltiplos clientes e operações complexas."
                   : ["AR"].includes(selectedCountry)
                   ? "Mejorá tus operaciones de Hotelería con recursos especializados diseñados para gestionar múltiples clientes y operaciones complejas."
-                  : ["UY", "PY", "BO", "MX", "OT$ES"].includes(selectedCountry)
+                  : ["UY", "PY", "BO", "MX", "CH", "OT$ES"].includes(
+                      selectedCountry
+                    )
                   ? "Mejore sus operaciones de Hotelería con recursos especializados diseñados para gestionar múltiples clientes y operaciones complejas."
                   : "Enhance your custom feeding operations with specialized features designed to manage multiple clients and complex operations."}
               </p>
@@ -834,7 +844,7 @@ export default function Component() {
                 <h3 className="text-lg font-bold font-barlow text-cattler-navy mb-4">
                   {selectedCountry === "BR"
                     ? "Complemento Recomendado para Bôitel"
-                    : ["AR", "UY", "PY", "BO", "MX", "OT$ES"].includes(
+                    : ["AR", "UY", "PY", "BO", "MX", "CH", "OT$ES"].includes(
                         selectedCountry
                       )
                     ? "Módulo Recomendado para Hotelería"
@@ -845,9 +855,15 @@ export default function Component() {
                     <h4 className="font-bold font-lato text-cattler-amber mb-2">
                       {selectedCountry === "BR"
                         ? "Módulo Bôitel"
-                        : ["AR", "UY", "PY", "BO", "MX", "OT$ES"].includes(
-                            selectedCountry
-                          )
+                        : [
+                            "AR",
+                            "UY",
+                            "PY",
+                            "BO",
+                            "MX",
+                            "CH",
+                            "OT$ES",
+                          ].includes(selectedCountry)
                         ? "Módulo Hotelería"
                         : "Custom Feeder Add On"}
                     </h4>
@@ -871,9 +887,15 @@ export default function Component() {
                     >
                       {selectedCountry === "BR"
                         ? "Adicionar ao Plano"
-                        : ["AR", "UY", "PY", "BO", "MX", "OT$ES"].includes(
-                            selectedCountry
-                          )
+                        : [
+                            "AR",
+                            "UY",
+                            "PY",
+                            "BO",
+                            "MX",
+                            "CH",
+                            "OT$ES",
+                          ].includes(selectedCountry)
                         ? "Agregar al Plan"
                         : "Add to Plan"}
                     </Button>
@@ -886,7 +908,7 @@ export default function Component() {
                   ? "Este complemento é especificamente projetado para operações de Bôitel e pode ser adicionado a qualquer plano de Confinamento."
                   : ["AR", "UY", "OT$ES"].includes(selectedCountry)
                   ? "Este módulo está diseñado específicamente para operaciones de Hotelería y puede añadirse a cualquier plan de Feedlot."
-                  : ["PY", "BO", "MX", "OT$ES"].includes(selectedCountry)
+                  : ["PY", "BO", "MX", "CH", "OT$ES"].includes(selectedCountry)
                   ? "Este módulo está diseñado específicamente para operaciones de Hotelería y puede añadirse a cualquier plan de Confinamiento."
                   : "This add-on is specifically designed for custom feeding operations and can be added to any Feeder plan."}
               </div>
@@ -898,7 +920,9 @@ export default function Component() {
             <h2 className="text-3xl font-bold font-barlow text-cattler-navy text-center mb-8">
               {selectedCountry === "BR"
                 ? "Compare Todos os Planos"
-                : ["UY", "PY", "BO", "MX", "OT$ES"].includes(selectedCountry)
+                : ["UY", "PY", "BO", "MX", "CH", "OT$ES"].includes(
+                    selectedCountry
+                  )
                 ? "Compare Todos los Planes"
                 : ["AR"].includes(selectedCountry)
                 ? "Compará Todos los Planes"
@@ -911,9 +935,15 @@ export default function Component() {
                     <th className="text-left py-4 px-4 font-bold font-lato text-cattler-navy bg-white">
                       {selectedCountry === "BR"
                         ? "Recursos"
-                        : ["AR", "UY", "PY", "BO", "MX", "OT$ES"].includes(
-                            selectedCountry
-                          )
+                        : [
+                            "AR",
+                            "UY",
+                            "PY",
+                            "BO",
+                            "MX",
+                            "CH",
+                            "OT$ES",
+                          ].includes(selectedCountry)
                         ? "Funcionalidades"
                         : "Features"}
                     </th>
@@ -1236,9 +1266,15 @@ export default function Component() {
                           <Plus className="h-3 w-3 mr-1" />
                           {selectedCountry === "BR"
                             ? "Disponível para:"
-                            : ["AR", "UY", "PY", "BO", "MX", "OT$ES"].includes(
-                                selectedCountry
-                              )
+                            : [
+                                "AR",
+                                "UY",
+                                "PY",
+                                "BO",
+                                "MX",
+                                "CH",
+                                "OT$ES",
+                              ].includes(selectedCountry)
                             ? "Disponible para:"
                             : "Available for:"}
                           {addon.availableFor
@@ -1263,6 +1299,7 @@ export default function Component() {
                                   "PY",
                                   "BO",
                                   "MX",
+                                  "CH",
                                   "OT$ES",
                                 ].includes(selectedCountry)
                               ? "Incluído en:"
@@ -1292,9 +1329,15 @@ export default function Component() {
                         >
                           {selectedCountry === "BR"
                             ? "Adicionar ao Plano"
-                            : ["AR", "UY", "PY", "BO", "MX", "OT$ES"].includes(
-                                selectedCountry
-                              )
+                            : [
+                                "AR",
+                                "UY",
+                                "PY",
+                                "BO",
+                                "MX",
+                                "CH",
+                                "OT$ES",
+                              ].includes(selectedCountry)
                             ? "Agregar al Plan"
                             : "Add to Plan"}
                         </Button>
@@ -1311,7 +1354,7 @@ export default function Component() {
             <h2 className="text-3xl font-bold font-barlow mb-4">
               {selectedCountry === "BR"
                 ? "Pronto para Começar?"
-                : ["AR", "UY", "PY", "BO", "MX", "OT$ES"].includes(
+                : ["AR", "UY", "PY", "BO", "MX", "CH", "OT$ES"].includes(
                     selectedCountry
                   )
                 ? "¿Listo para empezar?"
@@ -1320,7 +1363,9 @@ export default function Component() {
             <p className="text-xl font-lato mb-8 opacity-90">
               {selectedCountry === "BR"
                 ? "Escolha o plano que se adapta à sua operação e comece a gerenciar seu confinamento com mais eficiência hoje."
-                : ["UY", "PY", "BO", "MX", "OT$ES"].includes(selectedCountry)
+                : ["UY", "PY", "BO", "MX", "CH", "OT$ES"].includes(
+                    selectedCountry
+                  )
                 ? "Elija el plan que se adapte a su operación y comience a gestionar su confinamiento con más eficiencia hoy."
                 : ["AR"].includes(selectedCountry)
                 ? "Elegí el plan que se adapte a tu operación y comienza a gestionar tu confinamiento con más eficiencia hoy."
@@ -1347,7 +1392,7 @@ export default function Component() {
               >
                 {selectedCountry === "BR"
                   ? "Iniciar Teste Gratuito"
-                  : ["AR", "UY", "PY", "BO", "MX", "OT$ES"].includes(
+                  : ["AR", "UY", "PY", "BO", "MX", "CH", "OT$ES"].includes(
                       selectedCountry
                     )
                   ? "Iniciar Prueba Gratuita"
@@ -1372,7 +1417,7 @@ export default function Component() {
               >
                 {selectedCountry === "BR"
                   ? "Contatar Vendas"
-                  : ["AR", "UY", "PY", "BO", "MX", "OT$ES"].includes(
+                  : ["AR", "UY", "PY", "BO", "MX", "CH", "OT$ES"].includes(
                       selectedCountry
                     )
                   ? "Contactar Ventas"

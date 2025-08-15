@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react"
 import { useCountryDetection } from "./use-country-detection"
 
-export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "OT$EN" | "OT$ES"
+export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "CH" | "OT$EN" | "OT$ES"
 
 const countryCurrencyMap: Record<Country, string> = {
   US: "$",
@@ -14,6 +14,7 @@ const countryCurrencyMap: Record<Country, string> = {
   BO: "US$",
   BR: "R$",
   MX: "US$",
+  CH: "US$",
   "OT$EN": "US$",
   "OT$ES": "US$",
 }
@@ -1310,6 +1311,153 @@ const pricingTranslations = {
     "hear.customer": "Cliente Existente",
     "hear.other": "Outro",
   },
+
+  // Chile (CH) - Español
+  CH: {
+    // Same as PY for now - copy all PY translations
+    pricingTitle: "Elige Tu Plan de Confinamiento",
+    pricingSubtitle:
+      "Soluciones completas de gestión de confinamiento diseñadas para optimizar tus operaciones. Desde alimentación básica hasta análisis avanzados.",
+
+    // Plan names
+    planLite: "CONFINAMIENTO LITE",
+    planGo: "CONFINAMIENTO GO",
+    planFlex: "CONFINAMIENTO FLEX",
+    planPro: "CONFINAMIENTO PRO",
+
+    // Plan descriptions
+    planLiteDesc: "Solución básica para pequeñas operaciones",
+    planGoDesc: "Para productores que buscan planificación nutricional",
+    planFlexDesc: "Para quienes desean gestión precisa en la manga",
+    planProDesc: "Para quienes exigen excelencia en sanidad y análisis del rebaño",
+
+    // Common terms
+    pens: "Corrales",
+    users: "Usuarios",
+    perMonth: "por mes",
+    perYear: "por año",
+    annually: "anualmente",
+    monthly: "mensual",
+    getStarted: "Comenzar",
+    mostPopular: "Más Popular",
+
+    // Billing
+    billingCycle: "Ciclo de Facturación",
+    monthlyBilling: "Mensual",
+    annualBilling: "Anual (10% de descuento)",
+    annualSavings: "Ahorra con facturación anual",
+
+    // Features
+    feeding: "Alimentación",
+    cattleManagement: "Gestión de Ganado",
+    suppliesInventory: "Inventario de Suministros",
+    rationManagement: "Manejo de Raciones",
+    advancedFeeding: "Alimentación Avanzada",
+    animalHealth: "Sanidad Animal",
+    chute: "Manga",
+    tagReaderIntegration: "Integración con Lector de Caravanas",
+    inputTransformation: "Transformación de Insumos",
+    analytics: "Análisis",
+    marketValueReport: "Reporte de Valor de Mercado",
+
+    // Add-ons
+    addOnsTitle: "Complementos Disponibles",
+    addOnsSubtitle: "Haz clic en un complemento para comprarlo para tu plan de Confinamiento existente",
+    customFeeder: "Módulo Hotelería",
+    customFeederDesc: "Gestión completa para operaciones de Hotelería con múltiples clientes",
+    clientUsers: "Usuarios de Clientes",
+    clientUsersDesc: "Usuarios adicionales para clientes específicos",
+    loading: "Cargando...",
+    showDetails: "Ver detalles",
+    hideDetails: "Ocultar",
+    mainFeatures: "Funcionalidades Principales",
+
+    // Checkout
+    checkoutTitle: "Completa Tu Pedido",
+    checkoutSubtitle: "Personaliza tu plan con características adicionales",
+    contactInfo: "Información de Contacto",
+    orderSummary: "Resumen del Pedido",
+    fullName: "Nombre Completo",
+    emailAddress: "Dirección de Email",
+    companyName: "Nombre de la Empresa",
+    phoneNumber: "Número de Teléfono",
+    additionalPens: "Corrales Adicionales",
+    additionalUsers: "Usuarios Adicionales",
+    total: "Total",
+    continueToPayment: "Continuar al Pago",
+
+    // Payment
+    paymentTitle: "Información de Pago",
+    paymentSubtitle: "Completa tu suscripción de forma segura",
+    cardDetails: "Datos de la Tarjeta",
+    cardholderName: "Nombre del Titular",
+    cardNumber: "Número de Tarjeta",
+    expiryDate: "Fecha de Vencimiento",
+    cvv: "CVV",
+    billingAddress: "Dirección de Facturación",
+    address: "Dirección",
+    city: "Ciudad",
+    state: "Región",
+    zipCode: "Código Postal",
+    country: "País",
+    finalizePayment: "Finalizar Pago",
+    securePayment: "Pago Seguro",
+
+    // Feedlot Info
+    feedlotInfoTitle: "Información del Confinamiento",
+    feedlotInfoSubtitle: "Cuéntanos más sobre tu operación para personalizar tu experiencia",
+    companyInfo: "Información de la Empresa",
+    location: "Ubicación",
+    operationInfo: "Información de la Operación",
+    totalCapacity: "Capacidad Total (cabezas)",
+    currentHeadCount: "Rebaño Actual",
+    startDate: "Fecha de Inicio Deseada",
+    previousSoftware: "Software de Alimentación Anterior",
+    howDidYouHear: "¿Cómo te enteraste de nosotros?",
+    additionalNotes: "Notas Adicionales",
+    finishSetup: "Finalizar Configuración",
+
+    // Success
+    successTitle: "¡Pago Exitoso!",
+    successSubtitle: "¡Bienvenido a FEEDER! Tu cuenta ha sido creada y está lista para usar.",
+    nextSteps: "Próximos Pasos",
+    accessAccount: "Accede a tu cuenta",
+    configureOperation: "Configura tu operación",
+    exploreFeatures: "Explora las características",
+    needHelp: "¿Necesitas Ayuda?",
+    contactSupport: "Contactar Soporte",
+    helpCenter: "Centro de Ayuda",
+    accessFeeder: "Acceder a FEEDER",
+    downloadReceipt: "Descargar Recibo",
+
+    // Countries
+    "countries.US": "Estados Unidos",
+    "countries.CA": "Canadá",
+    "countries.AR": "Argentina",
+    "countries.PY": "Paraguay",
+    "countries.UY": "Uruguay",
+    "countries.BO": "Bolivia",
+    "countries.BR": "Brasil",
+    "countries.MX": "México",
+    "countries.CH": "Chile",
+    "countries.OT": "Otro",
+
+    // Software options
+    "software.none": "Sin Software de Alimentación",
+    "software.performanceBeef": "Performance Beef",
+    "software.nutron": "Nutron",
+    "software.other": "Otro",
+
+    // How did you hear options
+    "hear.google": "Búsqueda en Google",
+    "hear.social": "Redes Sociales",
+    "hear.conference": "Conferencia de la Industria",
+    "hear.referral": "Referencia de Colega",
+    "hear.publication": "Publicación Comercial",
+    "hear.sales": "Representante de Ventas",
+    "hear.customer": "Cliente Existente",
+    "hear.other": "Otro",
+  },
 }
 
 export function usePricingTranslation() {
@@ -1360,7 +1508,14 @@ export function usePricingTranslation() {
   const currency = useMemo(() => countryCurrencyMap[selectedCountry], [selectedCountry])
 
   // Memoize current translations object - use country directly
-  const currentTranslations = useMemo(() => pricingTranslations[selectedCountry], [selectedCountry])
+  const currentTranslations = useMemo(() => {
+    const translations = pricingTranslations[selectedCountry as keyof typeof pricingTranslations]
+    if (!translations) {
+      console.warn(`No translations found for country: ${selectedCountry}, falling back to US`)
+      return pricingTranslations.US
+    }
+    return translations
+  }, [selectedCountry])
 
   // Translation function that updates immediately when country changes
   const t = useCallback(
