@@ -45,12 +45,22 @@ export function useWixIframe() {
   // Function to scroll to specific position when modal opens (for Wix iframe)
   const scrollToTopForModal = () => {
     if (isWixIframe) {
-      // Scroll to pixel 1100 for desktop, or to top for mobile
-      const targetPosition = window.innerWidth >= 768 ? 1100 : 0;
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-      });
+      // For desktop, scroll to pixel 1100
+      if (window.innerWidth >= 768) {
+        // Use multiple methods to ensure it works
+        document.documentElement.scrollTop = 1100;
+        document.body.scrollTop = 1100;
+        
+        // Also try window.scrollTo
+        setTimeout(() => {
+          window.scrollTo(0, 1100);
+        }, 10);
+      } else {
+        // For mobile, scroll to top
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        window.scrollTo(0, 0);
+      }
     }
   };
 

@@ -12,7 +12,10 @@ export default function VideoCtaSection() {
   return (
     <>
       {/* Video CTA Section */}
-      <div className="text-center mt-12 md:mt-16">
+      <div
+        className="text-center mt-12 md:mt-16"
+        id="video-presentation-section"
+      >
         <div className="bg-white p-4 md:p-8 rounded-2xl shadow-lg max-w-2xl mx-auto">
           <h3 className="text-xl md:text-2xl font-bold text-[#121334] mb-3 md:mb-4">
             {t("videoCtaTitle")}
@@ -22,6 +25,7 @@ export default function VideoCtaSection() {
           </p>
 
           <button
+            id="video-presentation-button"
             onClick={() => setIsVideoPopupOpen(true)}
             className="group bg-gradient-to-r from-[#f25f24] to-[#d14d1a] hover:from-[#d14d1a] hover:to-[#b8421a] text-white font-semibold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center mx-auto text-sm md:text-base"
           >
