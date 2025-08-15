@@ -42,11 +42,13 @@ export function useWixIframe() {
     };
   };
 
-  // Function to scroll to top when modal opens (for Wix iframe)
+  // Function to scroll to specific position when modal opens (for Wix iframe)
   const scrollToTopForModal = () => {
-    if (isWixIframe && scrollPosition > 100) {
+    if (isWixIframe) {
+      // Scroll to pixel 1100 for desktop, or to top for mobile
+      const targetPosition = window.innerWidth >= 768 ? 1100 : 0;
       window.scrollTo({
-        top: 0,
+        top: targetPosition,
         behavior: 'smooth'
       });
     }
