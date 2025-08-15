@@ -34,11 +34,11 @@ export default function VideoPopup({ isOpen, onClose }: VideoPopupProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-80 flex items-start justify-center z-50 p-2 md:p-4 pt-12 md:pt-0"
+      className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-2 md:p-4"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl max-h-[90vh] md:max-h-[80vh]"
+        className="relative w-full max-w-4xl max-h-[85vh] md:max-h-[75vh]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="bg-white rounded-lg overflow-hidden shadow-2xl flex flex-col max-h-full">
@@ -64,7 +64,7 @@ export default function VideoPopup({ isOpen, onClose }: VideoPopupProps) {
               className="relative bg-gray-200 w-full h-full"
               style={{
                 paddingBottom: "56.25%",
-                maxHeight: "calc(90vh - 120px)",
+                maxHeight: "calc(85vh - 140px)",
                 minHeight: "200px",
               }}
             >
