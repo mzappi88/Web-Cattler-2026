@@ -1,22 +1,9 @@
 import { useState, useEffect } from 'react';
 
 export function useWixIframe() {
-  const [isWixIframe, setIsWixIframe] = useState(false);
-  const [iframeHeight, setIframeHeight] = useState<number | null>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
-    // Detect if we're in a Wix iframe
-    const isInIframe = window !== window.top;
-    setIsWixIframe(isInIframe);
-
-    // If in iframe, try to get the height
-    if (isInIframe) {
-      // Try to get height from parent window or document
-      const height = window.innerHeight || document.documentElement.clientHeight;
-      setIframeHeight(height);
-    }
-
     // Track scroll position
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
@@ -28,45 +15,47 @@ export function useWixIframe() {
 
   // Utility function to get modal positioning classes
   const getModalClasses = () => {
-    if (isWixIframe) {
-      return {
-        container: "items-start pt-4 md:pt-8",
-        modal: "max-h-[85vh] md:max-h-[90vh]",
-        videoContainer: "calc(85vh - 160px)"
-      };
-    }
     return {
-      container: "items-start md:items-center pt-16 md:pt-4",
-      modal: "max-h-[70vh] md:max-h-[80vh]",
-      videoContainer: "calc(70vh - 160px)"
+      container: "items-start pt-4 md:pt-8",
+      modal: "max-h-[85vh] md:max-h-[90vh]",
+      videoContainer: "calc(85vh - 160px)"
     };
   };
 
-  // Function to scroll to specific position when modal opens (for Wix iframe)
+  // Function to scroll to specific position when modal opens
   const scrollToTopForModal = () => {
-    if (isWixIframe) {
-      // For desktop, scroll to pixel 1100
-      if (window.innerWidth >= 768) {
-        // Use multiple methods to ensure it works
-        document.documentElement.scrollTop = 1100;
-        document.body.scrollTop = 1100;
-        
-        // Also try window.scrollTo
-        setTimeout(() => {
-          window.scrollTo(0, 1100);
-        }, 10);
-      } else {
-        // For mobile, scroll to top
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        window.scrollTo(0, 0);
-      }
-    }
+    const targetPosition = window.innerWidth >= 768 ? 1100 : 0;
+    
+    // Method 1: Direct scroll assignment
+    document.documentElement.scrollTop = targetPosition;
+    document.body.scrollTop = targetPosition;
+    
+    // Method 2: Window scrollTo
+    window.scrollTo(0, targetPosition);
+    
+    // Method 3: Force scroll after a delay
+    setTimeout(() => {
+      document.documentElement.scrollTop = targetPosition;
+      document.body.scrollTop = targetPosition;
+      window.scrollTo(0, targetPosition);
+    }, 50);
+    
+    // Method 4: Try smooth scroll
+    setTimeout(() => {
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+    }, 100);
+    
+    // Method 5: Final attempt
+    setTimeout(() => {
+      document.documentElement.scrollTop = targetPosition;
+      document.body.scrollTop = targetPosition;
+    }, 200);
   };
 
   return {
-    isWixIframe,
-    iframeHeight,
     scrollPosition,
     getModalClasses,
     scrollToTopForModal
