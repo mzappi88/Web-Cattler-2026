@@ -13,7 +13,7 @@ export function useWixIframe() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Utility function to get modal positioning classes
+  // Utility function to get modal positioning classes and styles
   const getModalClasses = () => {
     return {
       container: "items-start pt-4 md:pt-8",
@@ -22,42 +22,37 @@ export function useWixIframe() {
     };
   };
 
-  // Function to scroll to specific position when modal opens
-  const scrollToTopForModal = () => {
-    const targetPosition = window.innerWidth >= 768 ? 1100 : 0;
-    
-    // Method 1: Direct scroll assignment
-    document.documentElement.scrollTop = targetPosition;
-    document.body.scrollTop = targetPosition;
-    
-    // Method 2: Window scrollTo
-    window.scrollTo(0, targetPosition);
-    
-    // Method 3: Force scroll after a delay
-    setTimeout(() => {
-      document.documentElement.scrollTop = targetPosition;
-      document.body.scrollTop = targetPosition;
-      window.scrollTo(0, targetPosition);
-    }, 50);
-    
-    // Method 4: Try smooth scroll
-    setTimeout(() => {
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-      });
-    }, 100);
-    
-    // Method 5: Final attempt
-    setTimeout(() => {
-      document.documentElement.scrollTop = targetPosition;
-      document.body.scrollTop = targetPosition;
-    }, 200);
+  // Function to get modal positioning styles for specific position
+  const getModalStyles = () => {
+    if (window.innerWidth >= 768) {
+      // For desktop: position at pixel 1100
+      return {
+        container: {
+          alignItems: 'flex-start',
+          paddingTop: '1100px',
+          transform: 'translateY(-1100px)'
+        },
+        modal: {
+          maxHeight: '85vh'
+        }
+      };
+    } else {
+      // For mobile: position at top
+      return {
+        container: {
+          alignItems: 'flex-start',
+          paddingTop: '4px'
+        },
+        modal: {
+          maxHeight: '90vh'
+        }
+      };
+    }
   };
 
   return {
     scrollPosition,
     getModalClasses,
-    scrollToTopForModal
+    getModalStyles
   };
 }
