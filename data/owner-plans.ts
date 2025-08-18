@@ -189,7 +189,7 @@ export const PRICES_BY_COUNTRY: Record<
     plan2pens: 25,
     plan3pens: 40,
     plan4pens: 60,
-    plan1users: 1,
+    plan1users: 2,
     plan2users: 2,
     plan3users: 3,
     plan4usesr: 5,
