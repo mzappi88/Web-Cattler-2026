@@ -9,7 +9,6 @@ import { useTranslation, getDemoUrl } from "@/hooks/use-translation";
 import { CountrySelector } from "./country-selector";
 import { useRouter } from "next/navigation";
 import VideoCtaSection from "@/components/video-cta-section";
-import VideoPopup from "@/components/video-popup";
 import EnhancedCtaSection from "./enhanced-cta-section";
 
 export default function CattlerLanding() {
@@ -17,7 +16,6 @@ export default function CattlerLanding() {
   const [isWixIframe, setIsWixIframe] = useState(false);
   const [isWixMobile, setIsWixMobile] = useState(false);
   const router = useRouter();
-  const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
 
   useEffect(() => {
     // Detect if we're in a Wix iframe

@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import { Play } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
-import VideoPopup from "@/components/video-popup";
+import FullscreenVideo from "@/components/fullscreen-video";
 
 export default function VideoCtaSection() {
   const { t } = useTranslation();
-  const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   return (
     <>
@@ -26,7 +26,7 @@ export default function VideoCtaSection() {
 
           <button
             id="video-presentation-button"
-            onClick={() => setIsVideoPopupOpen(true)}
+            onClick={() => setIsVideoOpen(true)}
             className="group bg-gradient-to-r from-[#f25f24] to-[#d14d1a] hover:from-[#d14d1a] hover:to-[#b8421a] text-white font-semibold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center mx-auto text-sm md:text-base"
           >
             <div className="bg-white/20 rounded-full p-1.5 md:p-2 mr-2 md:mr-3 group-hover:bg-white/30 transition-colors">
@@ -37,10 +37,13 @@ export default function VideoCtaSection() {
         </div>
       </div>
 
-      {/* Video Popup */}
-      <VideoPopup
-        isOpen={isVideoPopupOpen}
-        onClose={() => setIsVideoPopupOpen(false)}
+      {/* Fullscreen Video */}
+      <FullscreenVideo
+        videoUrl={t("presentationVideoUrl")}
+        title={t("videoCtaTitle")}
+        subtitle={t("videoCtaSubtitle")}
+        isOpen={isVideoOpen}
+        onClose={() => setIsVideoOpen(false)}
       />
     </>
   );

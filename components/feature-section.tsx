@@ -4,6 +4,7 @@ import type React from "react";
 import { useLearnMoreClick } from "@/hooks/use-learn-more-click";
 import { useTranslation, getDemoUrl } from "@/hooks/use-translation";
 import { ArrowRight } from "lucide-react";
+import FeatureVideoExpander from "@/components/feature-video-expander";
 
 interface FeatureSectionProps {
   title: string;
@@ -38,49 +39,16 @@ export function FeatureSection({
   console.log(`Rendering ${title} section with video source:`, videoSrc);
 
   const VideoComponent = () => (
-    <div className="flex-1 max-w-full md:max-w-[50%] flex justify-center items-center mb-6 md:mb-0">
-      <div
-        className={
-          isPhone
-            ? "w-[200px] h-[400px] md:w-[280px] md:h-[560px] bg-[#1a1a1a] rounded-[30px] md:rounded-[40px] overflow-hidden relative shadow-[0_10px_30px_rgba(0,0,0,0.2)] p-2 md:p-2.5"
-            : "w-[300px] h-[200px] md:w-[500px] md:h-[350px] bg-[#1a1a1a] rounded-[15px] md:rounded-[20px] overflow-hidden relative shadow-[0_10px_30px_rgba(0,0,0,0.2)] p-1.5 md:p-2.5"
-        }
-        style={isPhone ? phoneStyle : tabletStyle}
-      >
-        <div
-          className={
-            isPhone
-              ? "w-full h-full bg-black rounded-[24px] md:rounded-[32px] overflow-hidden relative"
-              : "w-full h-full bg-black rounded-[10px] md:rounded-[12px] overflow-hidden relative"
-          }
-        >
-          <video
-            src={videoSrc}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-            style={{
-              objectFit: "cover",
-              width: "100%",
-              height: "100%",
-              transform: `scale(${videoScale})`,
-              objectPosition: "center",
-              ...videoStyle,
-            }}
-          >
-            <source src={videoSrc} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        {!isPhone && (
-          <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none">
-            <div className="absolute top-0 left-0 right-0 bottom-0 border-[8px] md:border-[10px] border-black rounded-[15px] md:rounded-[20px] shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]"></div>
-          </div>
-        )}
-      </div>
-    </div>
+    <FeatureVideoExpander
+      videoSrc={videoSrc}
+      title={title}
+      description={typeof description === "string" ? description : ""}
+      isPhone={isPhone}
+      videoStyle={videoStyle}
+      phoneStyle={phoneStyle}
+      tabletStyle={tabletStyle}
+      videoScale={videoScale}
+    />
   );
 
   const ContentComponent = () => (

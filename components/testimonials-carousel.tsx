@@ -2,7 +2,6 @@
 
 import { useTranslation } from "@/hooks/use-translation";
 import { useTestimonials } from "@/hooks/use-testimonials";
-import { useWixIframe } from "@/hooks/use-wix-iframe";
 import {
   Carousel,
   CarouselContent,
@@ -12,16 +11,15 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Play, Quote, X } from "lucide-react";
+import { Play, Quote } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import FullscreenVideo from "@/components/fullscreen-video";
 
 export default function TestimonialsCarousel() {
   const { t } = useTranslation();
   const testimonials = useTestimonials();
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
-  const { getModalStyles } = useWixIframe();
-  const modalStyles = getModalStyles();
 
   const handleVideoClick = (videoUrl: string | undefined) => {
     if (videoUrl) {
@@ -31,25 +29,6 @@ export default function TestimonialsCarousel() {
 
   const closeVideoModal = () => {
     setSelectedVideo(null);
-  };
-
-  const getEmbedUrl = (url: string) => {
-    // Handle youtu.be format
-    if (url.includes("youtu.be/")) {
-      const videoId = url.split("youtu.be/")[1]?.split("?")[0];
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-    }
-    // Handle youtube.com/watch?v= format
-    if (url.includes("youtube.com/watch?v=")) {
-      const videoId = url.split("v=")[1]?.split("&")[0];
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-    }
-    // Handle youtube.com/embed/ format
-    if (url.includes("youtube.com/embed/")) {
-      const videoId = url.split("embed/")[1]?.split("?")[0];
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-    }
-    return url; // fallback
   };
 
   return (
@@ -155,68 +134,14 @@ export default function TestimonialsCarousel() {
         </div>
       </section>
 
-      {/* Video Modal */}
-      {selectedVideo && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex justify-center z-50 p-2 md:p-4"
-          style={modalStyles.container}
-          onClick={closeVideoModal}
-        >
-          <div
-            className="relative w-full max-w-4xl"
-            style={modalStyles.modal}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="bg-white rounded-lg overflow-hidden shadow-2xl flex flex-col max-h-full">
-              {/* Header */}
-              <div className="p-3 md:p-6 text-center relative flex-shrink-0">
-                <button
-                  onClick={closeVideoModal}
-                  className="absolute top-2 right-2 md:top-4 md:right-4 text-gray-500 hover:text-gray-700 transition-colors z-10 bg-white/80 hover:bg-white rounded-full p-1 md:p-2"
-                >
-                  <X className="w-4 h-4 md:w-6 md:h-6" />
-                </button>
-                <h3 className="text-lg md:text-2xl font-bold text-[#121334] mb-1 md:mb-2 pr-8">
-                  {t("testimonialsTitle")}
-                </h3>
-                <p className="text-xs md:text-base text-gray-600">
-                  {t("watchVideo")}
-                </p>
-              </div>
-
-              {/* Video Container */}
-              <div className="flex-1 min-h-0">
-                <div
-                  className="relative bg-gray-200 w-full h-full"
-                  style={{
-                    paddingBottom: "56.25%",
-                    maxHeight: "calc(85vh - 120px)",
-                    minHeight: "200px",
-                  }}
-                >
-                  <iframe
-                    src={getEmbedUrl(selectedVideo)}
-                    className="absolute inset-0 w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="p-3 md:p-6 text-center flex-shrink-0">
-                <Button
-                  onClick={closeVideoModal}
-                  variant="outline"
-                  className="border-[#121334] text-[#121334] hover:bg-[#121334] hover:text-white text-sm md:text-base"
-                >
-                  {t("close")}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Fullscreen Video */}
+      <FullscreenVideo
+        videoUrl={selectedVideo || ""}
+        title={t("testimonialsTitle")}
+        subtitle={t("watchVideo")}
+        isOpen={!!selectedVideo}
+        onClose={closeVideoModal}
+      />
     </>
   );
 }
