@@ -89,7 +89,17 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-transparent text-foreground;
+  }
+  
+  /* Ensure everything below footer is transparent */
+  html, body {
+    background: transparent !important;
+  }
+  
+  /* Make sure main content doesn't add background */
+  main {
+    background: transparent !important;
   }
 }
 
