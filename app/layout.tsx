@@ -84,7 +84,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-transparent">
+      <body>
         <TranslationProvider>
           <IframeResizer />
           {children}

@@ -97,10 +97,7 @@ export default function Footer() {
   const linkUrls = getLinkUrls();
 
   return (
-    <footer
-      className="bg-transparent text-white pt-12 pb-6"
-      style={{ backgroundColor: "transparent" }}
-    >
+    <footer className="bg-gray-900 text-white pt-12 pb-6">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Company Info */}
