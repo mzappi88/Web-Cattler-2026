@@ -219,10 +219,10 @@ const FEATURE_CONFIG: FeatureConfig = {
     },
     advancedFeeding: { plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
       subFeatures: [
-        { name: "feedingProtocols", plan1: "addon", plan2: "addon", plan3: "addon", plan4: true },
-        { name: "FeedingAutomation", plan1: "addon", plan2: "addon", plan3: "addon", plan4: true },
+        { name: "BunkScoreCustomization", plan1: "addon", plan2: true, plan3: true, plan4: true },
         { name: "AutoAdjust", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
-        { name: "BunkScoreCustomization", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
+        { name: "feedingProtocols", plan1: "addon", plan2: "addon", plan3: "addon", plan4: true },
+        { name: "FeedingAutomation", plan1: "addon", plan2: "addon", plan3: "addon", plan4: true },               
       ]
     },
     AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4:"",isExpandable: true, expandedByDefault: true,
