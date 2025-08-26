@@ -895,8 +895,8 @@ export function getPlanFeatures(
     },
     AR: {
       1: [
-        "Gestión comleta de Alimentación",
-        "Manejo de Haciendad y Mapa de Corrales",
+        "Gestión completa de Alimentación",
+        "Manejo de Hacienda y Mapa de Corrales",
         "Manejo de Inventarios",
       ],
       2: [
@@ -977,7 +977,7 @@ export function getPlanFeatures(
     PY: {
       1: [
         "Gestión completa de Alimentación",
-        "Manejo de Haciendad y Mapa de Corrales",
+        "Manejo de Hacienda y Mapa de Corrales",
         "Manejo de Inventarios",
       ],
       2: [
@@ -1001,7 +1001,7 @@ export function getPlanFeatures(
     CH: {
       1: [
         "Gestión completa de Alimentación",
-        "Manejo de Haciendad y Mapa de Corrales",
+        "Manejo de Hacienda y Mapa de Corrales",
         "Manejo de Inventarios",
       ],
       2: [
@@ -1026,7 +1026,7 @@ export function getPlanFeatures(
     UY: {
       1: [
         "Gestión completa de Alimentación",
-        "Manejo de Haciendad y Mapa de Corrales",
+        "Manejo de Hacienda y Mapa de Corrales",
         "Manejo de Inventarios",
       ],
       2: [
@@ -1045,7 +1045,7 @@ export function getPlanFeatures(
     BO: {
       1: [
         "Gestión completa de Alimentación",
-        "Manejo de Haciendad y Mapa de Corrales",
+        "Manejo de Hacienda y Mapa de Corrales",
         "Manejo de Inventarios",
       ],
       2: [
@@ -1064,7 +1064,7 @@ export function getPlanFeatures(
     MX: {
       1: [
         "Gestión completa de Alimentación",
-        "Manejo de Haciendad y Mapa de Corrales",
+        "Manejo de Hacienda y Mapa de Corrales",
         "Manejo de Inventarios",
       ],
       2: [
@@ -1118,7 +1118,7 @@ export function getPlanFeatures(
     OT$ES:{
       1: [
         "Gestión completa de Alimentación",
-        "Manejo de Haciendad y Mapa de Corrales",
+        "Manejo de Hacienda y Mapa de Corrales",
         "Manejo de Inventarios",
       ],
       2: [
