@@ -7,16 +7,64 @@ import { getOwnerPlans, findPlanById } from "@/data/owner-plans";
 import { usePricingTranslation } from "@/hooks/use-pricing-translation";
 import { getPricingUrl } from "@/hooks/use-translation";
 
-// Simplified promotional state
-const PROMOTIONAL_STATE = {
-  saleActive: false,
-  saleName: "",
-  discounts: {
-    annual: {},
-    monthly: {},
-    xMonthly: {},
-    freeMonths: {},
+// Regional promotional configurations for checkout
+const regionalPromotions = {
+  // North America: US, CA, OT$EN
+  northAmerica: {
+    saleActive: true,
+    saleName: "promotion.northAmerica", // Will be translated
+    discounts: {
+      annual: {},
+      monthly: {},
+      xMonthly: {},
+      freeMonths: {},
+    },
   },
+
+  // LATAM: AR, UY, PY, BO, CH, MX
+  latam: {
+    saleActive: false,
+    saleName: "promotion.latam", // Will be translated
+    discounts: {
+      annual: {},
+      monthly: {},
+      xMonthly: {},
+      freeMonths: {},
+    },
+  },
+
+  // Brazil: BR
+  brazil: {
+    saleActive: false,
+    saleName: "promotion.brazil", // Will be translated
+    discounts: {
+      annual: {},
+      monthly: {},
+      xMonthly: {},
+      freeMonths: {},
+    },
+  },
+};
+
+// Function to get regional promotion based on country
+const getRegionalPromotion = (country: string) => {
+  // North America: US, CA, OT$EN
+  if (["US", "CA", "OT$EN"].includes(country)) {
+    return regionalPromotions.northAmerica;
+  }
+
+  // LATAM: AR, UY, PY, BO, CH, MX
+  if (["AR", "UY", "PY", "BO", "CH", "MX"].includes(country)) {
+    return regionalPromotions.latam;
+  }
+
+  // Brazil: BR
+  if (["BR"].includes(country)) {
+    return regionalPromotions.brazil;
+  }
+
+  // Default to North America if country not found
+  return regionalPromotions.northAmerica;
 };
 
 export default function CheckoutPage() {
@@ -50,11 +98,12 @@ export default function CheckoutPage() {
     const plan = findPlanById(ownerPlans, planId);
 
     if (plan) {
+      const regionalPromotion = getRegionalPromotion(selectedCountry);
       setSelectedPlan({
         ...plan,
         billingCycle,
         planType: "owner",
-        promotionalState: PROMOTIONAL_STATE,
+        promotionalState: regionalPromotion,
       });
       setError(null);
     } else {

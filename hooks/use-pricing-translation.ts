@@ -164,6 +164,17 @@ const pricingTranslations = {
     "hear.sales": "Sales Representative",
     "hear.customer": "Existing Customer",
     "hear.other": "Other",
+
+    // Promotional messages
+    "promotion.northAmerica": "Labor Day Sale",
+    "promotion.latam": "LATAM Holiday Offers",
+    "promotion.brazil": "Brazil Holiday Offers",
+    "promotion.discount": "Save",
+    "promotion.percentOff": "% off",
+    "promotion.freeMonths": "months free",
+    "promotion.xMonths": "months for",
+    "promotion.months": "months",
+    "promotion.limitedTime": "Limited time offer - Save up to 20% on selected plans and add-ons!",
   },
   CA: {
     // Same as US for now - copy all US translations
@@ -282,6 +293,16 @@ const pricingTranslations = {
     "hear.sales": "Sales Representative",
     "hear.customer": "Existing Customer",
     "hear.other": "Other",
+
+    // Promotional messages
+    "promotion.northAmerica": "Labor Day Sale",
+    "promotion.latam": "LATAM Holiday Offers",
+    "promotion.brazil": "Brazil Holiday Offers",
+    "promotion.discount": "Save",
+    "promotion.percentOff": "% off",
+    "promotion.freeMonths": "months free",
+    "promotion.xMonths": "months for",
+    "promotion.limitedTime": "Limited time offer - Save up to 50% on selected plans and add-ons!",
   },
   "OT$EN": {
     // Same as US for now - copy all US translations
@@ -400,6 +421,16 @@ const pricingTranslations = {
     "hear.sales": "Sales Representative",
     "hear.customer": "Existing Customer",
     "hear.other": "Other",
+
+    // Promotional messages
+    "promotion.northAmerica": "North America Holiday Offers",
+    "promotion.latam": "LATAM Holiday Offers",
+    "promotion.brazil": "Brazil Holiday Offers",
+    "promotion.discount": "Save",
+    "promotion.percentOff": "% off",
+    "promotion.freeMonths": "months free",
+    "promotion.xMonths": "months for",
+    "promotion.limitedTime": "Limited time offer - Save up to 50% on selected plans and add-ons!",
   },
 
   // Spanish speaking countries (UY, PY, BO, MX, OT-ES)
@@ -546,6 +577,17 @@ const pricingTranslations = {
     "hear.sales": "Representante de Ventas",
     "hear.customer": "Cliente Existente",
     "hear.other": "Otro",
+
+    // Promotional messages
+    "promotion.northAmerica": "Ofertas de Feriado Norte América",
+    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.brazil": "Ofertas de Feriado Brasil",
+    "promotion.discount": "Ahorra",
+    "promotion.percentOff": "% de descuento",
+    "promotion.freeMonths": "meses gratis",
+    "promotion.xMonths": "meses por",
+    "promotion.months": "meses",
+    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta 50% en planes y complementos seleccionados!",
   },
   PY: {
     // Same as UY for now - copy all UY translations
@@ -664,6 +706,17 @@ const pricingTranslations = {
     "hear.sales": "Representante de Ventas",
     "hear.customer": "Cliente Existente",
     "hear.other": "Otro",
+
+    // Promotional messages
+    "promotion.northAmerica": "Ofertas de Feriado Norte América",
+    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.brazil": "Ofertas de Feriado Brasil",
+    "promotion.discount": "Ahorra",
+    "promotion.percentOff": "% de descuento",
+    "promotion.freeMonths": "meses gratis",
+    "promotion.xMonths": "meses por",
+    "promotion.months": "meses",
+    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta 50% en planes y complementos seleccionados!",
   },
   BO: {
     // Same as UY for now - copy all UY translations
@@ -782,6 +835,17 @@ const pricingTranslations = {
     "hear.sales": "Representante de Ventas",
     "hear.customer": "Cliente Existente",
     "hear.other": "Otro",
+
+    // Promotional messages
+    "promotion.northAmerica": "Ofertas de Feriado Norte América",
+    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.brazil": "Ofertas de Feriado Brasil",
+    "promotion.discount": "Ahorra",
+    "promotion.percentOff": "% de descuento",
+    "promotion.freeMonths": "meses gratis",
+    "promotion.xMonths": "meses por",
+    "promotion.months": "meses",
+    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta 50% en planes y complementos seleccionados!",
   },
   MX: {
     // Same as UY for now - copy all UY translations
@@ -1018,6 +1082,17 @@ const pricingTranslations = {
     "hear.sales": "Representante de Ventas",
     "hear.customer": "Cliente Existente",
     "hear.other": "Otro",
+
+    // Promotional messages
+    "promotion.northAmerica": "Ofertas de Feriado Norte América",
+    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.brazil": "Ofertas de Feriado Brasil",
+    "promotion.discount": "Ahorra",
+    "promotion.percentOff": "% de descuento",
+    "promotion.freeMonths": "meses gratis",
+    "promotion.xMonths": "meses por",
+    "promotion.months": "meses",
+    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta 50% en planes y complementos seleccionados!",
   },
 
   // Argentina (AR) - specific translations
@@ -1164,6 +1239,17 @@ const pricingTranslations = {
     "hear.sales": "Representante de Ventas",
     "hear.customer": "Cliente Existente",
     "hear.other": "Otro",
+
+    // Promotional messages
+    "promotion.northAmerica": "Ofertas de Feriado Norte América",
+    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.brazil": "Ofertas de Feriado Brasil",
+    "promotion.discount": "Ahorra",
+    "promotion.percentOff": "% de descuento",
+    "promotion.freeMonths": "meses gratis",
+    "promotion.xMonths": "meses por",
+    "promotion.months": "meses",
+    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta 50% en planes y complementos seleccionados!",
   },
 
   // Brazil (BR) - Portuguese
@@ -1457,6 +1543,17 @@ const pricingTranslations = {
     "hear.sales": "Representante de Ventas",
     "hear.customer": "Cliente Existente",
     "hear.other": "Otro",
+
+    // Promotional messages
+    "promotion.northAmerica": "Ofertas de Feriado América do Norte",
+    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.brazil": "Ofertas de Feriado Brasil",
+    "promotion.discount": "Economize",
+    "promotion.percentOff": "% de desconto",
+    "promotion.freeMonths": "meses grátis",
+    "promotion.xMonths": "meses por",
+    "promotion.months": "meses",
+    "promotion.limitedTime": "Oferta por tempo limitado - Economize até 50% em planos e complementos selecionados!",
   },
 }
 

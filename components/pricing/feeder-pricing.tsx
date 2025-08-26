@@ -55,7 +55,6 @@ interface Plan {
 import type { AddOn, PricingState } from "@/types/pricing";
 import {
   PLAN_NAME_BY_COUNTRY,
-  PRICES_BY_COUNTRY,
   getComingSoonText,
   getExtraPenPrice,
   getExtraUserPrice,
@@ -68,6 +67,264 @@ import {
   getClientUsersPrice,
   calculateAnnualPrice,
 } from "@/data/owner-plans";
+
+// Regional promotional configurations
+const regionalPromotions = {
+  // North America: US, CA, OT$EN
+  northAmerica: {
+    saleActive: true,
+    saleName: "promotion.northAmerica", // Will be translated
+    defaultIsAnnual: true,
+    discounts: {
+      annual: {
+        plan1: { isActive: true, discountFactor: 0.2 },
+        plan2: { isActive: true, discountFactor: 0.2 },
+        plan3: { isActive: true, discountFactor: 0.2 },
+        plan4: { isActive: true, discountFactor: 0.2 },
+        customFeeder: { isActive: true, discountFactor: 0.2 }, // Mayor descuento para Custom Feeder
+        AnimalHealth: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Animal Health
+        Chute: { isActive: true, discountFactor: 0.2 },
+        EIDIntegration: { isActive: true, discountFactor: 0.2 },
+        advancedFeeding: { isActive: true, discountFactor: 0.2 },
+        inputTransformation: { isActive: true, discountFactor: 0.2 },
+        userClients: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Client Users
+        AdvancedInventory: { isActive: true, discountFactor: 0.2 },
+        marketValueReport: { isActive: true, discountFactor: 0.2 },
+        Purchases: { isActive: true, discountFactor: 0.2 },
+        FeedingProtocols: { isActive: true, discountFactor: 0.2 },
+        AutoAdjust: { isActive: true, discountFactor: 0.2 },
+        BunkScoreCustomization: { isActive: true, discountFactor: 0.2 },
+        FeedingAutomation: { isActive: true, discountFactor: 0.2 },
+        Analytics: { isActive: true, discountFactor: 0.2 },
+        TruckScaleIntegration: { isActive: true, discountFactor: 0.2 },
+        DumpBoxIntegration: { isActive: true, discountFactor: 0.2 },
+        MicroMachineIntegration: { isActive: true, discountFactor: 0.2 },
+        informeCuota481: { isActive: true, discountFactor: 0.2 },
+        cowCalfBasic: { isActive: true, discountFactor: 0.2 },
+        cowCalfAdvanced: { isActive: true, discountFactor: 0.2 },
+        pastureBasic: { isActive: true, discountFactor: 0.2 },
+        pastureAdvanced: { isActive: true, discountFactor: 0.2 },
+        AnimalHealthbasic: { isActive: true, discountFactor: 0.2 },
+        AnimalHealthadvanced: { isActive: true, discountFactor: 0.2 },
+        animalHealthChute: { isActive: true, discountFactor: 0.2 },
+        ChuteQuickStart: { isActive: true, discountFactor: 0.2 },
+        ChuteCattleIN: { isActive: true, discountFactor: 0.2 },
+        ChuteNewOrder: { isActive: true, discountFactor: 0.2 },
+        microingridientManagement: { isActive: true, discountFactor: 0.2 },
+        billing: { isActive: true, discountFactor: 0.2 },
+        grainBank: { isActive: true, discountFactor: 0.2 },
+      },
+      monthly: {
+        plan1: { isActive: false, discountFactor: 0.2 },
+        plan2: { isActive: false, discountFactor: 0.2 },
+        plan3: { isActive: false, discountFactor: 0.3 },
+        plan4: { isActive: false, discountFactor: 0.25 },
+        "customFeeder-addon": { isActive: false, discountFactor: 0.2 },
+      },
+      xMonthly: {
+        plan1: { isActive: false, discountFactor: 0.5, xMonths: 6 },
+        plan2: { isActive: false, discountFactor: 0.5, xMonths: 6 },
+        plan3: { isActive: false, discountFactor: 0.5, xMonths: 6 },
+        plan4: { isActive: false, discountFactor: 0.4, xMonths: 3 },
+        "customFeeder-addon": {
+          isActive: false,
+          discountFactor: 0.5,
+          xMonths: 12,
+        },
+      },
+      freeMonths: {
+        plan1: { isActive: false, discountFactor: 0, freeMonths: 2 },
+        plan2: { isActive: false, discountFactor: 0, freeMonths: 2 },
+        plan3: { isActive: false, discountFactor: 0, freeMonths: 2 },
+        plan4: { isActive: false, discountFactor: 0, freeMonths: 1 },
+        "customFeeder-addon": {
+          isActive: false,
+          discountFactor: 0,
+          freeMonths: 3,
+        },
+      },
+    },
+  },
+
+  // LATAM: AR, UY, PY, BO, CH, MX
+  latam: {
+    saleActive: false,
+    saleName: "promotion.latam", // Will be translated
+    defaultIsAnnual: true,
+    discounts: {
+      annual: {
+        plan1: { isActive: false, discountFactor: 0.15 },
+        plan2: { isActive: false, discountFactor: 0.15 },
+        plan3: { isActive: false, discountFactor: 0.15 },
+        plan4: { isActive: false, discountFactor: 0.15 },
+        customFeeder: { isActive: true, discountFactor: 0.2 }, // Mayor descuento para Custom Feeder
+        AnimalHealth: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Animal Health
+        Chute: { isActive: true, discountFactor: 0.2 },
+        EIDIntegration: { isActive: true, discountFactor: 0.2 },
+        advancedFeeding: { isActive: true, discountFactor: 0.2 },
+        InputTransformation: { isActive: true, discountFactor: 0.2 },
+        userClients: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Client Users
+        AdvancedInventory: { isActive: true, discountFactor: 0.2 },
+        MarketValueReport: { isActive: true, discountFactor: 0.2 },
+        Purchases: { isActive: true, discountFactor: 0.2 },
+        FeedingProtocols: { isActive: true, discountFactor: 0.2 },
+        AutoAdjust: { isActive: true, discountFactor: 0.2 },
+        BunkScoreCustomization: { isActive: true, discountFactor: 0.2 },
+        FeedingAutomation: { isActive: true, discountFactor: 0.2 },
+        Analytics: { isActive: true, discountFactor: 0.2 },
+        TruckScaleIntegration: { isActive: true, discountFactor: 0.2 },
+        DumpBoxIntegration: { isActive: true, discountFactor: 0.2 },
+        MicroMachineIntegration: { isActive: true, discountFactor: 0.2 },
+        informeCuota481: { isActive: true, discountFactor: 0.2 },
+        cowCalfBasic: { isActive: true, discountFactor: 0.2 },
+        cowCalfAdvanced: { isActive: true, discountFactor: 0.2 },
+        pastureBasic: { isActive: true, discountFactor: 0.2 },
+        pastureAdvanced: { isActive: true, discountFactor: 0.2 },
+        AnimalHealthbasic: { isActive: true, discountFactor: 0.2 },
+        AnimalHealthadvanced: { isActive: true, discountFactor: 0.2 },
+        animalHealthChute: { isActive: true, discountFactor: 0.2 },
+        ChuteQuickStart: { isActive: true, discountFactor: 0.2 },
+        ChuteCattleIN: { isActive: true, discountFactor: 0.2 },
+        ChuteNewOrder: { isActive: true, discountFactor: 0.2 },
+        microingridientManagement: { isActive: true, discountFactor: 0.2 },
+        billing: { isActive: true, discountFactor: 0.2 },
+        grainBank: { isActive: true, discountFactor: 0.2 },
+      },
+      monthly: {
+        plan1: { isActive: false, discountFactor: 0.2 },
+        plan2: { isActive: false, discountFactor: 0.2 },
+        plan3: { isActive: false, discountFactor: 0.3 },
+        plan4: { isActive: false, discountFactor: 0.25 },
+        "customFeeder-addon": { isActive: false, discountFactor: 0.2 },
+      },
+      xMonthly: {
+        plan1: { isActive: false, discountFactor: 0.5, xMonths: 6 },
+        plan2: { isActive: false, discountFactor: 0.5, xMonths: 6 },
+        plan3: { isActive: false, discountFactor: 0.5, xMonths: 6 },
+        plan4: { isActive: false, discountFactor: 0.4, xMonths: 3 },
+        "customFeeder-addon": {
+          isActive: false,
+          discountFactor: 0.5,
+          xMonths: 12,
+        },
+      },
+      freeMonths: {
+        plan1: { isActive: false, discountFactor: 0, freeMonths: 2 },
+        plan2: { isActive: false, discountFactor: 0, freeMonths: 2 },
+        plan3: { isActive: false, discountFactor: 0, freeMonths: 2 },
+        plan4: { isActive: false, discountFactor: 0, freeMonths: 1 },
+        "customFeeder-addon": {
+          isActive: false,
+          discountFactor: 0,
+          freeMonths: 3,
+        },
+      },
+    },
+  },
+
+  // Brazil: BR
+  brazil: {
+    saleActive: false,
+    saleName: "promotion.brazil", // Will be translated
+    defaultIsAnnual: true,
+    discounts: {
+      annual: {
+        plan1: { isActive: false, discountFactor: 0.15 },
+        plan2: { isActive: false, discountFactor: 0.15 },
+        plan3: { isActive: false, discountFactor: 0.15 },
+        plan4: { isActive: false, discountFactor: 0.15 },
+        customFeeder: { isActive: true, discountFactor: 0.2 }, // Mayor descuento para Custom Feeder
+        AnimalHealth: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Animal Health
+        Chute: { isActive: true, discountFactor: 0.2 },
+        EIDIntegration: { isActive: true, discountFactor: 0.2 },
+        advancedFeeding: { isActive: true, discountFactor: 0.2 },
+        InputTransformation: { isActive: true, discountFactor: 0.2 },
+        userClients: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Client Users
+        AdvancedInventory: { isActive: true, discountFactor: 0.2 },
+        MarketValueReport: { isActive: true, discountFactor: 0.2 },
+        Purchases: { isActive: true, discountFactor: 0.2 },
+        FeedingProtocols: { isActive: true, discountFactor: 0.2 },
+        AutoAdjust: { isActive: true, discountFactor: 0.2 },
+        BunkScoreCustomization: { isActive: true, discountFactor: 0.2 },
+        FeedingAutomation: { isActive: true, discountFactor: 0.2 },
+        Analytics: { isActive: true, discountFactor: 0.2 },
+        TruckScaleIntegration: { isActive: true, discountFactor: 0.2 },
+        DumpBoxIntegration: { isActive: true, discountFactor: 0.2 },
+        MicroMachineIntegration: { isActive: true, discountFactor: 0.2 },
+        informeCuota481: { isActive: true, discountFactor: 0.2 },
+        cowCalfBasic: { isActive: true, discountFactor: 0.2 },
+        cowCalfAdvanced: { isActive: true, discountFactor: 0.2 },
+        pastureBasic: { isActive: true, discountFactor: 0.2 },
+        pastureAdvanced: { isActive: true, discountFactor: 0.2 },
+        AnimalHealthbasic: { isActive: true, discountFactor: 0.2 },
+        AnimalHealthadvanced: { isActive: true, discountFactor: 0.2 },
+        animalHealthChute: { isActive: true, discountFactor: 0.2 },
+        ChuteQuickStart: { isActive: true, discountFactor: 0.2 },
+        ChuteCattleIN: { isActive: true, discountFactor: 0.2 },
+        ChuteNewOrder: { isActive: true, discountFactor: 0.2 },
+        microingridientManagement: { isActive: true, discountFactor: 0.2 },
+        billing: { isActive: true, discountFactor: 0.2 },
+        grainBank: { isActive: true, discountFactor: 0.2 },
+      },
+      monthly: {
+        plan1: { isActive: false, discountFactor: 0.2 },
+        plan2: { isActive: false, discountFactor: 0.2 },
+        plan3: { isActive: false, discountFactor: 0.3 },
+        plan4: { isActive: false, discountFactor: 0.25 },
+        "customFeeder-addon": { isActive: false, discountFactor: 0.25 }, // Mayor descuento para Custom Feeder
+        "animal-health": { isActive: false, discountFactor: 0.15 }, // Descuento menor para Animal Health
+        chute: { isActive: false, discountFactor: 0.2 },
+        "eid-integration": { isActive: false, discountFactor: 0.2 },
+        advancedFeeding: { isActive: false, discountFactor: 0.2 },
+        "input-transformation": { isActive: false, discountFactor: 0.2 },
+        "client-users": { isActive: false, discountFactor: 0.1 }, // Descuento menor para Client Users
+      },
+      xMonthly: {
+        plan1: { isActive: false, discountFactor: 0.5, xMonths: 6 },
+        plan2: { isActive: false, discountFactor: 0.5, xMonths: 6 },
+        plan3: { isActive: false, discountFactor: 0.5, xMonths: 6 },
+        plan4: { isActive: false, discountFactor: 0.4, xMonths: 3 },
+        "customFeeder-addon": {
+          isActive: false,
+          discountFactor: 0.5,
+          xMonths: 12,
+        },
+      },
+      freeMonths: {
+        plan1: { isActive: false, discountFactor: 0, freeMonths: 2 },
+        plan2: { isActive: false, discountFactor: 0, freeMonths: 2 },
+        plan3: { isActive: false, discountFactor: 0, freeMonths: 2 },
+        plan4: { isActive: false, discountFactor: 0, freeMonths: 1 },
+        "customFeeder-addon": {
+          isActive: false,
+          discountFactor: 0,
+          freeMonths: 3,
+        },
+      },
+    },
+  },
+};
+
+// Function to get regional promotion based on country
+const getRegionalPromotion = (country: string) => {
+  // North America: US, CA, OT$EN
+  if (["US", "CA", "OT$EN"].includes(country)) {
+    return regionalPromotions.northAmerica;
+  }
+
+  // LATAM: AR, UY, PY, BO, CH, MX
+  if (["AR", "UY", "PY", "BO", "CH", "MX"].includes(country)) {
+    return regionalPromotions.latam;
+  }
+
+  // Brazil: BR
+  if (["BR"].includes(country)) {
+    return regionalPromotions.brazil;
+  }
+
+  // Default to North America if country not found
+  return regionalPromotions.northAmerica;
+};
 
 export const initialPricingState: PricingState = {
   isAnnual: false,
@@ -92,14 +349,14 @@ export const initialPricingState: PricingState = {
       plan1: { isActive: false, discountFactor: 0.2 },
       plan2: { isActive: false, discountFactor: 0.2 },
       plan3: { isActive: true, discountFactor: 0.3 },
-      plan4n4: { isActive: false, discountFactor: 0.25 },
+      plan4: { isActive: false, discountFactor: 0.25 },
       "customFeeder-addon": { isActive: false, discountFactor: 0.2 },
     },
     xMonthly: {
       plan1: { isActive: true, discountFactor: 0.5, xMonths: 6 },
       plan2: { isActive: true, discountFactor: 0.5, xMonths: 6 },
       plan3: { isActive: false, discountFactor: 0.5, xMonths: 6 },
-      plan4n4: { isActive: false, discountFactor: 0.4, xMonths: 3 },
+      plan4: { isActive: false, discountFactor: 0.4, xMonths: 3 },
       "customFeeder-addon": {
         isActive: false,
         discountFactor: 0.5,
@@ -110,7 +367,7 @@ export const initialPricingState: PricingState = {
       plan1: { isActive: false, discountFactor: 0, freeMonths: 2 },
       plan2: { isActive: false, discountFactor: 0, freeMonths: 2 },
       plan3: { isActive: false, discountFactor: 0, freeMonths: 2 },
-      plan4n4: { isActive: true, discountFactor: 0, freeMonths: 1 },
+      plan4: { isActive: true, discountFactor: 0, freeMonths: 1 },
       "customFeeder-addon": {
         isActive: false,
         discountFactor: 0,
@@ -124,11 +381,20 @@ export default function Component() {
   const router = useRouter();
   const { t, formatPrice, selectedCountry, setSelectedCountry, isHydrated } =
     usePricingTranslation();
-  const [promotionalState, setPromotionalState] =
-    useState<PricingState>(initialPricingState);
+
+  // Get regional promotion based on selected country
+  const regionalPromotion = getRegionalPromotion(selectedCountry);
+
+  const [promotionalState, setPromotionalState] = useState<PricingState>({
+    ...initialPricingState,
+    ...regionalPromotion,
+  });
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">(
-    promotionalState.defaultIsAnnual ? "annual" : "monthly"
+    regionalPromotion.defaultIsAnnual ? "annual" : "monthly"
   );
+  const [addOnBillingCycle, setAddOnBillingCycle] = useState<
+    "monthly" | "annual"
+  >(regionalPromotion.defaultIsAnnual ? "annual" : "monthly");
   const [pricingOption, setPricingOption] = useState<"standard" | "plan-50-50">(
     "standard"
   );
@@ -146,45 +412,83 @@ export default function Component() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Update promotional state when country changes
+  useEffect(() => {
+    const newRegionalPromotion = getRegionalPromotion(selectedCountry);
+    setPromotionalState({
+      ...initialPricingState,
+      ...newRegionalPromotion,
+    });
+    setBillingCycle(
+      newRegionalPromotion.defaultIsAnnual ? "annual" : "monthly"
+    );
+  }, [selectedCountry]);
+
   // Use centralized annual price calculation from owner-plans.ts
+
+  // Function to map plan ID to plan key (plan1, plan2, etc.)
+  const getPlanKey = (planId: string): string => {
+    const planName =
+      PLAN_NAME_BY_COUNTRY[selectedCountry] ?? PLAN_NAME_BY_COUNTRY["OT$EN"];
+
+    if (planId === planName.plan1) return "plan1";
+    if (planId === planName.plan2) return "plan2";
+    if (planId === planName.plan3) return "plan3";
+    if (planId === planName.plan4) return "plan4";
+
+    return planId; // Return original if not a plan
+  };
 
   const getActivePromotion = (
     productId: string,
     billingType: "monthly" | "annual"
   ) => {
-    if (!promotionalState.saleActive) return null;
+    // Map plan ID to plan key for plans, keep original for add-ons
+    const planKey = getPlanKey(productId);
 
-    if (
-      billingType === "annual" &&
-      promotionalState.discounts.annual[productId]?.isActive
-    ) {
+    // If sale is active, check for promotional discounts
+    if (promotionalState.saleActive) {
+      if (
+        billingType === "annual" &&
+        promotionalState.discounts.annual[planKey]?.isActive
+      ) {
+        return {
+          type: "annual",
+          ...promotionalState.discounts.annual[planKey],
+        };
+      }
+
+      if (
+        billingType === "monthly" &&
+        promotionalState.discounts.monthly[planKey]?.isActive
+      ) {
+        return {
+          type: "monthly",
+          ...promotionalState.discounts.monthly[planKey],
+        };
+      }
+
+      if (promotionalState.discounts.xMonthly[planKey]?.isActive) {
+        return {
+          type: "xMonthly",
+          ...promotionalState.discounts.xMonthly[planKey],
+        };
+      }
+
+      if (promotionalState.discounts.freeMonths[planKey]?.isActive) {
+        return {
+          type: "freeMonths",
+          ...promotionalState.discounts.freeMonths[planKey],
+        };
+      }
+    }
+
+    // If no promotional discount is active, apply default annual discount for add-ons
+    if (billingType === "annual" && !planKey.startsWith("plan")) {
       return {
         type: "annual",
-        ...promotionalState.discounts.annual[productId],
-      };
-    }
-
-    if (
-      billingType === "monthly" &&
-      promotionalState.discounts.monthly[productId]?.isActive
-    ) {
-      return {
-        type: "monthly",
-        ...promotionalState.discounts.monthly[productId],
-      };
-    }
-
-    if (promotionalState.discounts.xMonthly[productId]?.isActive) {
-      return {
-        type: "xMonthly",
-        ...promotionalState.discounts.xMonthly[productId],
-      };
-    }
-
-    if (promotionalState.discounts.freeMonths[productId]?.isActive) {
-      return {
-        type: "freeMonths",
-        ...promotionalState.discounts.freeMonths[productId],
+        isActive: true,
+        discountFactor: 0.1, // Default 10% annual discount for add-ons
       };
     }
 
@@ -217,18 +521,22 @@ export default function Component() {
   ) => {
     const promotion = getActivePromotion(productId, billingType);
 
-    if (!promotion) return null;
+    if (!promotion || !promotionalState.saleActive) return null;
 
     switch (promotion.type) {
       case "xMonthly":
-        return `${Math.round(
-          promotion.discountFactor * 100
-        )}% de desconto por ${(promotion as any).xMonths} meses`;
+        return `${Math.round(promotion.discountFactor * 100)}% ${t(
+          "promotion.percentOff"
+        )} ${t("promotion.xMonths")} ${(promotion as any).xMonths} ${t(
+          "promotion.months"
+        )}`;
       case "freeMonths":
-        return `${(promotion as any).freeMonths} meses grátis`;
+        return `${(promotion as any).freeMonths} ${t("promotion.freeMonths")}`;
       case "annual":
       case "monthly":
-        return `${Math.round(promotion.discountFactor * 100)}% de desconto`;
+        return `${Math.round(promotion.discountFactor * 100)}% ${t(
+          "promotion.percentOff"
+        )}`;
       default:
         return null;
     }
@@ -416,8 +724,12 @@ export default function Component() {
     const baseUrl =
       selectedCountry === "BR"
         ? "https://www.cattler.agr.br"
-        : "https://www.cattler.com.ar";
-    const cattlerUrl = `${baseUrl}/form-plan${planNumber}`;
+        : ["AR", "UY", "CH", "PY", "MX", "OT$ES"].includes(selectedCountry)
+        ? "https://www.cattler.com.ar"
+        : "https://www.cattler.farm";
+    const cattlerUrl = `${baseUrl}/form-plan${planNumber}${
+      billingCycle === "annual" ? "-annual" : ""
+    }`;
 
     // Si estamos en un iframe, cambiar la URL del padre
     if (window.parent && window.parent !== window) {
@@ -443,8 +755,12 @@ export default function Component() {
     const baseUrl =
       selectedCountry === "BR"
         ? "https://www.cattler.agr.br"
-        : "https://www.cattler.com.ar";
-    const cattlerUrl = `${baseUrl}/form-addon`;
+        : ["AR", "UY", "CH", "PY", "MX", "OT$ES"].includes(selectedCountry)
+        ? "https://www.cattler.com.ar"
+        : "https://www.cattler.farm";
+    const cattlerUrl = `${baseUrl}/form-addon${
+      addOnBillingCycle === "annual" ? "-annual" : ""
+    }`;
 
     // Si estamos en un iframe, cambiar la URL del padre
     if (window.parent && window.parent !== window) {
@@ -457,6 +773,10 @@ export default function Component() {
 
   const toggleBillingCycle = () => {
     setBillingCycle((prev) => (prev === "monthly" ? "annual" : "monthly"));
+  };
+
+  const toggleAddOnBillingCycle = () => {
+    setAddOnBillingCycle((prev) => (prev === "monthly" ? "annual" : "monthly"));
   };
 
   // Show loading state until hydrated (with timeout fallback)
@@ -557,12 +877,9 @@ export default function Component() {
           <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-center py-3 mb-8 rounded-lg shadow-lg">
             <div className="flex items-center justify-center gap-2">
               <span className="text-lg font-bold animate-pulse">
-                🔥 {promotionalState.saleName} 🔥
+                🔥 {t(promotionalState.saleName)} 🔥
               </span>
-              <span className="text-sm">
-                Oferta por tempo limitado - Economize até 50% em planos e
-                complementos selecionados!
-              </span>
+              <span className="text-sm">{t("promotion.limitedTime")}</span>
             </div>
           </div>
         )}
@@ -607,15 +924,58 @@ export default function Component() {
                       : "text-gray-400"
                   }`}
                 />
-                <span
-                  className={`font-lato ${
-                    billingCycle === "annual"
-                      ? "font-bold text-cattler-navy"
-                      : "text-gray-500"
-                  }`}
-                >
-                  {t("annualBilling")}
-                </span>
+                <div className="flex flex-col items-start">
+                  <span
+                    className={`font-lato ${
+                      billingCycle === "annual"
+                        ? "font-bold text-cattler-navy"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {(() => {
+                      // Check if there's an active annual promotion for any plan
+                      const hasAnnualPromotion = currentPlans.some(
+                        (plan) => getActivePromotion(plan.id, "annual") !== null
+                      );
+
+                      if (hasAnnualPromotion) {
+                        const promotion = getActivePromotion(
+                          currentPlans[0].id,
+                          "annual"
+                        );
+                        if (promotion) {
+                          return `Annual (${Math.round(
+                            promotion.discountFactor * 100
+                          )}% discount)`;
+                        }
+                      }
+
+                      return t("annualBilling");
+                    })()}
+                  </span>
+                  {(() => {
+                    // Check if there's an active annual promotion for any plan
+                    const hasAnnualPromotion = currentPlans.some(
+                      (plan) => getActivePromotion(plan.id, "annual") !== null
+                    );
+
+                    if (hasAnnualPromotion) {
+                      const promotion = getActivePromotion(
+                        currentPlans[0].id,
+                        "annual"
+                      );
+                      if (promotion) {
+                        return (
+                          <Badge className="bg-red-500 text-white text-xs animate-pulse mt-1">
+                            {t(promotionalState.saleName)}
+                          </Badge>
+                        );
+                      }
+                    }
+
+                    return null;
+                  })()}
+                </div>
               </div>
             </div>
           </div>
@@ -652,16 +1012,22 @@ export default function Component() {
                   <div className="text-3xl font-bold font-barlow text-cattler-green mt-4">
                     {(() => {
                       const originalPrice =
+                        billingCycle === "monthly" ? plan.price : plan.price; // For annual billing, show monthly price as original
+
+                      // For annual billing, apply discount to monthly price, then multiply by 12
+                      const promotionalPrice =
                         billingCycle === "monthly"
-                          ? plan.price
-                          : Math.round(plan.annualPrice! / 12);
-                      const promotionalPrice = calculatePromotionalPrice(
-                        billingCycle === "monthly"
-                          ? plan.price
-                          : plan.annualPrice!,
-                        plan.id,
-                        billingCycle
-                      );
+                          ? calculatePromotionalPrice(
+                              plan.price,
+                              plan.id,
+                              "monthly"
+                            )
+                          : calculatePromotionalPrice(
+                              plan.price,
+                              plan.id,
+                              "annual"
+                            ) * 12;
+
                       const displayPrice =
                         billingCycle === "monthly"
                           ? promotionalPrice
@@ -674,33 +1040,33 @@ export default function Component() {
                       return (
                         <div className="flex flex-col items-center">
                           {hasPromotion && (
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="text-lg line-through text-gray-400">
-                                {formatPrice(originalPrice)}
-                              </span>
-                              <Badge className="bg-red-500 text-white text-xs animate-pulse">
-                                {promotionalState.saleName}
+                            <>
+                              <Badge className="bg-red-500 text-white text-xs animate-pulse mb-2 px-3 py-2">
+                                <div className="flex flex-col items-center">
+                                  <div className="text-xs font-medium">
+                                    {t(promotionalState.saleName)}
+                                  </div>
+                                  <div className="text-sm font-bold">
+                                    {getPromotionBadgeText(
+                                      plan.id,
+                                      billingCycle
+                                    )}
+                                  </div>
+                                </div>
                               </Badge>
-                            </div>
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="text-lg line-through text-gray-400">
+                                  {formatPrice(originalPrice)}
+                                </span>
+                              </div>
+                            </>
                           )}
                           <div>{formatPrice(displayPrice)}</div>
                         </div>
                       );
                     })()}
                   </div>
-                  {(() => {
-                    const promotionText = getPromotionBadgeText(
-                      plan.id,
-                      billingCycle
-                    );
-                    return (
-                      promotionText && (
-                        <Badge className="bg-red-500 text-white text-sm mt-2 animate-pulse text-center mx-auto">
-                          {promotionText}
-                        </Badge>
-                      )
-                    );
-                  })()}
+
                   <div className="text-sm font-roboto text-cattler-navy/60">
                     {t("perMonth")}
                     {billingCycle === "annual"
@@ -723,17 +1089,51 @@ export default function Component() {
                   </div>
                   {billingCycle === "annual" && (
                     <div className="mt-1 text-xs font-roboto text-cattler-orange font-medium">
-                      {formatPrice(plan.annualPrice!)} {t("perYear")} (
-                      {selectedCountry === "BR"
-                        ? "Economize"
-                        : ["UY", "PY", "BO", "MX", "CH", "OT$ES"].includes(
-                            selectedCountry
-                          )
-                        ? "Ahorre"
-                        : ["AR"].includes(selectedCountry)
-                        ? "Ahorrá"
-                        : "Save"}{" "}
-                      {formatPrice(Math.round(plan.price * 12 * 0.1))})
+                      {formatPrice(
+                        calculatePromotionalPrice(
+                          plan.price,
+                          plan.id,
+                          "annual"
+                        ) * 12
+                      )}{" "}
+                      {t("perYear")} (
+                      {(() => {
+                        const promotion = getActivePromotion(plan.id, "annual");
+                        if (promotion) {
+                          return `${
+                            selectedCountry === "BR"
+                              ? "Economize"
+                              : [
+                                  "UY",
+                                  "PY",
+                                  "BO",
+                                  "MX",
+                                  "CH",
+                                  "OT$ES",
+                                ].includes(selectedCountry)
+                              ? "Ahorre"
+                              : ["AR"].includes(selectedCountry)
+                              ? "Ahorrá"
+                              : "Save"
+                          } ${formatPrice(
+                            Math.round(
+                              plan.price * 12 * promotion.discountFactor
+                            )
+                          )}`;
+                        }
+                        return `${
+                          selectedCountry === "BR"
+                            ? "Economize"
+                            : ["UY", "PY", "BO", "MX", "CH", "OT$ES"].includes(
+                                selectedCountry
+                              )
+                            ? "Ahorre"
+                            : ["AR"].includes(selectedCountry)
+                            ? "Ahorrá"
+                            : "Save"
+                        } ${formatPrice(Math.round(plan.price * 12 * 0.1))}`;
+                      })()}
+                      )
                     </div>
                   )}
                 </CardHeader>
@@ -1130,15 +1530,109 @@ export default function Component() {
             <p className="text-center text-cattler-navy/70 font-roboto mb-8">
               {t("addOnsSubtitle")}
             </p>
+
+            {/* Add-ons Billing Cycle Toggle */}
+            <div className="flex justify-center mb-8">
+              <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full border-2 border-cattler-teal/30">
+                <div className="flex items-center gap-2">
+                  <Calendar
+                    className={`h-5 w-5 ${
+                      addOnBillingCycle === "monthly"
+                        ? "text-cattler-green"
+                        : "text-gray-400"
+                    }`}
+                  />
+                  <span
+                    className={`font-lato ${
+                      addOnBillingCycle === "monthly"
+                        ? "font-bold text-cattler-navy"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {t("monthlyBilling")}
+                  </span>
+                </div>
+                <Switch
+                  checked={addOnBillingCycle === "annual"}
+                  onCheckedChange={toggleAddOnBillingCycle}
+                />
+                <div className="flex items-center gap-2">
+                  <CalendarDays
+                    className={`h-5 w-5 ${
+                      addOnBillingCycle === "annual"
+                        ? "text-cattler-green"
+                        : "text-gray-400"
+                    }`}
+                  />
+                  <div className="flex flex-col items-start">
+                    <span
+                      className={`font-lato ${
+                        addOnBillingCycle === "annual"
+                          ? "font-bold text-cattler-navy"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {(() => {
+                        // Check if there's an active annual promotion for any addon
+                        const hasAnnualPromotion = currentAddOns.some(
+                          (addon) =>
+                            getActivePromotion(addon.id, "annual") !== null
+                        );
+
+                        if (hasAnnualPromotion && promotionalState.saleActive) {
+                          const promotion = getActivePromotion(
+                            currentAddOns[0].id,
+                            "annual"
+                          );
+                          if (promotion) {
+                            return `Annual (${Math.round(
+                              promotion.discountFactor * 100
+                            )}% discount)`;
+                          }
+                        }
+
+                        return t("annualBilling");
+                      })()}
+                    </span>
+                    {(() => {
+                      // Check if there's an active annual promotion for any addon
+                      const hasAnnualPromotion = currentAddOns.some(
+                        (addon) =>
+                          getActivePromotion(addon.id, "annual") !== null
+                      );
+
+                      if (hasAnnualPromotion && promotionalState.saleActive) {
+                        const promotion = getActivePromotion(
+                          currentAddOns[0].id,
+                          "annual"
+                        );
+                        if (promotion) {
+                          return (
+                            <Badge className="bg-red-500 text-white text-xs animate-pulse mt-1">
+                              {t(promotionalState.saleName)}
+                            </Badge>
+                          );
+                        }
+                      }
+
+                      return null;
+                    })()}
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {currentAddOns.map((addon, index) => {
                 const originalPrice = addon.price;
                 const promotionalPrice = calculatePromotionalPrice(
                   originalPrice,
                   addon.id,
-                  "monthly"
+                  addOnBillingCycle
                 );
-                const hasPromotion = getActivePromotion(addon.id, "monthly");
+                const hasPromotion = getActivePromotion(
+                  addon.id,
+                  addOnBillingCycle
+                );
 
                 return (
                   <div
@@ -1221,32 +1715,128 @@ export default function Component() {
 
                         return (
                           <div className="flex flex-col items-center">
-                            {hasPromotion && (
-                              <div className="flex items-center gap-1 mb-1">
-                                <span className="text-sm line-through text-gray-400">
-                                  +{formatPrice(originalPrice)}/{t("perMonth")}
-                                </span>
-                                <Badge className="bg-red-500 text-white text-xs animate-pulse">
-                                  {promotionalState.saleName}
+                            {hasPromotion && promotionalState.saleActive && (
+                              <>
+                                <Badge className="bg-red-500 text-white text-xs animate-pulse mb-2 px-3 py-2">
+                                  <div className="flex flex-col items-center">
+                                    <div className="text-xs font-medium">
+                                      {t(promotionalState.saleName)}
+                                    </div>
+                                    <div className="text-sm font-bold">
+                                      {getPromotionBadgeText(
+                                        addon.id,
+                                        addOnBillingCycle
+                                      )}
+                                    </div>
+                                  </div>
                                 </Badge>
-                              </div>
+                              </>
                             )}
-                            <div>
-                              +{formatPrice(promotionalPrice)}/{t("perMonth")}
+                            <div className="flex flex-col items-center">
+                              {hasPromotion && promotionalState.saleActive && (
+                                <>
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-lg line-through text-gray-400">
+                                      {formatPrice(originalPrice)}
+                                    </span>
+                                  </div>
+                                </>
+                              )}
+                              <div
+                                className={`text-3xl font-bold font-barlow ${
+                                  addon.isCustomFeeder
+                                    ? "text-cattler-amber"
+                                    : "text-cattler-teal"
+                                }`}
+                              >
+                                {formatPrice(
+                                  addOnBillingCycle === "annual"
+                                    ? promotionalPrice
+                                    : promotionalPrice
+                                )}
+                              </div>
+                              <div className="text-sm font-roboto text-cattler-navy/60">
+                                {t("perMonth")}
+                                {addOnBillingCycle === "annual"
+                                  ? `,  ${
+                                      selectedCountry === "BR"
+                                        ? "cobrado anualmente"
+                                        : [
+                                            "AR",
+                                            "UY",
+                                            "PY",
+                                            "BO",
+                                            "MX",
+                                            "CH",
+                                            "OT$ES",
+                                          ].includes(selectedCountry)
+                                        ? "cobrado anualmente"
+                                        : "billed annually"
+                                    }`
+                                  : ""}
+                              </div>
+                              {addOnBillingCycle === "annual" && (
+                                <div className="mt-1 text-xs font-roboto text-cattler-orange font-medium">
+                                  {formatPrice(
+                                    calculatePromotionalPrice(
+                                      originalPrice,
+                                      addon.id,
+                                      "annual"
+                                    ) * 12
+                                  )}{" "}
+                                  {t("perYear")} (
+                                  {(() => {
+                                    const promotion = getActivePromotion(
+                                      addon.id,
+                                      "annual"
+                                    );
+                                    if (promotion) {
+                                      return `${
+                                        selectedCountry === "BR"
+                                          ? "Economize"
+                                          : [
+                                              "UY",
+                                              "PY",
+                                              "BO",
+                                              "MX",
+                                              "CH",
+                                              "OT$ES",
+                                            ].includes(selectedCountry)
+                                          ? "Ahorre"
+                                          : ["AR"].includes(selectedCountry)
+                                          ? "Ahorrá"
+                                          : "Save"
+                                      } ${formatPrice(
+                                        Math.round(
+                                          originalPrice *
+                                            12 *
+                                            promotion.discountFactor
+                                        )
+                                      )}`;
+                                    }
+                                    return `${
+                                      selectedCountry === "BR"
+                                        ? "Economize"
+                                        : [
+                                            "UY",
+                                            "PY",
+                                            "BO",
+                                            "MX",
+                                            "CH",
+                                            "OT$ES",
+                                          ].includes(selectedCountry)
+                                        ? "Ahorre"
+                                        : ["AR"].includes(selectedCountry)
+                                        ? "Ahorrá"
+                                        : "Save"
+                                    } ${formatPrice(
+                                      Math.round(originalPrice * 12 * 0.1)
+                                    )}`;
+                                  })()}
+                                  )
+                                </div>
+                              )}
                             </div>
-                            {(() => {
-                              const promotionText = getPromotionBadgeText(
-                                addon.id,
-                                "monthly"
-                              );
-                              return (
-                                promotionText && (
-                                  <Badge className="bg-red-500 text-white text-xs mt-1 animate-pulse text-center mx-auto">
-                                    {promotionText}
-                                  </Badge>
-                                )
-                              );
-                            })()}
                           </div>
                         );
                       })()}

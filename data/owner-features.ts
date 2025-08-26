@@ -113,7 +113,7 @@ const FEATURE_CONFIG: FeatureConfig = {
       isCustomFeeder: true,
       isExpandable: true,
       subFeatures: [
-        { name: "billing", plan1: false, plan2: false, plan3: false, plan4: false },
+        { name: "billing", plan1: false, plan2: true, plan3: true, plan4: true },
         { name: "accountManagement", plan1: false, plan2: false, plan3: false, plan4: false },
         { name: "marginsReport", plan1: false, plan2: false, plan3: false, plan4: false },
         { name: "clientUsers", plan1: "addon", plan2: "addon", plan3: "addon", plan4: "addon" },
