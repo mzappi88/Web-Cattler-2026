@@ -197,7 +197,7 @@ export default function CattlerLandingSale() {
     <div className="min-h-screen bg-[#499E80]">
       {/* Hero Section with Image */}
       <div className="relative w-full bg-black">
-        {/* Mobile Hero - Full height */}
+        {/* Mobile Hero - Full height like home */}
         <div className="relative w-full h-[50vh] md:hidden">
           <img
             src="/Sale/labor-day.png"
@@ -206,7 +206,7 @@ export default function CattlerLandingSale() {
           />
         </div>
 
-        {/* Desktop Hero - Fixed aspect ratio for iframe compatibility */}
+        {/* Desktop Hero - Same aspect ratio as home */}
         <div
           className="relative w-full hidden md:block"
           style={{
