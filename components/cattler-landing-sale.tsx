@@ -319,13 +319,13 @@ export default function CattlerLandingSale() {
       </div>
 
       {/* Spacing before Video CTA Section */}
-      <div className="py-8 md:py-12"></div>
+      <div className="py-8 md:py-0"></div>
 
       {/* Video CTA Section */}
       <VideoCtaSection />
 
       {/* Spacing before Enhanced CTA Section */}
-      <div className="py-16 md:py-24"></div>
+      <div className="py-16 md:py-16"></div>
 
       {/* Enhanced CTA Section */}
       <EnhancedCtaSection />
