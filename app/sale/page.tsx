@@ -6,10 +6,9 @@ import CattlerLandingSale from "@/components/cattler-landing-sale";
 
 export default function SalePage() {
   return (
-    <div className="min-h-screen">
+    <div>
       <CattlerLandingSale />
       {/* Cattler Features Section */}
-
       <CattlerFeatures />
 
       {/* Feeder Pricing Section */}

@@ -194,7 +194,7 @@ export default function CattlerLandingSale() {
   );
 
   return (
-    <div className="min-h-screen bg-[#499E80]">
+    <div className="bg-[#499E80]">
       {/* Hero Section with Image */}
       <div className="relative w-full bg-black">
         {/* Mobile Hero - Full height like home */}
