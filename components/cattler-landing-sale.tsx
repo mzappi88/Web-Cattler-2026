@@ -196,13 +196,28 @@ export default function CattlerLandingSale() {
   return (
     <div className="min-h-screen bg-[#499E80]">
       {/* Hero Section with Image */}
-      <div className="relative h-screen">
-        {/* Background Image */}
-        <div className="absolute inset-0">
+      <div className="relative w-full bg-black">
+        {/* Mobile Hero - Full height */}
+        <div className="relative w-full h-[50vh] md:hidden">
           <img
             src="/Sale/labor-day.png"
             alt="Labor Day Sale"
-            className="w-full h-full object-cover"
+            className="absolute top-0 left-0 w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Desktop Hero - Fixed aspect ratio for iframe compatibility */}
+        <div
+          className="relative w-full hidden md:block"
+          style={{
+            paddingBottom:
+              "42.19%" /* 16:9 aspect ratio reducido 25% desde 56.25% */,
+          }}
+        >
+          <img
+            src="/Sale/labor-day.png"
+            alt="Labor Day Sale"
+            className="absolute top-0 left-0 w-full h-full object-cover"
           />
         </div>
       </div>
@@ -304,13 +319,13 @@ export default function CattlerLandingSale() {
       </div>
 
       {/* Spacing before Video CTA Section */}
-      <div className="py-8 md:py-2"></div>
+      <div className="py-8 md:py-12"></div>
 
       {/* Video CTA Section */}
       <VideoCtaSection />
 
       {/* Spacing before Enhanced CTA Section */}
-      <div className="py-16 md:py-16"></div>
+      <div className="py-16 md:py-24"></div>
 
       {/* Enhanced CTA Section */}
       <EnhancedCtaSection />
