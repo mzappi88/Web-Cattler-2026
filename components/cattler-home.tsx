@@ -224,6 +224,9 @@ export default function CattlerHome() {
         </div>
       </div>
 
+      {/* Spacing before Enhanced CTA Section */}
+      <div className="py-16 md:py-24"></div>
+
       {/* Enhanced CTA Section */}
       <EnhancedCtaSection />
     </div>
