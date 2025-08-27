@@ -1224,7 +1224,7 @@ export default function Component() {
                         selectedCountry
                       )
                     ? "¿Hace Hotelería?"
-                    : "Do you custom feeed?"}
+                    : "Do you custom feed?"}
                 </h2>
               </div>
 
