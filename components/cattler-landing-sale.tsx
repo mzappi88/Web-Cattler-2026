@@ -193,6 +193,29 @@ export default function CattlerLandingSale() {
     </div>
   );
 
+  // Función para determinar qué banner mostrar según el país
+  const getBannerImage = () => {
+    const latamCountries = ["AR", "BO", "PY", "UY", "CH", "MX"];
+    const spanishLanguage = ["OT$ES"];
+
+    if (
+      latamCountries.includes(selectedCountry) ||
+      spanishLanguage.includes(selectedCountry)
+    ) {
+      return {
+        src: "/Sale/promo-primavera.png",
+        alt: "Promoción de Primavera",
+      };
+    }
+
+    return {
+      src: "/Sale/labor-day.png",
+      alt: "Labor Day Sale",
+    };
+  };
+
+  const bannerImage = getBannerImage();
+
   return (
     <div className="bg-[#499E80]">
       {/* Hero Section with Image */}
@@ -200,8 +223,8 @@ export default function CattlerLandingSale() {
         {/* Mobile Hero - Full height like home */}
         <div className="relative w-full h-[50vh] md:hidden">
           <img
-            src="/Sale/labor-day.png"
-            alt="Labor Day Sale"
+            src={bannerImage.src}
+            alt={bannerImage.alt}
             className="absolute top-0 left-0 w-full h-full object-cover"
           />
         </div>
@@ -215,8 +238,8 @@ export default function CattlerLandingSale() {
           }}
         >
           <img
-            src="/Sale/labor-day.png"
-            alt="Labor Day Sale"
+            src={bannerImage.src}
+            alt={bannerImage.alt}
             className="absolute top-0 left-0 w-full h-full object-cover"
           />
         </div>
