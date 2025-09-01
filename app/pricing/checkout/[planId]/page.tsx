@@ -23,7 +23,7 @@ const regionalPromotions = {
 
   // LATAM: AR, UY, PY, BO, CH, MX
   latam: {
-    saleActive: false,
+    saleActive: true,
     saleName: "promotion.latam", // Will be translated
     discounts: {
       annual: {},

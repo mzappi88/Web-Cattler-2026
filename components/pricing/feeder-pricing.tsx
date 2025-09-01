@@ -148,15 +148,15 @@ const regionalPromotions = {
 
   // LATAM: AR, UY, PY, BO, CH, MX
   latam: {
-    saleActive: false,
+    saleActive: true,
     saleName: "promotion.latam", // Will be translated
     defaultIsAnnual: true,
     discounts: {
       annual: {
-        plan1: { isActive: false, discountFactor: 0.15 },
-        plan2: { isActive: false, discountFactor: 0.15 },
-        plan3: { isActive: false, discountFactor: 0.15 },
-        plan4: { isActive: false, discountFactor: 0.15 },
+        plan1: { isActive: true, discountFactor: 0.2 },
+        plan2: { isActive: true, discountFactor: 0.2 },
+        plan3: { isActive: true, discountFactor: 0.2 },
+        plan4: { isActive: true, discountFactor: 0.2 },
         customFeeder: { isActive: true, discountFactor: 0.2 }, // Mayor descuento para Custom Feeder
         AnimalHealth: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Animal Health
         Chute: { isActive: true, discountFactor: 0.2 },
@@ -307,23 +307,29 @@ const regionalPromotions = {
 
 // Function to get regional promotion based on country
 const getRegionalPromotion = (country: string) => {
+  console.log("🌍 getRegionalPromotion called with country:", country);
+
   // North America: US, CA, OT$EN
   if (["US", "CA", "OT$EN"].includes(country)) {
+    console.log("🇺🇸 Using North America promotion");
     return regionalPromotions.northAmerica;
   }
 
-  // LATAM: AR, UY, PY, BO, CH, MX
-  if (["AR", "UY", "PY", "BO", "CH", "MX"].includes(country)) {
+  // LATAM: AR, UY, PY, BO, CH, MX, OT$ES
+  if (["AR", "UY", "PY", "BO", "CH", "MX", "OT$ES"].includes(country)) {
+    console.log("🌎 Using LATAM promotion");
     return regionalPromotions.latam;
   }
 
   // Brazil: BR
   if (["BR"].includes(country)) {
+    console.log("🇧🇷 Using Brazil promotion");
     return regionalPromotions.brazil;
   }
 
-  // Default to North America if country not found
-  return regionalPromotions.northAmerica;
+  // Default to LATAM for Spanish-speaking countries
+  console.log("🌎 Defaulting to LATAM promotion for country:", country);
+  return regionalPromotions.latam;
 };
 
 export const initialPricingState: PricingState = {
@@ -385,6 +391,23 @@ export default function Component() {
   // Get regional promotion based on selected country
   const regionalPromotion = getRegionalPromotion(selectedCountry);
 
+  console.log(
+    "🔍 Regional promotion for",
+    selectedCountry,
+    ":",
+    regionalPromotion
+  );
+  console.log("🔍 Sale active:", regionalPromotion.saleActive);
+  console.log("🔍 Sale name:", regionalPromotion.saleName);
+
+  // Test translation function
+  console.log("🔍 Testing translation function:");
+  console.log("🔍 t('promotion.latam'):", t("promotion.latam"));
+  console.log("🔍 t('promotion.percentOff'):", t("promotion.percentOff"));
+  console.log("🔍 isHydrated:", isHydrated);
+  console.log("🔍 Selected country:", selectedCountry);
+  console.log("🔍 Detected country from hook:", selectedCountry);
+
   const [promotionalState, setPromotionalState] = useState<PricingState>({
     ...initialPricingState,
     ...regionalPromotion,
@@ -415,6 +438,12 @@ export default function Component() {
   // Update promotional state when country changes
   useEffect(() => {
     const newRegionalPromotion = getRegionalPromotion(selectedCountry);
+    console.log(
+      "🔄 Updating promotional state for",
+      selectedCountry,
+      ":",
+      newRegionalPromotion
+    );
     setPromotionalState({
       ...initialPricingState,
       ...newRegionalPromotion,
@@ -881,6 +910,12 @@ export default function Component() {
               </span>
               <span className="text-sm">{t("promotion.limitedTime")}</span>
             </div>
+            {/* Debug info - Comentado para producción */}
+            {/* <div className="text-xs opacity-75 mt-1">
+              Debug: saleName="{promotionalState.saleName}" | Translated: "
+              {t(promotionalState.saleName)}" | isHydrated:{" "}
+              {isHydrated.toString()}
+            </div> */}
           </div>
         )}
         <div className="text-center mb-12">
@@ -1031,7 +1066,21 @@ export default function Component() {
                       const displayPrice =
                         billingCycle === "monthly"
                           ? promotionalPrice
-                          : Math.round(promotionalPrice / 12);
+                          : Math.round(
+                              (() => {
+                                const promotionalPrice =
+                                  calculatePromotionalPrice(
+                                    plan.price,
+                                    plan.id,
+                                    "annual"
+                                  );
+                                // If no promotion is active, apply annual discount
+                                if (promotionalPrice === plan.price) {
+                                  return plan.price * 0.9;
+                                }
+                                return promotionalPrice;
+                              })()
+                            );
                       const hasPromotion = getActivePromotion(
                         plan.id,
                         billingCycle
@@ -1090,11 +1139,20 @@ export default function Component() {
                   {billingCycle === "annual" && (
                     <div className="mt-1 text-xs font-roboto text-cattler-orange font-medium">
                       {formatPrice(
-                        calculatePromotionalPrice(
-                          plan.price,
-                          plan.id,
-                          "annual"
-                        ) * 12
+                        Math.round(
+                          (() => {
+                            const promotionalPrice = calculatePromotionalPrice(
+                              plan.price,
+                              plan.id,
+                              "annual"
+                            );
+                            // If no promotion is active, apply annual discount
+                            if (promotionalPrice === plan.price) {
+                              return plan.price * 0.9;
+                            }
+                            return promotionalPrice;
+                          })() * 12
+                        )
                       )}{" "}
                       {t("perYear")} (
                       {(() => {
@@ -1778,11 +1836,13 @@ export default function Component() {
                               {addOnBillingCycle === "annual" && (
                                 <div className="mt-1 text-xs font-roboto text-cattler-orange font-medium">
                                   {formatPrice(
-                                    calculatePromotionalPrice(
-                                      originalPrice,
-                                      addon.id,
-                                      "annual"
-                                    ) * 12
+                                    Math.round(
+                                      calculatePromotionalPrice(
+                                        originalPrice,
+                                        addon.id,
+                                        "annual"
+                                      ) * 12
+                                    )
                                   )}{" "}
                                   {t("perYear")} (
                                   {(() => {
@@ -1969,7 +2029,11 @@ export default function Component() {
                   const baseUrl =
                     selectedCountry === "BR"
                       ? "https://www.cattler.agr.br"
-                      : "https://www.cattler.com.ar";
+                      : ["AR", "UY", "CH", "PY", "MX", "OT$ES"].includes(
+                          selectedCountry
+                        )
+                      ? "https://www.cattler.com.ar"
+                      : "https://www.cattler.farm";
                   const demoPath =
                     selectedCountry === "BR" ? "/solicitar-demo" : "/demo";
                   const cattlerUrl = `${baseUrl}${demoPath}`;
@@ -1996,7 +2060,11 @@ export default function Component() {
                   const baseUrl =
                     selectedCountry === "BR"
                       ? "https://www.cattler.agr.br"
-                      : "https://www.cattler.com.ar";
+                      : ["AR", "UY", "CH", "PY", "MX", "OT$ES"].includes(
+                          selectedCountry
+                        )
+                      ? "https://www.cattler.com.ar"
+                      : "https://www.cattler.farm";
                   const cattlerUrl = `${baseUrl}/contact`;
                   if (window.parent && window.parent !== window) {
                     window.parent.location.href = cattlerUrl;

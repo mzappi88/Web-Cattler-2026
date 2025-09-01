@@ -170,7 +170,7 @@ const pricingTranslations = {
     "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Brazil Holiday Offers",
     "promotion.discount": "Save",
-    "promotion.percentOff": "% off",
+    "promotion.percentOff": "OFF",
     "promotion.freeMonths": "months free",
     "promotion.xMonths": "months for",
     "promotion.months": "months",
@@ -299,7 +299,7 @@ const pricingTranslations = {
     "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Brazil Holiday Offers",
     "promotion.discount": "Save",
-    "promotion.percentOff": "% off",
+    "promotion.percentOff": "OFF",
     "promotion.freeMonths": "months free",
     "promotion.xMonths": "months for",
     "promotion.limitedTime": "Limited time offer - Save up to 50% on selected plans and add-ons!",
@@ -427,7 +427,7 @@ const pricingTranslations = {
     "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Brazil Holiday Offers",
     "promotion.discount": "Save",
-    "promotion.percentOff": "% off",
+    "promotion.percentOff": "OFF",
     "promotion.freeMonths": "months free",
     "promotion.xMonths": "months for",
     "promotion.limitedTime": "Limited time offer - Save up to 50% on selected plans and add-ons!",
@@ -580,10 +580,10 @@ const pricingTranslations = {
 
     // Promotional messages
     "promotion.northAmerica": "Ofertas de Feriado Norte América",
-    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Ofertas de Feriado Brasil",
     "promotion.discount": "Ahorra",
-    "promotion.percentOff": "% de descuento",
+    "promotion.percentOff": "de descuento",
     "promotion.freeMonths": "meses gratis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
@@ -709,10 +709,10 @@ const pricingTranslations = {
 
     // Promotional messages
     "promotion.northAmerica": "Ofertas de Feriado Norte América",
-    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Ofertas de Feriado Brasil",
     "promotion.discount": "Ahorra",
-    "promotion.percentOff": "% de descuento",
+    "promotion.percentOff": "de descuento",
     "promotion.freeMonths": "meses gratis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
@@ -838,10 +838,10 @@ const pricingTranslations = {
 
     // Promotional messages
     "promotion.northAmerica": "Ofertas de Feriado Norte América",
-    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Ofertas de Feriado Brasil",
     "promotion.discount": "Ahorra",
-    "promotion.percentOff": "% de descuento",
+    "promotion.percentOff": "de descuento",
     "promotion.freeMonths": "meses gratis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
@@ -964,7 +964,19 @@ const pricingTranslations = {
     "hear.sales": "Representante de Ventas",
     "hear.customer": "Cliente Existente",
     "hear.other": "Otro",
+
+    // Promotional messages
+    "promotion.northAmerica": "Ofertas de Feriado América do Norte",
+    "promotion.latam": "Promo Primavera",
+    "promotion.brazil": "Ofertas de Feriado Brasil",
+    "promotion.discount": "Economize",
+    "promotion.percentOff": "de descuento",
+    "promotion.freeMonths": "meses grátis",
+    "promotion.xMonths": "meses por",
+    "promotion.months": "meses",
+    "promotion.limitedTime": "Oferta por tempo limitado - Economize até 50% em planos e complementos selecionados!",
   },
+
   "OT$ES": {
     // Same as UY for now - copy all UY translations
     pricingTitle: "Elige Tu Plan de Confinamiento",
@@ -1085,10 +1097,10 @@ const pricingTranslations = {
 
     // Promotional messages
     "promotion.northAmerica": "Ofertas de Feriado Norte América",
-    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Ofertas de Feriado Brasil",
     "promotion.discount": "Ahorra",
-    "promotion.percentOff": "% de descuento",
+    "promotion.percentOff": "de descuento",
     "promotion.freeMonths": "meses gratis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
@@ -1242,10 +1254,10 @@ const pricingTranslations = {
 
     // Promotional messages
     "promotion.northAmerica": "Ofertas de Feriado Norte América",
-    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Ofertas de Feriado Brasil",
     "promotion.discount": "Ahorra",
-    "promotion.percentOff": "% de descuento",
+    "promotion.percentOff": "de descuento",
     "promotion.freeMonths": "meses gratis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
@@ -1396,7 +1408,19 @@ const pricingTranslations = {
     "hear.sales": "Representante de Vendas",
     "hear.customer": "Cliente Existente",
     "hear.other": "Outro",
+
+    // Promotional messages
+    "promotion.northAmerica": "Ofertas de Feriado América do Norte",
+    "promotion.latam": "Promo Primavera",
+    "promotion.brazil": "Ofertas de Feriado Brasil",
+    "promotion.discount": "Economize",
+    "promotion.percentOff": "de desconto",
+    "promotion.freeMonths": "meses grátis",
+    "promotion.xMonths": "meses por",
+    "promotion.months": "meses",
+    "promotion.limitedTime": "Oferta por tempo limitado - Economize até 50% em planos e complementos selecionados!",
   },
+  
 
   // Chile (CH) - Español
   CH: {
@@ -1546,15 +1570,19 @@ const pricingTranslations = {
 
     // Promotional messages
     "promotion.northAmerica": "Ofertas de Feriado América do Norte",
-    "promotion.latam": "Ofertas de Feriado LATAM",
+    "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Ofertas de Feriado Brasil",
     "promotion.discount": "Economize",
-    "promotion.percentOff": "% de desconto",
+    "promotion.percentOff": "de descuento",
     "promotion.freeMonths": "meses grátis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
     "promotion.limitedTime": "Oferta por tempo limitado - Economize até 50% em planos e complementos selecionados!",
-  },
+  }, 
+  
+
+
+
 }
 
 export function usePricingTranslation() {
