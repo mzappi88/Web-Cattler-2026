@@ -966,7 +966,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
       OT$EN: "Load & Drop Order Creation Automation",
       OT$ES: "Automatización de Órdenes de Carga/Descarga",
     },
-    CustomizeBunkScoring: {
+    BunkScoreCustomization: {
       BR: "Personalização da Leitura de Cocho",
       AR: "Personalización de Lectura de Comederos",
       US: "Feeder Reading Customization",
@@ -1240,19 +1240,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
       OT$EN: "Microingredientes Management",
       OT$ES: "Gestión de MicroIngredientes",
     },
-    BunkScoreCustomization: {
-      BR: "Personalização da Leitura de Cocho",
-      AR: "Personalización de Lectura de Comederos",
-      US: "Bunk Score Customization",
-      CA: "Bunk Score Customization",
-      MX: "Personalización de Lectura de Comederos",
-      PY: "Personalización de Lectura de Bateas",
-      UY: "Personalización de Lectura de Comederos",
-      BO: "Personalización de Lectura de Comederos",
-      CH: "Personalización de Lectura de Bateas",
-      OT$EN: "Feeder Reading Customization",
-      OT$ES: "Personalización de Lectura de Comederos",
-    },
+
     AutoAdjust: {
       BR: "Ajuste Automático de Ordens de Entrega",
       AR: "Auto Ajuste de Órdenes de Entrega",
@@ -1617,8 +1605,8 @@ export function getFeaturesForCountry(selectedCountry: Country, t: (key: string)
         return getLocalizedFeatureName("dumpBoxIntegration", country);
       case "MicroMachineIntegration":
         return getLocalizedFeatureName("MicroMachineIntegration", country);
-      case "CustomizeBunkScoring":
-        return getLocalizedFeatureName("CustomizeBunkScoring", country);
+      case "BunkScoreCustomization":
+        return getLocalizedFeatureName("BunkScoreCustomization", country);
       case "MicroingredientesManagement":
         return getLocalizedFeatureName("MicroingredientesManagement", country);
       case "GrainBank":

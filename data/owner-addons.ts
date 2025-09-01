@@ -42,8 +42,8 @@ export const ADDON_IDS = {
   ADVANCED_FEEDING: "advancedFeeding",
   FEEDING_PROTOCOLS: "feedingProtocols",
   INPUT_TRANSFORMATION: "inputTransformation",
-  LOAD_DROP_AUTOMATION: "loadDropAutomation",
-  CUSTOMIZE_BUNK_SCORING: "customizeBunkScoring",
+  LOAD_DROP_AUTOMATION: "FeedingAutomation",
+  CUSTOMIZE_BUNK_SCORING: "BunkScoreCustomization",
   MICROINGREDIENT_MANAGEMENT: "microingridientManagement",
   AUTO_ADJUST: "autoAdjust",
   
@@ -252,7 +252,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan3", "plan4"],
       hidden: true,
     },
-    "loadDropAutomation": {
+    "FeedingAutomation": {
       name: "Automação de Carga e Descarga",
       description: "Sistema de automação de carga e descarga",
       availableFor: ["plan3", "plan4"],
@@ -260,7 +260,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       comingSoon: true,
       hidden: true,
     },
-    "customizeBunkScoring": {
+    "BunkScoreCustomization": {
       name: "Personalização de Bunk Scoring",
       description: "Sistema de personalização de bunk scoring",
       availableFor: ["plan2", "plan3", "plan4"],
@@ -472,22 +472,22 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
     "feedingProtocols": {
       name: "Protocolos de Alimentación",
       description: "Sistema de protocolos de alimentación",
-      availableFor: ["plan1", "plan2"],
-      includedIn: ["plan3", "plan4"],
+      availableFor: ["plan1", "plan2","plan3"],
+      includedIn: ["plan4"],
       hidden: false,
     },
-    "loadDropAutomation": {
+    "FeedingAutomation": {
       name: "Automatización de Carga y Descarga",
       description: "Sistema de automatización de carga y descarga",
-      availableFor: ["plan1", "plan2"],
-      includedIn: ["plan3", "plan4"],
+      availableFor: ["plan1", "plan2","plan3"],
+      includedIn: ["plan4"],
        hidden: false,
     },
-    "customizeBunkScoring": {
+    "BunkScoreCustomization": {
       name: "Lectura de comederos personalizada",
       description: "Sistema de personalización de la lectura de comederos y ajuste automático de entregas",
-      availableFor: ["plan2", "plan3", "plan4"],
-      includedIn: ["plan4"],
+      availableFor: ["plan1"],
+      includedIn: ["plan2","plan3", "plan4"],
       comingSoon: true,
       hidden: false,
     },
@@ -694,15 +694,15 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan3", "plan4"],
       hidden: true,
     },
-    "loadDropAutomation": {
-      name: "Load/Drop Automation",
+    "FeedingAutomation": {
+      name: "Feeding Automation",
       description: "Load and drop automation system",
       availableFor: ["plan3", "plan4"],
       includedIn: [],
       comingSoon: true,
       hidden: true,
     },
-    "customizeBunkScoring": {
+    "BunkScoreCustomization": {
       name: "Customize Bunk Scoring",
       description: "Customize bunk scoring system",
       availableFor: ["plan2", "plan3", "plan4"],
@@ -906,7 +906,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan3", "plan4"],
       hidden: true,
     },
-    "loadDropAutomation": {
+    "FeedingAutomation": {
       name: "Load/Drop Automation",
       description: "Load and drop automation system",
       availableFor: ["plan3", "plan4"],
@@ -914,7 +914,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       comingSoon: true,
       hidden: true,
     },
-    "customizeBunkScoring": {
+    "BunkScoreCustomization": {
       name: "Customize Bunk Scoring",
       description: "Customize bunk scoring system",
       availableFor: ["plan2", "plan3", "plan4"],
@@ -1230,7 +1230,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan4"],
       hidden: false,
     },
-    "loadDropAutomation": {
+    "FeedingAutomation": {
       name: "Automatización de Carga y Descarga",
       description: "Sistema de automatización de carga y descarga",
       availableFor: ["plan1", "plan2"],
@@ -1238,7 +1238,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       comingSoon: true,
       hidden: false,
     },
-    "customizeBunkScoring": {
+    "BunkScoreCustomization": {
       name: "Lectura de comederos personalizada",
       description: "Sistema de personalización de la lectura de comederos y ajuste automático de entregas",
       availableFor: ["plan1", "plan2", "plan3"],
@@ -1454,14 +1454,14 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan2","plan3"],
       hidden: true,
     },
-    "loadDropAutomation": {
+    "FeedingAutomation": {
       name: "Automatización de Carga y Descarga",
       description: "Sistema de automatización de carga y descarga",
       availableFor: ["plan2"],
       includedIn: ["plan3"],
       hidden: false,
     },
-    "customizeBunkScoring": {
+    "BunkScoreCustomization": {
       name: "Lectura de comederos personalizada",
       description: "Sistema de personalización de la lectura de comederos y ajuste automático de entregas",
       availableFor: ["plan2", "plan3"],
@@ -1665,14 +1665,14 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan2","plan3"],
       hidden: true,
     },
-    "loadDropAutomation": {
+    "FeedingAutomation": {
       name: "Automatización de Carga y Descarga",
       description: "Sistema de automatización de carga y descarga",
       availableFor: ["plan2"],
       includedIn: ["plan3"],
       hidden: false,
     },
-    "customizeBunkScoring": {
+    "BunkScoreCustomization": {
       name: "Lectura de comederos personalizada",
       description: "Sistema de personalización de la lectura de comederos y ajuste automático de entregas",
       availableFor: ["plan2", "plan3"],
@@ -1883,7 +1883,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan3", "plan4"],
       hidden: true,
     },
-    "loadDropAutomation": {
+    "FeedingAutomation": {
       name: "Automatización de Carga y Descarga",
       description: "Sistema de automatización de carga y descarga",
       availableFor: ["plan3", "plan4"],
@@ -1891,7 +1891,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       comingSoon: true,
       hidden: true,
     },
-    "customizeBunkScoring": {
+    "BunkScoreCustomization": {
       name: "Personalización de Bunk Scoring",
       description: "Sistema de personalización de bunk scoring",
       availableFor: ["plan2", "plan3", "plan4"],
@@ -2094,7 +2094,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan3", "plan4"],
       hidden: true,
     },
-    "loadDropAutomation": {
+    "FeedingAutomation": {
       name: "Automatización de Carga y Descarga",
       description: "Sistema de automatización de carga y descarga",
       availableFor: ["plan3", "plan4"],
@@ -2102,7 +2102,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       comingSoon: true,
       hidden: true,
     },
-    "customizeBunkScoring": {
+    "BunkScoreCustomization": {
       name: "Personalización de Bunk Scoring",
       description: "Sistema de personalización de bunk scoring",
       availableFor: ["plan2", "plan3", "plan4"],
@@ -2305,7 +2305,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan3", "plan4"],
       hidden: true,
     },
-    "loadDropAutomation": {
+    "FeedingAutomation": {
       name: "Load/Drop Automation",
       description: "Load and drop automation system",
       availableFor: ["plan3", "plan4"],
@@ -2313,7 +2313,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       comingSoon: true,
       hidden: true,
     },
-    "customizeBunkScoring": {
+    "BunkScoreCustomization": {
       name: "Customize Bunk Scoring",
       description: "Customize bunk scoring system",
       availableFor: ["plan2", "plan3", "plan4"],
@@ -2691,7 +2691,7 @@ export function getLoadDropAutomationAddOn(selectedCountry: string): AddOn | und
   return addOns.find(addon => addon.id === ADDON_IDS.LOAD_DROP_AUTOMATION);
 }
 
-export function getCustomizeBunkScoringAddOn(selectedCountry: string): AddOn | undefined {
+export function getBunkScoreCustomizationAddOn(selectedCountry: string): AddOn | undefined {
   const addOns = getAddOns(selectedCountry);
   return addOns.find(addon => addon.id === ADDON_IDS.CUSTOMIZE_BUNK_SCORING);
 }

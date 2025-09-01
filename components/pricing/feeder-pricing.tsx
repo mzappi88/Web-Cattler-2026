@@ -82,14 +82,14 @@ const regionalPromotions = {
         plan3: { isActive: true, discountFactor: 0.2 },
         plan4: { isActive: true, discountFactor: 0.2 },
         customFeeder: { isActive: true, discountFactor: 0.2 }, // Mayor descuento para Custom Feeder
-        AnimalHealth: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Animal Health
+        animalHealth: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Animal Health
         Chute: { isActive: true, discountFactor: 0.2 },
         EIDIntegration: { isActive: true, discountFactor: 0.2 },
         advancedFeeding: { isActive: true, discountFactor: 0.2 },
         inputTransformation: { isActive: true, discountFactor: 0.2 },
         userClients: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Client Users
         AdvancedInventory: { isActive: true, discountFactor: 0.2 },
-        marketValueReport: { isActive: true, discountFactor: 0.2 },
+        MarketValueReport: { isActive: true, discountFactor: 0.2 },
         Purchases: { isActive: true, discountFactor: 0.2 },
         FeedingProtocols: { isActive: true, discountFactor: 0.2 },
         AutoAdjust: { isActive: true, discountFactor: 0.2 },
@@ -107,7 +107,7 @@ const regionalPromotions = {
         AnimalHealthbasic: { isActive: true, discountFactor: 0.2 },
         AnimalHealthadvanced: { isActive: true, discountFactor: 0.2 },
         animalHealthChute: { isActive: true, discountFactor: 0.2 },
-        ChuteQuickStart: { isActive: true, discountFactor: 0.2 },
+        chuteQuickStart: { isActive: true, discountFactor: 0.2 },
         ChuteCattleIN: { isActive: true, discountFactor: 0.2 },
         ChuteNewOrder: { isActive: true, discountFactor: 0.2 },
         microingridientManagement: { isActive: true, discountFactor: 0.2 },
@@ -158,17 +158,17 @@ const regionalPromotions = {
         plan3: { isActive: true, discountFactor: 0.2 },
         plan4: { isActive: true, discountFactor: 0.2 },
         customFeeder: { isActive: true, discountFactor: 0.2 }, // Mayor descuento para Custom Feeder
-        AnimalHealth: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Animal Health
-        Chute: { isActive: true, discountFactor: 0.2 },
+        animalHealth: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Animal Health
+        chute: { isActive: true, discountFactor: 0.2 },
         EIDIntegration: { isActive: true, discountFactor: 0.2 },
         advancedFeeding: { isActive: true, discountFactor: 0.2 },
-        InputTransformation: { isActive: true, discountFactor: 0.2 },
+        inputTransformation: { isActive: true, discountFactor: 0.2 },
         userClients: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Client Users
         AdvancedInventory: { isActive: true, discountFactor: 0.2 },
-        MarketValueReport: { isActive: true, discountFactor: 0.2 },
-        Purchases: { isActive: true, discountFactor: 0.2 },
-        FeedingProtocols: { isActive: true, discountFactor: 0.2 },
-        AutoAdjust: { isActive: true, discountFactor: 0.2 },
+        marketValueReport: { isActive: true, discountFactor: 0.2 },
+        purchases: { isActive: true, discountFactor: 0.2 },
+        feedingProtocols: { isActive: true, discountFactor: 0.2 },
+        autoAdjust: { isActive: true, discountFactor: 0.2 },
         BunkScoreCustomization: { isActive: true, discountFactor: 0.2 },
         FeedingAutomation: { isActive: true, discountFactor: 0.2 },
         Analytics: { isActive: true, discountFactor: 0.2 },
@@ -183,7 +183,7 @@ const regionalPromotions = {
         AnimalHealthbasic: { isActive: true, discountFactor: 0.2 },
         AnimalHealthadvanced: { isActive: true, discountFactor: 0.2 },
         animalHealthChute: { isActive: true, discountFactor: 0.2 },
-        ChuteQuickStart: { isActive: true, discountFactor: 0.2 },
+        chuteQuickStart: { isActive: true, discountFactor: 0.2 },
         ChuteCattleIN: { isActive: true, discountFactor: 0.2 },
         ChuteNewOrder: { isActive: true, discountFactor: 0.2 },
         microingridientManagement: { isActive: true, discountFactor: 0.2 },
@@ -1196,20 +1196,20 @@ export default function Component() {
                   )}
                 </CardHeader>
                 <CardContent className="flex-grow">
-                  <div className="space-y-3 mb-4">
-                    <div className="flex justify-between">
+                  <div className="space-y-2 mb-4 text-center">
+                    <div className="flex items-center justify-center space-x-2">
                       <span className="text-sm font-medium font-lato text-cattler-navy">
                         {t("pens")}:
                       </span>
-                      <span className="text-sm font-roboto text-cattler-navy/80">
+                      <span className="text-sm font-roboto text-cattler-navy/80 font-semibold">
                         {plan.pens}
                       </span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex items-center justify-center space-x-2">
                       <span className="text-sm font-medium font-lato text-cattler-navy">
                         {t("users")}:
                       </span>
-                      <span className="text-sm font-roboto text-cattler-navy/80">
+                      <span className="text-sm font-roboto text-cattler-navy/80 font-semibold">
                         {plan.users}
                       </span>
                     </div>
