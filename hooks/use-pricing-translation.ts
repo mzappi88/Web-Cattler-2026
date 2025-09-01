@@ -167,7 +167,7 @@ const pricingTranslations = {
 
     // Promotional messages
     "promotion.northAmerica": "Labor Day Sale",
-    "promotion.latam": "LATAM Holiday Offers",
+    "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Brazil Holiday Offers",
     "promotion.discount": "Save",
     "promotion.percentOff": "% off",
@@ -296,7 +296,7 @@ const pricingTranslations = {
 
     // Promotional messages
     "promotion.northAmerica": "Labor Day Sale",
-    "promotion.latam": "LATAM Holiday Offers",
+    "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Brazil Holiday Offers",
     "promotion.discount": "Save",
     "promotion.percentOff": "% off",
@@ -424,7 +424,7 @@ const pricingTranslations = {
 
     // Promotional messages
     "promotion.northAmerica": "North America Holiday Offers",
-    "promotion.latam": "LATAM Holiday Offers",
+    "promotion.latam": "Promo Primavera",
     "promotion.brazil": "Brazil Holiday Offers",
     "promotion.discount": "Save",
     "promotion.percentOff": "% off",
