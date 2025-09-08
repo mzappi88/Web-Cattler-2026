@@ -784,7 +784,9 @@ export default function Component() {
     const baseUrl =
       selectedCountry === "BR"
         ? "https://www.cattler.agr.br"
-        : ["AR", "UY", "CH", "PY", "MX", "OT$ES"].includes(selectedCountry)
+        : ["AR", "BO", "UY", "CH", "PY", "MX", "OT$ES"].includes(
+            selectedCountry
+          )
         ? "https://www.cattler.com.ar"
         : "https://www.cattler.farm";
     const cattlerUrl = `${baseUrl}/form-addon${
