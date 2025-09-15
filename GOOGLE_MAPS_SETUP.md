@@ -104,3 +104,4 @@ NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSyBxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 - ✅ Reinicia el servidor después de cambiar variables de entorno
 - ❌ Nunca subas tu API key a Git o repositorios públicos
 
+
