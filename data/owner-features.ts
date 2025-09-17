@@ -209,7 +209,7 @@ const FEATURE_CONFIG: FeatureConfig = {
     penRider: { plan1: true, plan2: true, plan3: true, plan4: true },
     reports: { plan1: true, plan2: true, plan3: true, plan4: true },
     animalHealth: { plan1: false, plan2: true, plan3: true, plan4: true},
-    chute: { plan1: false, plan2: "addon", plan3: true, plan4: true, isExpandable: true, expandedByDefault: true, 
+    chute: { plan1: "addon", plan2: "addon", plan3: true, plan4: true, isExpandable: true, expandedByDefault: true, 
       subFeatures:[
         {name: "chuteCattleIn",plan1: "", plan2: "", plan3:"",plan4:""},
         {name: "chuteNewOrder",plan1: "", plan2: "", plan3:"",plan4:""},
