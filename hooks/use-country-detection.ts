@@ -3,57 +3,315 @@
 import { useEffect, useState, useRef } from "react";
 import type { Country } from "@/hooks/use-translation";
 
-// Lista de países de habla hispana (excluyendo los que ya están en el selector)
+// Lista de países de habla hispana
 const spanishSpeakingCountries = [
-  "ES", // España
-  "CO", // Colombia
-  "PE", // Perú
-  "VE", // Venezuela
-  "CL", // Chile
-  "EC", // Ecuador
-  "GT", // Guatemala
-  "CU", // Cuba
-  "BO", // Bolivia (ya está en el selector)
-  "DO", // República Dominicana
-  "HN", // Honduras
-  "PY", // Paraguay (ya está en el selector)
-  "SV", // El Salvador
-  "NI", // Nicaragua
-  "CR", // Costa Rica
-  "PA", // Panamá
-  "UY", // Uruguay (ya está en el selector)
-  "GQ", // Guinea Ecuatorial
-  "MX", // México (ya está en el selector)
-  "AR", // Argentina (ya está en el selector)
-  "CH", // Chile (ya está en el selector)
+  "ES", "CO", "PE", "VE", "CL", "EC", "GT", "CU", "BO", "DO", 
+  "HN", "PY", "SV", "NI", "CR", "PA", "UY", "GQ", "MX", "AR", "CH"
 ];
 
-// Lista de países de habla inglesa (excluyendo los que ya están en el selector)
+// Lista de países de habla inglesa
 const englishSpeakingCountries = [
-  "GB", // Reino Unido
-  "AU", // Australia
-  "NZ", // Nueva Zelanda
-  "IE", // Irlanda
-  "ZA", // Sudáfrica
-  "IN", // India
-  "PK", // Pakistán
-  "NG", // Nigeria
-  "KE", // Kenia
-  "UG", // Uganda
-  "TZ", // Tanzania
-  "ZW", // Zimbabue
-  "ZM", // Zambia
-  "MW", // Malawi
-  "BW", // Botsuana
-  "NA", // Namibia
-  "SZ", // Suazilandia
-  "LS", // Lesoto
-  "US", // Estados Unidos (ya está en el selector)
-  "CA", // Canadá (ya está en el selector)
+  "GB", "AU", "NZ", "IE", "ZA", "IN", "PK", "NG", "KE", "UG", 
+  "TZ", "ZW", "ZM", "MW", "BW", "NA", "SZ", "LS", "US", "CA"
 ];
 
-// Function to detect country using browser language as fallback
-function detectCountryFromBrowser(): Country {
+// 1. GEOLOCALIZACIÓN DEL NAVEGADOR (Más Preciso)
+async function detectCountryFromGeolocation(): Promise<Country | null> {
+  if (typeof window === 'undefined' || !navigator.geolocation) return null;
+  
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          console.log("🌍 Geolocation coordinates:", { latitude, longitude });
+          
+          // Use reverse geocoding to get country
+          const response = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+          );
+          const data = await response.json();
+          
+          console.log("🌍 Reverse geocoding result:", data);
+          
+          if (data.countryCode) {
+            const countryCode = data.countryCode.toUpperCase();
+            console.log("🌍 Geolocation detected country:", countryCode);
+            resolve(countryCode as Country);
+          } else {
+            resolve(null);
+          }
+        } catch (error) {
+          console.warn("🌍 Geolocation reverse geocoding failed:", error);
+          resolve(null);
+        }
+      },
+      (error) => {
+        console.warn("🌍 Geolocation failed:", error);
+        resolve(null);
+      },
+      {
+        timeout: 5000,
+        enableHighAccuracy: false,
+        maximumAge: 300000 // 5 minutes
+      }
+    );
+  });
+}
+
+// 2. DETECCIÓN POR TIMEZONE (Mejor que solo idioma)
+function detectCountryFromTimezone(): Country | null {
+  if (typeof window === 'undefined') return null;
+  
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  console.log("🌍 Browser timezone:", timezone);
+  
+  // Mapeo de timezones a países
+  const timezoneCountryMap: Record<string, Country> = {
+    // Argentina
+    "America/Argentina/Buenos_Aires": "AR",
+    "America/Buenos_Aires": "AR",
+    "America/Argentina/Cordoba": "AR",
+    "America/Argentina/Rosario": "AR",
+    "America/Argentina/Mendoza": "AR",
+    "America/Argentina/La_Rioja": "AR",
+    "America/Argentina/San_Juan": "AR",
+    "America/Argentina/Tucuman": "AR",
+    "America/Argentina/Catamarca": "AR",
+    "America/Argentina/Jujuy": "AR",
+    "America/Argentina/Salta": "AR",
+    "America/Argentina/Santiago_del_Estero": "AR",
+    
+    // Brasil
+    "America/Sao_Paulo": "BR",
+    "America/Rio_Branco": "BR",
+    "America/Manaus": "BR",
+    "America/Recife": "BR",
+    "America/Bahia": "BR",
+    "America/Fortaleza": "BR",
+    "America/Maceio": "BR",
+    "America/Aracaju": "BR",
+    "America/Sergipe": "BR",
+    "America/Alagoas": "BR",
+    "America/Pernambuco": "BR",
+    "America/Paraiba": "BR",
+    "America/Rio_Grande_do_Norte": "BR",
+    "America/Ceara": "BR",
+    "America/Piaui": "BR",
+    "America/Maranhao": "BR",
+    "America/Para": "BR",
+    "America/Amapa": "BR",
+    "America/Roraima": "BR",
+    "America/Rondonia": "BR",
+    "America/Acre": "BR",
+    "America/Campo_Grande": "BR",
+    "America/Cuiaba": "BR",
+    "America/Goiania": "BR",
+    "America/Brasilia": "BR",
+    "America/Vitoria": "BR",
+    "America/Espirito_Santo": "BR",
+    "America/Rio_de_Janeiro": "BR",
+    "America/Santarem": "BR",
+    "America/Belem": "BR",
+    "America/Boa_Vista": "BR",
+    "America/Porto_Velho": "BR",
+    "America/Porto_Alegre": "BR",
+    "America/Santa_Catarina": "BR",
+    "America/Curitiba": "BR",
+    "America/Sao_Luis": "BR",
+    "America/Teresina": "BR",
+    "America/Joao_Pessoa": "BR",
+    "America/Natal": "BR",
+    "America/Fortaleza": "BR",
+    "America/Maceio": "BR",
+    "America/Aracaju": "BR",
+    "America/Sergipe": "BR",
+    "America/Alagoas": "BR",
+    "America/Pernambuco": "BR",
+    "America/Paraiba": "BR",
+    "America/Rio_Grande_do_Norte": "BR",
+    "America/Ceara": "BR",
+    "America/Piaui": "BR",
+    "America/Maranhao": "BR",
+    "America/Para": "BR",
+    "America/Amapa": "BR",
+    "America/Roraima": "BR",
+    "America/Rondonia": "BR",
+    "America/Acre": "BR",
+    "America/Campo_Grande": "BR",
+    "America/Cuiaba": "BR",
+    "America/Goiania": "BR",
+    "America/Brasilia": "BR",
+    "America/Vitoria": "BR",
+    "America/Espirito_Santo": "BR",
+    "America/Rio_de_Janeiro": "BR",
+    "America/Santarem": "BR",
+    "America/Belem": "BR",
+    "America/Boa_Vista": "BR",
+    "America/Porto_Velho": "BR",
+    "America/Porto_Alegre": "BR",
+    "America/Santa_Catarina": "BR",
+    "America/Curitiba": "BR",
+    "America/Sao_Luis": "BR",
+    "America/Teresina": "BR",
+    "America/Joao_Pessoa": "BR",
+    "America/Natal": "BR",
+    
+    // México
+    "America/Mexico_City": "MX",
+    "America/Cancun": "MX",
+    "America/Merida": "MX",
+    "America/Monterrey": "MX",
+    "America/Tijuana": "MX",
+    "America/Chihuahua": "MX",
+    "America/Hermosillo": "MX",
+    "America/Mazatlan": "MX",
+    "America/Bahia_Banderas": "MX",
+    "America/Ciudad_Juarez": "MX",
+    "America/Matamoros": "MX",
+    "America/Ojinaga": "MX",
+    "America/Saltillo": "MX",
+    "America/Tampico": "MX",
+    "America/Veracruz": "MX",
+    "America/Villahermosa": "MX",
+    "America/Chetumal": "MX",
+    "America/Cozumel": "MX",
+    "America/Isla_Mujeres": "MX",
+    "America/Playa_del_Carmen": "MX",
+    "America/Puerto_Vallarta": "MX",
+    "America/Acapulco": "MX",
+    "America/Guadalajara": "MX",
+    "America/Leon": "MX",
+    "America/Puebla": "MX",
+    "America/Queretaro": "MX",
+    "America/San_Luis_Potosi": "MX",
+    "America/Toluca": "MX",
+    "America/Zacatecas": "MX",
+    "America/Aguascalientes": "MX",
+    "America/Campeche": "MX",
+    "America/Campeche": "MX",
+    "America/Chiapas": "MX",
+    "America/Colima": "MX",
+    "America/Durango": "MX",
+    "America/Guanajuato": "MX",
+    "America/Guerrero": "MX",
+    "America/Hidalgo": "MX",
+    "America/Jalisco": "MX",
+    "America/Michoacan": "MX",
+    "America/Morelos": "MX",
+    "America/Nayarit": "MX",
+    "America/Nuevo_Leon": "MX",
+    "America/Oaxaca": "MX",
+    "America/Queretaro": "MX",
+    "America/Quintana_Roo": "MX",
+    "America/San_Luis_Potosi": "MX",
+    "America/Sinaloa": "MX",
+    "America/Sonora": "MX",
+    "America/Tabasco": "MX",
+    "America/Tamaulipas": "MX",
+    "America/Tlaxcala": "MX",
+    "America/Veracruz": "MX",
+    "America/Yucatan": "MX",
+    "America/Zacatecas": "MX",
+    
+    // Chile
+    "America/Santiago": "CH",
+    "America/Punta_Arenas": "CH",
+    "Pacific/Easter": "CH",
+    
+    // Paraguay
+    "America/Asuncion": "PY",
+    
+    // Uruguay
+    "America/Montevideo": "UY",
+    
+    // Bolivia
+    "America/La_Paz": "BO",
+    "America/Cochabamba": "BO",
+    "America/Santa_Cruz": "BO",
+    
+    // Canadá
+    "America/Toronto": "CA",
+    "America/Vancouver": "CA",
+    "America/Edmonton": "CA",
+    "America/Winnipeg": "CA",
+    "America/Halifax": "CA",
+    "America/St_Johns": "CA",
+    "America/Goose_Bay": "CA",
+    "America/Glace_Bay": "CA",
+    "America/Moncton": "CA",
+    "America/Blanc-Sablon": "CA",
+    "America/Atikokan": "CA",
+    "America/Cambridge_Bay": "CA",
+    "America/Creston": "CA",
+    "America/Dawson": "CA",
+    "America/Dawson_Creek": "CA",
+    "America/Fort_Nelson": "CA",
+    "America/Inuvik": "CA",
+    "America/Iqaluit": "CA",
+    "America/Moncton": "CA",
+    "America/Nipigon": "CA",
+    "America/Pangnirtung": "CA",
+    "America/Rainy_River": "CA",
+    "America/Rankin_Inlet": "CA",
+    "America/Resolute": "CA",
+    "America/St_Johns": "CA",
+    "America/Swift_Current": "CA",
+    "America/Thunder_Bay": "CA",
+    "America/Toronto": "CA",
+    "America/Vancouver": "CA",
+    "America/Whitehorse": "CA",
+    "America/Winnipeg": "CA",
+    "America/Yellowknife": "CA",
+    
+    // Estados Unidos
+    "America/New_York": "US",
+    "America/Chicago": "US",
+    "America/Denver": "US",
+    "America/Los_Angeles": "US",
+    "America/Anchorage": "US",
+    "America/Honolulu": "US",
+    "America/Detroit": "US",
+    "America/Indiana/Indianapolis": "US",
+    "America/Indiana/Knox": "US",
+    "America/Indiana/Marengo": "US",
+    "America/Indiana/Petersburg": "US",
+    "America/Indiana/Tell_City": "US",
+    "America/Indiana/Vevay": "US",
+    "America/Indiana/Vincennes": "US",
+    "America/Indiana/Winamac": "US",
+    "America/Kentucky/Louisville": "US",
+    "America/Kentucky/Monticello": "US",
+    "America/Los_Angeles": "US",
+    "America/Menominee": "US",
+    "America/Metlakatla": "US",
+    "America/New_York": "US",
+    "America/Nome": "US",
+    "America/Sitka": "US",
+    "America/Yakutat": "US",
+    "Pacific/Honolulu": "US"
+  };
+  
+  // Buscar coincidencia exacta
+  if (timezoneCountryMap[timezone]) {
+    console.log("🌍 Timezone exact match:", timezone, "→", timezoneCountryMap[timezone]);
+    return timezoneCountryMap[timezone];
+  }
+  
+  // Buscar coincidencia parcial
+  for (const [tz, country] of Object.entries(timezoneCountryMap)) {
+    if (timezone.includes(tz.split('/')[1])) { // Comparar solo la parte del país
+      console.log("🌍 Timezone partial match:", timezone, "→", country);
+      return country;
+    }
+  }
+  
+  console.log("🌍 No timezone match found for:", timezone);
+  return null;
+}
+
+// 3. DETECCIÓN POR IDIOMA DEL NAVEGADOR (Fallback)
+function detectCountryFromBrowserLanguage(): Country {
   if (typeof window === 'undefined') return "OT$EN";
   
   const browserLanguage = navigator.language.toLowerCase();
@@ -63,13 +321,65 @@ function detectCountryFromBrowser(): Country {
   if (browserLanguage.startsWith("es-ar")) {
     console.log("🌍 Browser language is es-AR, setting to AR");
     return "AR";
+  } else if (browserLanguage.startsWith("pt")) {
+    console.log("🌍 Browser language is Portuguese, setting to BR");
+    return "BR";
   } else if (browserLanguage.startsWith("es")) {
-    console.log("🌍 Browser language is Spanish, setting to OT$ES");
+    console.log("🌍 Browser language is Spanish, setting OT$ES");
     return "OT$ES";
   } else {
-    console.log("🌍 Browser language is not Spanish, setting to OT$EN");
+    console.log("🌍 Browser language is not Spanish/Portuguese, setting OT$EN");
     return "OT$EN";
   }
+}
+
+// 4. MÚLTIPLES APIs DE IP (Más Robusto)
+async function detectCountryFromMultipleIPs(): Promise<Country | null> {
+  const apis = [
+    {
+      name: "ipapi.co",
+      url: "https://ipapi.co/json/",
+      parser: (data: any) => data.country_code
+    },
+    {
+      name: "ip-api.com",
+      url: "http://ip-api.com/json/",
+      parser: (data: any) => data.status === 'success' ? data.countryCode : null
+    },
+    {
+      name: "ipinfo.io",
+      url: "https://ipinfo.io/json",
+      parser: (data: any) => data.country
+    },
+    {
+      name: "ipgeolocation.io",
+      url: "https://api.ipgeolocation.io/ipgeo?apiKey=free",
+      parser: (data: any) => data.country_code2
+    }
+  ];
+  
+  for (const api of apis) {
+    try {
+      console.log(`🌍 Trying ${api.name}...`);
+      const response = await fetch(api.url, {
+        signal: AbortSignal.timeout(3000)
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        const countryCode = api.parser(data);
+        
+        if (countryCode) {
+          console.log(`🌍 ${api.name} detected:`, countryCode);
+          return countryCode.toUpperCase() as Country;
+        }
+      }
+    } catch (error) {
+      console.warn(`🌍 ${api.name} failed:`, error);
+    }
+  }
+  
+  return null;
 }
 
 // Utility function to clear country detection cache
@@ -109,168 +419,79 @@ export function useCountryDetection() {
       }
 
       try {
-        console.log("🌍 Starting country detection...");
+        console.log("🌍 Starting improved country detection...");
         
-        // Try our own API route first (no CORS issues)
-        let data;
-        try {
-          const response = await fetch("/api/country", {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/json',
-            },
-            signal: AbortSignal.timeout(5000)
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          data = await response.json();
-          console.log("🌍 Our API Route Response:", data);
-          
-          if (!data.success) {
-            console.log("🌍 API returned error, using fallback data:", data.fallback);
-            // Use fallback data if available
-            if (data.fallback && data.fallback.country_code) {
-              data = data.fallback;
-            } else {
-              throw new Error(data.error || "API returned error");
-            }
-          }
-        } catch (ourApiError) {
-          console.warn("Our API failed, trying external API:", ourApiError);
-          
-          // Try external API as fallback
-          try {
-            const response = await fetch("https://ipapi.co/json/", {
-              method: 'GET',
-              headers: {
-                'Accept': 'application/json',
-              },
-              signal: AbortSignal.timeout(5000)
-            });
-
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            data = await response.json();
-            console.log("🌍 External API Response:", data);
-          } catch (externalApiError) {
-            console.warn("All APIs failed, using browser language:", externalApiError);
-            throw new Error("All APIs failed");
+        let finalCountry: Country | null = null;
+        
+        // 1. Try geolocation first (most accurate)
+        console.log("🌍 Step 1: Trying geolocation...");
+        const geolocationCountry = await detectCountryFromGeolocation();
+        if (geolocationCountry) {
+          finalCountry = geolocationCountry;
+          console.log("🌍 Geolocation success:", finalCountry);
+        }
+        
+        // 2. Try timezone detection
+        if (!finalCountry) {
+          console.log("🌍 Step 2: Trying timezone detection...");
+          const timezoneCountry = detectCountryFromTimezone();
+          if (timezoneCountry) {
+            finalCountry = timezoneCountry;
+            console.log("🌍 Timezone detection success:", finalCountry);
           }
         }
         
-        const userCountryCode = data.country_code;
-        console.log("🌍 Country Code from API:", userCountryCode);
-        console.log("🌍 Full API data:", data);
+        // 3. Try multiple IP APIs
+        if (!finalCountry) {
+          console.log("🌍 Step 3: Trying multiple IP APIs...");
+          const ipCountry = await detectCountryFromMultipleIPs();
+          if (ipCountry) {
+            finalCountry = ipCountry;
+            console.log("🌍 IP detection success:", finalCountry);
+          }
+        }
         
-        // Verificar si el país está en la lista de países soportados
-        const supportedCountries: Country[] = ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH"];
+        // 4. Fallback to browser language
+        if (!finalCountry) {
+          console.log("🌍 Step 4: Using browser language fallback...");
+          finalCountry = detectCountryFromBrowserLanguage();
+          console.log("🌍 Browser language fallback:", finalCountry);
+        }
         
-        console.log("🌍 Supported Countries:", supportedCountries);
-        console.log("🌍 Is userCountryCode in supported countries?", supportedCountries.includes(userCountryCode as Country));
-        
-        let finalCountry: Country;
-        
-        if (supportedCountries.includes(userCountryCode as Country)) {
-          console.log("🌍 Setting detected country to:", userCountryCode);
-          finalCountry = userCountryCode as Country;
-        } else {
-          console.log("🌍 Country not in supported list, checking language...");
-          // Si no está en la lista soportada, determinar el idioma
-          if (spanishSpeakingCountries.includes(userCountryCode)) {
+        // Final validation and mapping
+        if (finalCountry) {
+          const supportedCountries: Country[] = ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH"];
+          
+          if (supportedCountries.includes(finalCountry)) {
+            console.log("🌍 Final country (supported):", finalCountry);
+          } else if (spanishSpeakingCountries.includes(finalCountry)) {
             console.log("🌍 Spanish speaking country detected, setting OT$ES");
             finalCountry = "OT$ES";
-          } else if (englishSpeakingCountries.includes(userCountryCode)) {
+          } else if (englishSpeakingCountries.includes(finalCountry)) {
             console.log("🌍 English speaking country detected, setting OT$EN");
             finalCountry = "OT$EN";
           } else {
-            console.log("🌍 Using browser language as fallback");
-            finalCountry = detectCountryFromBrowser();
+            console.log("🌍 Unknown country, using browser language fallback");
+            finalCountry = detectCountryFromBrowserLanguage();
           }
         }
 
         console.log("🌍 Final country decision:", finalCountry);
-
-        // Special case: If we're in the US but got OT$EN, check browser language
-        if (finalCountry === "OT$EN" && userCountryCode === "US") {
-          console.log("🌍 Special case: US detected but got OT$EN, checking browser language...");
-          const browserLanguage = navigator.language.toLowerCase();
-          if (browserLanguage.startsWith("en")) {
-            console.log("🌍 Browser language is English, setting to US");
-            finalCountry = "US";
-          }
-        }
-
-        console.log("🌍 Final country decision:", finalCountry);
-
-        // Special case: If API returned US but user is likely in Argentina
-        if (finalCountry === "US" && typeof window !== 'undefined') {
-          const browserLanguage = navigator.language.toLowerCase();
-          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-          console.log("🌍 Checking if user is actually in Argentina...");
-          console.log("🌍 Browser language:", browserLanguage, "Timezone:", timezone);
-          console.log("🌍 Is browser language Spanish?", browserLanguage.startsWith("es"));
-          console.log("🌍 Is timezone from Argentina?", timezone.includes("America/Argentina") || timezone.includes("America/Buenos_Aires"));
-          
-          // If timezone is in Argentina, override to AR (regardless of browser language)
-          if (timezone.includes("America/Argentina") || 
-              timezone.includes("America/Buenos_Aires") ||
-              timezone.includes("America/Cordoba") ||
-              timezone.includes("America/Rosario") ||
-              timezone.includes("America/Mendoza") ||
-              timezone.includes("America/La_Rioja") ||
-              timezone.includes("America/San_Juan") ||
-              timezone.includes("America/Tucuman") ||
-              timezone.includes("America/Catamarca") ||
-              timezone.includes("America/Jujuy") ||
-              timezone.includes("America/Salta") ||
-              timezone.includes("America/Santiago_del_Estero")
-          ) {
-            console.log("🌍 Overriding to AR based on timezone (Argentina detected)");
-            finalCountry = "AR";
-          } else {
-            console.log("🌍 Not overriding - timezone is not from Argentina");
-          }
-        } else {
-          console.log("🌍 Not checking Argentina override - finalCountry is not US or window is undefined");
-        }
-
-        // Additional stability check: If we previously detected AR and are still in Argentina, keep AR
-        const previousCountry = localStorage.getItem("cattler-country");
-        if (previousCountry === "AR" && finalCountry !== "AR" && typeof window !== 'undefined') {
-          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-          if (timezone.includes("America/Argentina") || timezone.includes("America/Buenos_Aires")) {
-            console.log("🌍 Stability check: Keeping AR as previously detected and still in Argentina");
-            finalCountry = "AR";
-          }
-        }
-
-        console.log("🌍 Final country decision after Argentina check:", finalCountry);
 
         // Cache the result
         localStorage.setItem("cattler-country", finalCountry);
         localStorage.setItem("cattler-country-last-detection", now.toString());
         
-        // Log the final decision for debugging
-        console.log("🌍 Final cached country:", finalCountry);
-        console.log("🌍 Cache timestamp:", now);
-        
         setDetectedCountry(finalCountry);
         hasDetected.current = true;
         
       } catch (error) {
-        console.warn("Error detecting country:", error);
+        console.warn("Error in improved country detection:", error);
         
-        // Final fallback: usar el idioma del navegador
-        const fallbackCountry = detectCountryFromBrowser();
-        
+        // Final fallback: browser language
+        const fallbackCountry = detectCountryFromBrowserLanguage();
         console.log("🌍 Using browser language fallback:", fallbackCountry);
         
-        // Cache the fallback result
         localStorage.setItem("cattler-country", fallbackCountry);
         localStorage.setItem("cattler-country-last-detection", now.toString());
         
@@ -285,4 +506,4 @@ export function useCountryDetection() {
   }, []);
 
   return { detectedCountry, isDetecting };
-} 
+}
