@@ -386,10 +386,23 @@ async function detectCountryFromMultipleIPs(): Promise<Country | null> {
 export function clearCountryDetectionCache() {
   if (typeof window === 'undefined') return;
   
+  // Clear all possible cache keys
   localStorage.removeItem("cattler-country");
   localStorage.removeItem("cattler-country-last-detection");
   localStorage.removeItem("cattler-country-detected");
-  console.log("🌍 Country detection cache cleared");
+  
+  // Clear any old cache keys that might exist
+  const keysToRemove = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.includes("cattler")) {
+      keysToRemove.push(key);
+    }
+  }
+  
+  keysToRemove.forEach(key => localStorage.removeItem(key));
+  
+  console.log("🌍 Country detection cache cleared completely");
 }
 
 export function useCountryDetection() {
@@ -409,13 +422,22 @@ export function useCountryDetection() {
       const lastDetection = localStorage.getItem("cattler-country-last-detection");
       const now = Date.now();
       
-      // If we have a recent detection (within 24 hours), use cached result
-      if (cachedCountry && lastDetection && (now - parseInt(lastDetection)) < 86400000) {
+      // If we have a recent detection (within 2 hours), use cached result
+      if (cachedCountry && lastDetection) {
+        const timeDiff = now - parseInt(lastDetection);
+        const twoHours = 7200000; // 2 hours in milliseconds
+        
+        // Check if cache is valid and not too old
+        if (timeDiff < twoHours && timeDiff > 0) {
         console.log("🌍 Using cached country detection:", cachedCountry);
         setDetectedCountry(cachedCountry as Country);
         setIsDetecting(false);
         hasDetected.current = true;
         return;
+        } else {
+          console.log("🌍 Cache expired or invalid, clearing and redetecting...");
+          clearCountryDetectionCache();
+        }
       }
 
       try {
@@ -460,8 +482,8 @@ export function useCountryDetection() {
         
         // Final validation and mapping
         if (finalCountry) {
-          const supportedCountries: Country[] = ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH"];
-          
+        const supportedCountries: Country[] = ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH"];
+        
           if (supportedCountries.includes(finalCountry)) {
             console.log("🌍 Final country (supported):", finalCountry);
           } else if (spanishSpeakingCountries.includes(finalCountry)) {
@@ -506,4 +528,4 @@ export function useCountryDetection() {
   }, []);
 
   return { detectedCountry, isDetecting };
-}
+} 
