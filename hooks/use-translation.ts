@@ -661,18 +661,24 @@ export function useTranslation() {
     const savedCountry = localStorage.getItem("cattler-country") as Country
     const hasBeenDetected = localStorage.getItem("cattler-country-detected") === "true"
     
+    console.log("🌍 Translation - detectedCountry:", detectedCountry, "isDetecting:", isDetecting);
+    console.log("🌍 Translation - savedCountry:", savedCountry, "hasBeenDetected:", hasBeenDetected);
+    
     if (detectedCountry && !isDetecting) {
       // Si es la primera vez o no hay país guardado, usar el detectado automáticamente
       if (!hasBeenDetected || !savedCountry) {
+        console.log("🌍 Translation - Setting country to detected:", detectedCountry);
         setSelectedCountry(detectedCountry)
         localStorage.setItem("cattler-country", detectedCountry)
         localStorage.setItem("cattler-country-detected", "true")
       } else if (savedCountry && Object.keys(countryLanguageMap).includes(savedCountry)) {
         // Si ya se ha detectado antes, usar el guardado
+        console.log("🌍 Translation - Using saved country:", savedCountry);
         setSelectedCountry(savedCountry)
       }
     } else if (savedCountry && Object.keys(countryLanguageMap).includes(savedCountry)) {
       // Fallback: usar el guardado si no hay detección
+      console.log("🌍 Translation - Using fallback saved country:", savedCountry);
       setSelectedCountry(savedCountry)
     }
     setIsHydrated(true)
@@ -691,7 +697,9 @@ export function useTranslation() {
 
   // Memoize language to prevent unnecessary recalculations
   const language = useMemo(() => {
+    console.log("🌍 Translation - Mapping country to language:", selectedCountry);
     const mappedLanguage = countryLanguageMap[selectedCountry];
+    console.log("🌍 Translation - Mapped language:", mappedLanguage);
     if (!mappedLanguage) {
       console.warn(`No language mapping found for country: ${selectedCountry}, falling back to 'en'`);
       return "en";
