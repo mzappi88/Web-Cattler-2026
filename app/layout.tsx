@@ -29,12 +29,12 @@ export default function RootLayout({
                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
               })(window, document, "clarity", "script", "nk835onlfr");
               
-              // Clarity Project 2: nk835onlfr (redundancy)
+              // Clarity Project 2: noy9x8lyx5
               (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity2", "script", "nk835onlfr");
+              })(window, document, "clarity2", "script", "noy9x8lyx5");
             `,
           }}
         />
