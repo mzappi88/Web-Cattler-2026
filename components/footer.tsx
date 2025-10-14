@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
+import { useIframeDetection } from "@/hooks/use-iframe-detection";
 
 export default function Footer() {
   const { t, selectedCountry, language } = useTranslation();
+  const iframeDetection = useIframeDetection();
 
   // Custom TikTok icon since it's not in Lucide
   const TikTok = () => (
@@ -95,6 +97,17 @@ export default function Footer() {
 
   const contactInfo = getContactInfo();
   const linkUrls = getLinkUrls();
+
+  // Helper function to handle footer link clicks with iframe detection
+  const handleFooterLinkClick = (url: string) => {
+    // Si estamos en un iframe, cambiar la URL del padre
+    if (window.parent && window.parent !== window) {
+      window.parent.location.href = url;
+    } else {
+      // Si no estamos en iframe, redirigir directamente
+      window.location.href = url;
+    }
+  };
 
   return (
     <footer className="bg-gray-900 text-white pt-12 pb-6">
@@ -224,24 +237,24 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-8 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex flex-wrap justify-center md:justify-start space-x-6">
-              <Link
-                href={linkUrls.terms}
-                className="text-gray-400 hover:text-white text-sm"
+              <button
+                onClick={() => handleFooterLinkClick(linkUrls.terms)}
+                className="text-gray-400 hover:text-white text-sm cursor-pointer bg-transparent border-none p-0"
               >
                 {t("footer.termsConditions")}
-              </Link>
-              <Link
-                href={linkUrls.privacy}
-                className="text-gray-400 hover:text-white text-sm"
+              </button>
+              <button
+                onClick={() => handleFooterLinkClick(linkUrls.privacy)}
+                className="text-gray-400 hover:text-white text-sm cursor-pointer bg-transparent border-none p-0"
               >
                 {t("footer.privacyPolicy")}
-              </Link>
-              <Link
-                href={linkUrls.contact}
-                className="text-gray-400 hover:text-white text-sm"
+              </button>
+              <button
+                onClick={() => handleFooterLinkClick(linkUrls.contact)}
+                className="text-gray-400 hover:text-white text-sm cursor-pointer bg-transparent border-none p-0"
               >
                 {language === "es-ar" ? "Contáctanos" : t("footer.contact")}
-              </Link>
+              </button>
             </div>
           </div>
         </div>
