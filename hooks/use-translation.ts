@@ -789,3 +789,77 @@ export function getDemoUrl(country: Country): string {
       return "https://cattler.farm/demo"; // Default fallback
   }
 }
+
+// Enhanced function that considers iframe detection
+export function getDemoUrlWithIframeDetection(country: Country): string {
+  if (typeof window === 'undefined') {
+    return getDemoUrl(country);
+  }
+
+  // Check if we're in an iframe
+  const isInIframe = window !== window.top;
+  const referrer = document.referrer || '';
+  const hostname = window.location.hostname;
+
+  // Detect if we're embedded in Cattler.com.ar
+  const isCattlerComAr = 
+    hostname.includes('cattler.com.ar') ||
+    referrer.includes('cattler.com.ar');
+
+  // Detect if we're embedded in Cattler.farm
+  const isCattlerFarm = 
+    hostname.includes('cattler.farm') ||
+    referrer.includes('cattler.farm');
+
+  // If embedded in Cattler.com.ar, use Spanish URLs
+  if (isCattlerComAr) {
+    return country === 'BR' 
+      ? 'https://cattler.agr.br/demo'
+      : 'https://cattler.com.ar/demo';
+  }
+
+  // If embedded in Cattler.farm, use English URLs
+  if (isCattlerFarm) {
+    return 'https://cattler.farm/demo';
+  }
+
+  // Default country-based logic
+  return getDemoUrl(country);
+}
+
+// Enhanced function for pricing URLs that considers iframe detection
+export function getPricingUrlWithIframeDetection(country: Country): string {
+  if (typeof window === 'undefined') {
+    return getPricingUrl(country);
+  }
+
+  // Check if we're in an iframe
+  const isInIframe = window !== window.top;
+  const referrer = document.referrer || '';
+  const hostname = window.location.hostname;
+
+  // Detect if we're embedded in Cattler.com.ar
+  const isCattlerComAr = 
+    hostname.includes('cattler.com.ar') ||
+    referrer.includes('cattler.com.ar');
+
+  // Detect if we're embedded in Cattler.farm
+  const isCattlerFarm = 
+    hostname.includes('cattler.farm') ||
+    referrer.includes('cattler.farm');
+
+  // If embedded in Cattler.com.ar, use Spanish URLs
+  if (isCattlerComAr) {
+    return country === 'BR' 
+      ? 'https://cattler.agr.br/precos'
+      : 'https://www.cattler.com.ar/precios';
+  }
+
+  // If embedded in Cattler.farm, use English URLs
+  if (isCattlerFarm) {
+    return 'https://cattler.farm/getstarted';
+  }
+
+  // Default country-based logic
+  return getPricingUrl(country);
+}

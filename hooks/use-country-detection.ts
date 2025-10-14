@@ -15,6 +15,38 @@ const englishSpeakingCountries = [
   "TZ", "ZW", "ZM", "MW", "BW", "NA", "SZ", "LS", "US", "CA"
 ];
 
+// 0. DETECCIÓN POR IFRAME PADRE (Prioridad Máxima)
+function detectCountryFromIframe(): Country | null {
+  if (typeof window === 'undefined') return null;
+  
+  const referrer = document.referrer || '';
+  const hostname = window.location.hostname;
+  
+  // Detect if we're embedded in Cattler.com.ar (Always Spanish)
+  const isCattlerComAr = 
+    hostname.includes('cattler.com.ar') ||
+    referrer.includes('cattler.com.ar');
+    
+  // Detect if we're embedded in Cattler.agr.br (Always Portuguese)
+  const isCattlerAgrBr = 
+    hostname.includes('cattler.agr.br') ||
+    referrer.includes('cattler.agr.br');
+  
+  if (isCattlerComAr) {
+    console.log("🌍 Iframe parent detected: cattler.com.ar - forcing Spanish");
+    return "OT$ES"; // Force Spanish for cattler.com.ar
+  }
+  
+  if (isCattlerAgrBr) {
+    console.log("🌍 Iframe parent detected: cattler.agr.br - forcing Portuguese");
+    return "BR"; // Force Portuguese for cattler.agr.br
+  }
+  
+  // cattler.farm - No force, use normal country detection
+  console.log("🌍 No iframe parent detected or cattler.farm (use normal detection)");
+  return null;
+}
+
 // 1. GEOLOCALIZACIÓN DEL NAVEGADOR (Más Preciso)
 async function detectCountryFromGeolocation(): Promise<Country | null> {
   if (typeof window === 'undefined' || !navigator.geolocation) return null;
@@ -445,12 +477,22 @@ export function useCountryDetection() {
         
         let finalCountry: Country | null = null;
         
-        // 1. Try geolocation first (most accurate)
-        console.log("🌍 Step 1: Trying geolocation...");
-        const geolocationCountry = await detectCountryFromGeolocation();
-        if (geolocationCountry) {
-          finalCountry = geolocationCountry;
-          console.log("🌍 Geolocation success:", finalCountry);
+        // 0. Check iframe parent first (highest priority)
+        console.log("🌍 Step 0: Checking iframe parent domain...");
+        const iframeCountry = detectCountryFromIframe();
+        if (iframeCountry) {
+          finalCountry = iframeCountry;
+          console.log("🌍 Iframe parent detection success:", finalCountry);
+        }
+        
+        // 1. Try geolocation (most accurate for direct access)
+        if (!finalCountry) {
+          console.log("🌍 Step 1: Trying geolocation...");
+          const geolocationCountry = await detectCountryFromGeolocation();
+          if (geolocationCountry) {
+            finalCountry = geolocationCountry;
+            console.log("🌍 Geolocation success:", finalCountry);
+          }
         }
         
         // 2. Try timezone detection
