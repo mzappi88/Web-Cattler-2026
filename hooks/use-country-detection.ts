@@ -15,31 +15,46 @@ const englishSpeakingCountries = [
   "TZ", "ZW", "ZM", "MW", "BW", "NA", "SZ", "LS", "US", "CA"
 ];
 
-// 0. DETECCIÓN POR IFRAME PADRE (Prioridad Máxima)
+// Lista de países mapeados que deben mantener su detección normal
+const mappedCountries = ["CL", "BO", "PY", "UY", "AR", "MX", "BR"];
+
+// 0. DETECCIÓN POR IFRAME PADRE (Solo para países NO mapeados)
 function detectCountryFromIframe(): Country | null {
   if (typeof window === 'undefined') return null;
   
   const referrer = document.referrer || '';
   const hostname = window.location.hostname;
   
-  // Detect if we're embedded in Cattler.com.ar (Always Spanish)
+  console.log("🌍 Iframe detection debug:", {
+    referrer,
+    hostname,
+    referrerIncludes: referrer.includes('cattler.com.ar'),
+    hostnameIncludes: hostname.includes('cattler.com.ar')
+  });
+  
+  // Detect if we're embedded in Cattler.com.ar (Always Spanish for non-mapped countries)
   const isCattlerComAr = 
     hostname.includes('cattler.com.ar') ||
     referrer.includes('cattler.com.ar');
     
-  // Detect if we're embedded in Cattler.agr.br (Always Portuguese)
+  // Detect if we're embedded in Cattler.agr.br (Always Portuguese for non-mapped countries)
   const isCattlerAgrBr = 
     hostname.includes('cattler.agr.br') ||
     referrer.includes('cattler.agr.br');
   
+  console.log("🌍 Iframe detection results:", {
+    isCattlerComAr,
+    isCattlerAgrBr
+  });
+  
   if (isCattlerComAr) {
-    console.log("🌍 Iframe parent detected: cattler.com.ar - forcing Spanish");
-    return "OT$ES"; // Force Spanish for cattler.com.ar
+    console.log("🌍 Iframe parent detected: cattler.com.ar - forcing Spanish for non-mapped countries");
+    return "OT$ES"; // Force Spanish for cattler.com.ar (only for non-mapped countries)
   }
   
   if (isCattlerAgrBr) {
-    console.log("🌍 Iframe parent detected: cattler.agr.br - forcing Portuguese");
-    return "BR"; // Force Portuguese for cattler.agr.br
+    console.log("🌍 Iframe parent detected: cattler.agr.br - forcing Portuguese for non-mapped countries");
+    return "BR"; // Force Portuguese for cattler.agr.br (only for non-mapped countries)
   }
   
   // cattler.farm - No force, use normal country detection
@@ -449,120 +464,102 @@ export function useCountryDetection() {
     }
 
     const detectCountry = async () => {
-      // Check if we already have a cached result
-      const cachedCountry = localStorage.getItem("cattler-country");
-      const lastDetection = localStorage.getItem("cattler-country-last-detection");
-      const now = Date.now();
+      // First, try normal country detection for mapped countries
+      console.log("🌍 Starting normal country detection...");
       
-      // If we have a recent detection (within 2 hours), use cached result
-      if (cachedCountry && lastDetection) {
-        const timeDiff = now - parseInt(lastDetection);
-        const twoHours = 7200000; // 2 hours in milliseconds
-        
-        // Check if cache is valid and not too old
-        if (timeDiff < twoHours && timeDiff > 0) {
-        console.log("🌍 Using cached country detection:", cachedCountry);
-        setDetectedCountry(cachedCountry as Country);
-        setIsDetecting(false);
-        hasDetected.current = true;
-        return;
-        } else {
-          console.log("🌍 Cache expired or invalid, clearing and redetecting...");
-          clearCountryDetectionCache();
+      let finalCountry: Country | null = null;
+      
+      // 1. Try geolocation (most accurate for direct access)
+      console.log("🌍 Step 1: Trying geolocation...");
+      const geolocationCountry = await detectCountryFromGeolocation();
+      if (geolocationCountry) {
+        finalCountry = geolocationCountry;
+        console.log("🌍 Geolocation success:", finalCountry);
+      }
+      
+      // 2. Try timezone detection
+      if (!finalCountry) {
+        console.log("🌍 Step 2: Trying timezone detection...");
+        const timezoneCountry = detectCountryFromTimezone();
+        if (timezoneCountry) {
+          finalCountry = timezoneCountry;
+          console.log("🌍 Timezone detection success:", finalCountry);
         }
       }
-
-      try {
-        console.log("🌍 Starting improved country detection...");
-        
-        let finalCountry: Country | null = null;
-        
-        // 0. Check iframe parent first (highest priority)
-        console.log("🌍 Step 0: Checking iframe parent domain...");
-        const iframeCountry = detectCountryFromIframe();
-        if (iframeCountry) {
-          finalCountry = iframeCountry;
-          console.log("🌍 Iframe parent detection success:", finalCountry);
+      
+      // 3. Try multiple IP APIs
+      if (!finalCountry) {
+        console.log("🌍 Step 3: Trying multiple IP APIs...");
+        const ipCountry = await detectCountryFromMultipleIPs();
+        if (ipCountry) {
+          finalCountry = ipCountry;
+          console.log("🌍 IP detection success:", finalCountry);
         }
+      }
+      
+      // 4. Fallback to browser language
+      if (!finalCountry) {
+        console.log("🌍 Step 4: Using browser language fallback...");
+        finalCountry = detectCountryFromBrowserLanguage();
+        console.log("🌍 Browser language fallback:", finalCountry);
+      }
+      
+      // Check if detected country is in mapped countries list
+      const isMappedCountry = finalCountry && mappedCountries.includes(finalCountry);
+      console.log("🌍 Detected country:", finalCountry, "Is mapped:", isMappedCountry);
+      
+      // If it's a mapped country, use normal detection result
+      if (isMappedCountry) {
+        console.log("🌍 Mapped country detected, using normal detection result:", finalCountry);
+        setDetectedCountry(finalCountry);
+        setIsDetecting(false);
+        hasDetected.current = true;
         
-        // 1. Try geolocation (most accurate for direct access)
-        if (!finalCountry) {
-          console.log("🌍 Step 1: Trying geolocation...");
-          const geolocationCountry = await detectCountryFromGeolocation();
-          if (geolocationCountry) {
-            finalCountry = geolocationCountry;
-            console.log("🌍 Geolocation success:", finalCountry);
-          }
-        }
-        
-        // 2. Try timezone detection
-        if (!finalCountry) {
-          console.log("🌍 Step 2: Trying timezone detection...");
-          const timezoneCountry = detectCountryFromTimezone();
-          if (timezoneCountry) {
-            finalCountry = timezoneCountry;
-            console.log("🌍 Timezone detection success:", finalCountry);
-          }
-        }
-        
-        // 3. Try multiple IP APIs
-        if (!finalCountry) {
-          console.log("🌍 Step 3: Trying multiple IP APIs...");
-          const ipCountry = await detectCountryFromMultipleIPs();
-          if (ipCountry) {
-            finalCountry = ipCountry;
-            console.log("🌍 IP detection success:", finalCountry);
-          }
-        }
-        
-        // 4. Fallback to browser language
-        if (!finalCountry) {
-          console.log("🌍 Step 4: Using browser language fallback...");
-          finalCountry = detectCountryFromBrowserLanguage();
-          console.log("🌍 Browser language fallback:", finalCountry);
-        }
-        
-        // Final validation and mapping
-        if (finalCountry) {
-        const supportedCountries: Country[] = ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH"];
-        
-          if (supportedCountries.includes(finalCountry)) {
-            console.log("🌍 Final country (supported):", finalCountry);
-          } else if (spanishSpeakingCountries.includes(finalCountry)) {
-            console.log("🌍 Spanish speaking country detected, setting OT$ES");
-            finalCountry = "OT$ES";
-          } else if (englishSpeakingCountries.includes(finalCountry)) {
-            console.log("🌍 English speaking country detected, setting OT$EN");
-            finalCountry = "OT$EN";
-          } else {
-            console.log("🌍 Unknown country, using browser language fallback");
-            finalCountry = detectCountryFromBrowserLanguage();
-          }
-        }
-
-        console.log("🌍 Final country decision:", finalCountry);
-
         // Cache the result
+        const now = Date.now();
         localStorage.setItem("cattler-country", finalCountry);
         localStorage.setItem("cattler-country-last-detection", now.toString());
-        
-        setDetectedCountry(finalCountry);
+        return;
+      }
+      
+      // For non-mapped countries, check iframe detection
+      console.log("🌍 Non-mapped country, checking iframe detection...");
+      const iframeCountry = detectCountryFromIframe();
+      if (iframeCountry) {
+        console.log("🌍 Iframe parent detection success:", iframeCountry);
+        setDetectedCountry(iframeCountry);
+        setIsDetecting(false);
         hasDetected.current = true;
         
-      } catch (error) {
-        console.warn("Error in improved country detection:", error);
+        // Cache the iframe result
+        const now = Date.now();
+        localStorage.setItem("cattler-country", iframeCountry);
+        localStorage.setItem("cattler-country-last-detection", now.toString());
+        return;
+      }
+      
+      // If we reach here, use the final country from normal detection
+      if (finalCountry) {
+        console.log("🌍 Using final country from normal detection:", finalCountry);
+        setDetectedCountry(finalCountry);
+        setIsDetecting(false);
+        hasDetected.current = true;
         
-        // Final fallback: browser language
+        // Cache the result
+        const now = Date.now();
+        localStorage.setItem("cattler-country", finalCountry);
+        localStorage.setItem("cattler-country-last-detection", now.toString());
+      } else {
+        console.log("🌍 No country detected, using fallback");
         const fallbackCountry = detectCountryFromBrowserLanguage();
-        console.log("🌍 Using browser language fallback:", fallbackCountry);
+        setDetectedCountry(fallbackCountry);
+        setIsDetecting(false);
+        hasDetected.current = true;
         
+        // Cache the fallback result
+        const now = Date.now();
         localStorage.setItem("cattler-country", fallbackCountry);
         localStorage.setItem("cattler-country-last-detection", now.toString());
-        
-        setDetectedCountry(fallbackCountry);
-        hasDetected.current = true;
-      } finally {
-        setIsDetecting(false);
       }
     };
 
