@@ -18,23 +18,78 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Microsoft Clarity - Multiple Projects */}
+        {/* Microsoft Clarity - Conditional Loading */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Clarity Project 1: nk835onlfr
-              (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity", "script", "nk835onlfr");
+              // Conditional Clarity loading to prevent cross-session tracking
+              function initializeClarity() {
+                const hostname = window.location.hostname;
+                const referrer = document.referrer || '';
+                const isInIframe = window !== window.top;
+                
+                console.log('🔍 Clarity Debug:', {
+                  hostname,
+                  referrer,
+                  isInIframe,
+                  referrerIncludesCattlerComAr: referrer.includes('cattler.com.ar'),
+                  referrerIncludesCattlerFarm: referrer.includes('cattler.farm')
+                });
+                
+                // Determine which Clarity project to load
+                let clarityProject = null;
+                let clarityName = 'clarity';
+                
+                // Case 1: Direct access to cattler.farm
+                if (hostname === 'cattler.farm') {
+                  clarityProject = 'nk835onlfr'; // cattler.farm project
+                  console.log('🌍 Loading Clarity for cattler.farm (direct access)');
+                }
+                // Case 2: Direct access to cattler.com.ar
+                else if (hostname === 'cattler.com.ar') {
+                  clarityProject = 'noy9x8lyx5'; // cattler.com.ar project
+                  console.log('🌍 Loading Clarity for cattler.com.ar (direct access)');
+                }
+                // Case 3: Iframe from cattler.com.ar
+                else if (isInIframe && referrer.includes('cattler.com.ar')) {
+                  clarityProject = 'noy9x8lyx5'; // cattler.com.ar project
+                  console.log('🌍 Loading Clarity for cattler.com.ar (iframe)');
+                }
+                // Case 4: Iframe from cattler.farm
+                else if (isInIframe && referrer.includes('cattler.farm')) {
+                  clarityProject = 'nk835onlfr'; // cattler.farm project
+                  console.log('🌍 Loading Clarity for cattler.farm (iframe)');
+                }
+                // Case 5: Default fallback (no iframe, no specific domain)
+                else if (!isInIframe) {
+                  // Use cattler.farm as default for direct access
+                  clarityProject = 'nk835onlfr';
+                  console.log('🌍 Loading default Clarity (cattler.farm)');
+                }
+                // Case 6: Iframe from unknown source - don't load any Clarity
+                else {
+                  console.log('🌍 No Clarity loaded (unknown iframe source)');
+                  return;
+                }
+                
+                // Load the appropriate Clarity project
+                if (clarityProject) {
+                  (function(c,l,a,r,i,t,y){
+                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                  })(window, document, clarityName, "script", clarityProject);
+                  
+                  console.log('✅ Clarity loaded:', clarityProject);
+                }
+              }
               
-              // Clarity Project 2: noy9x8lyx5
-              (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity2", "script", "noy9x8lyx5");
+              // Initialize Clarity when DOM is ready
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeClarity);
+              } else {
+                initializeClarity();
+              }
             `,
           }}
         />
