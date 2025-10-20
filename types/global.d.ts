@@ -13,6 +13,9 @@ declare global {
         }) => void;
       };
     };
+    gtag?: (...args: any[]) => void;
+    fbq?: (...args: any[]) => void;
+    dataLayer?: any[];
   }
 }
 

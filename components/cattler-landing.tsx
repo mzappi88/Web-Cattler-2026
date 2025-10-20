@@ -139,6 +139,37 @@ export default function CattlerLanding() {
         },
         onFormSubmitted: () => {
           setSubmitted(true);
+
+          // Google Tag Manager - Evento de conversión
+          if (typeof window !== "undefined" && (window as any).dataLayer) {
+            (window as any).dataLayer.push({
+              event: "form_submit",
+              event_category: "engagement",
+              event_label: "hubspot_form_landing",
+              form_type: "hubspot",
+              page_location: window.location.href,
+              page_title: document.title,
+              value: 1,
+            });
+          }
+
+          // Google Tag Manager - Evento de conversión específico
+          if (typeof window !== "undefined" && (window as any).dataLayer) {
+            (window as any).dataLayer.push({
+              event: "conversion",
+              conversion_type: "lead_form",
+              form_source: "landing_page",
+              country: selectedCountry,
+              language: language,
+              value: 1,
+              currency: "USD",
+            });
+          }
+
+          // Facebook Pixel - Evento de conversión (opcional)
+          if (typeof window !== "undefined" && window.fbq) {
+            window.fbq("track", "Lead");
+          }
         },
       });
     }
