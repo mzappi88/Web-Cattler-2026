@@ -140,6 +140,8 @@ export default function CattlerLanding() {
         onFormSubmitted: () => {
           setSubmitted(true);
 
+          console.log("🎯 Form submitted - sending conversion events to GTM");
+
           // Google Tag Manager - Evento de conversión
           if (typeof window !== "undefined" && (window as any).dataLayer) {
             (window as any).dataLayer.push({
@@ -151,6 +153,7 @@ export default function CattlerLanding() {
               page_title: document.title,
               value: 1,
             });
+            console.log("✅ form_submit event sent to GTM");
           }
 
           // Google Tag Manager - Evento de conversión específico
@@ -164,11 +167,13 @@ export default function CattlerLanding() {
               value: 1,
               currency: "USD",
             });
+            console.log("✅ conversion event sent to GTM");
           }
 
           // Facebook Pixel - Evento de conversión (opcional)
           if (typeof window !== "undefined" && window.fbq) {
             window.fbq("track", "Lead");
+            console.log("✅ Facebook Pixel event sent");
           }
         },
       });
