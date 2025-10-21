@@ -18,15 +18,61 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Google Tag Manager */}
+        {/* Google Tag Manager - Conditional Loading */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-              })(window,document,'script','dataLayer','GTM-MM57STLM');
+              (function() {
+                const hostname = window.location.hostname;
+                const referrer = document.referrer || '';
+                const isInIframe = window !== window.top;
+                
+                // Determine which GTM container to use
+                let gtmId = null;
+                
+                // Case 1: Direct access to cattler.farm
+                if (hostname === 'cattler.farm') {
+                  gtmId = 'GTM-MM57STLM';
+                  console.log('🌍 Loading GTM for cattler.farm (direct access)');
+                }
+                // Case 2: Direct access to cattler.com.ar
+                else if (hostname === 'cattler.com.ar') {
+                  gtmId = 'GTM-TNCF2F2Q';
+                  console.log('🌍 Loading GTM for cattler.com.ar (direct access)');
+                }
+                // Case 3: Iframe from cattler.com.ar
+                else if (isInIframe && referrer.includes('cattler.com.ar')) {
+                  gtmId = 'GTM-TNCF2F2Q';
+                  console.log('🌍 Loading GTM for cattler.com.ar (iframe)');
+                }
+                // Case 4: Iframe from cattler.farm
+                else if (isInIframe && referrer.includes('cattler.farm')) {
+                  gtmId = 'GTM-MM57STLM';
+                  console.log('🌍 Loading GTM for cattler.farm (iframe)');
+                }
+                // Case 5: Default fallback (no iframe, no specific domain)
+                else if (!isInIframe) {
+                  // Use cattler.farm as default for direct access
+                  gtmId = 'GTM-MM57STLM';
+                  console.log('🌍 Loading default GTM (cattler.farm)');
+                }
+                // Case 6: Iframe from unknown source - don't load any GTM
+                else {
+                  console.log('🌍 No GTM loaded (unknown iframe source)');
+                  return;
+                }
+                
+                // Load the appropriate GTM container
+                if (gtmId) {
+                  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                  })(window,document,'script','dataLayer',gtmId);
+                  
+                  console.log('✅ GTM loaded:', gtmId);
+                }
+              })();
             `,
           }}
         />
@@ -172,15 +218,46 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {/* Google Tag Manager (noscript) */}
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-MM57STLM"
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
+        {/* Google Tag Manager (noscript) - Conditional */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const hostname = window.location.hostname;
+                const referrer = document.referrer || '';
+                const isInIframe = window !== window.top;
+                
+                // Determine which GTM container to use (same logic as head)
+                let gtmId = null;
+                
+                if (hostname === 'cattler.farm') {
+                  gtmId = 'GTM-MM57STLM';
+                } else if (hostname === 'cattler.com.ar') {
+                  gtmId = 'GTM-TNCF2F2Q';
+                } else if (isInIframe && referrer.includes('cattler.com.ar')) {
+                  gtmId = 'GTM-TNCF2F2Q';
+                } else if (isInIframe && referrer.includes('cattler.farm')) {
+                  gtmId = 'GTM-MM57STLM';
+                } else if (!isInIframe) {
+                  gtmId = 'GTM-MM57STLM';
+                }
+                
+                // Add noscript iframe if GTM ID is determined
+                if (gtmId) {
+                  const noscript = document.createElement('noscript');
+                  const iframe = document.createElement('iframe');
+                  iframe.src = 'https://www.googletagmanager.com/ns.html?id=' + gtmId;
+                  iframe.height = '0';
+                  iframe.width = '0';
+                  iframe.style.display = 'none';
+                  iframe.style.visibility = 'hidden';
+                  noscript.appendChild(iframe);
+                  document.body.insertBefore(noscript, document.body.firstChild);
+                }
+              })();
+            `,
+          }}
+        />
         <TranslationProvider>
           <IframeResizer />
           {children}
