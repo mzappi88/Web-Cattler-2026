@@ -1,9 +1,5 @@
-import HubSpotForm from "@/components/hubspot-form"
+import DemoPage from "@/components/demo-page";
 
-export default function DemoPage() {
-  return (
-    <div className="min-h-screen">
-      <HubSpotForm />
-    </div>
-  )
+export default function Demo() {
+  return <DemoPage />;
 }

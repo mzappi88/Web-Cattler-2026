@@ -1577,12 +1577,8 @@ const pricingTranslations = {
     "promotion.freeMonths": "meses grátis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
-    "promotion.limitedTime": "Oferta por tempo limitado - Economize até 50% em planos e complementos selecionados!",
-  }, 
-  
-
-
-
+    "promotion.limitedTime": "Oferta por tempo limitado - Economize até 50% em planos e complementos selecionados!"
+  }
 }
 
 export function usePricingTranslation() {

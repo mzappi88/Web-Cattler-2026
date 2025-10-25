@@ -561,7 +561,7 @@ export function useCountryDetection() {
         localStorage.setItem("cattler-country", fallbackCountry);
         localStorage.setItem("cattler-country-last-detection", now.toString());
       }
-    };
+    }
 
     detectCountry();
   }, []);

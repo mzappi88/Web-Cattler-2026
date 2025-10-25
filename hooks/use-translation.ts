@@ -331,7 +331,7 @@ const translations = {
     explorePlansAndPrices: "Explorar Planes y Precios",
     requestFreeDemo: "Solicitar Demo Gratuita",
     close: "Cerrar",
-    videoNotAvailable: "Video no disponible",
+    videoNotAvailable: "Video no disponible"
   },
   pt: {
     // Navigation
@@ -641,8 +641,8 @@ const translations = {
     explorePlansAndPrices: "Explorar Planes y Precios",
     requestFreeDemo: "Solicitar Demo Gratuita",
     close: "Cerrar",
-    videoNotAvailable: "Video no disponible",
-  },
+    videoNotAvailable: "Video no disponible"
+  }
 }
 
 export function useTranslation() {
