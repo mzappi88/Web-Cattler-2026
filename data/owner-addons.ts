@@ -35,7 +35,7 @@ export const ADDON_IDS = {
   // Chute related
   CHUTE: "chute",
   EID_INTEGRATION: "EIDIntegration",
-  CHUTE_QUICK_START: "chuteQuickStart",
+  CHUTE_QUICK_START: "ChuteQuickStart",
   CHUTE_CATTLE_IN: "chuteCattleIN",
   
   // Feeding related
@@ -303,7 +303,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan4"],
       hidden: true,
     },
-    "chuteQuickStart": {
+    "ChuteQuickStart": {
       name: "Tronco Quick Start",
       description: "Sistema rápido de configuração do tronco",
       availableFor: ["plan1", "plan2"],
@@ -519,7 +519,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan4"],
       hidden: true,
     },
-    "chuteQuickStart": {
+    "ChuteQuickStart": {
       name: "Manga Quick Start",
       description: "Sistema rápido de configuración de manga",
       availableFor: ["plan1", "plan2"],
@@ -731,7 +731,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan4"],
       hidden: true,
     },
-    "chuteQuickStart": {
+    "ChuteQuickStart": {
       name: "Chute Quick Start",
       description: "Quick chute setup system",
       availableFor: [],
@@ -942,7 +942,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan4"],
       hidden: true,
     },
-    "chuteQuickStart": {
+    "ChuteQuickStart": {
       name: "Chute Quick Start",
       description: "Quick chute setup system",
       availableFor: [],
@@ -1016,6 +1016,35 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       availableFor: ["plan1"],
       includedIn: ["plan2", "plan3", "plan4"],
       hidden: true,
+    },
+    "FeedingAutomation": {
+      name: "Automatización de Carga y Descarga",
+      description: "Sistema de automatización de carga y descarga",
+      availableFor: ["plan2"],
+      includedIn: ["plan3", "plan4"],
+      comingSoon: false,
+      hidden: false,
+    },
+"autoAdjust": {
+      name: "Ajuste Automático de Órdenes de Entrega",
+      description: "Sistema de ajuste automático de órdenes de entrega",
+      availableFor: ["plan2"],
+      includedIn: ["plan3", "plan4"],
+      hidden: false,
+    },
+    "feedingProtocols": {
+      name: "Protocolos de Alimentación",
+      description: "Sistema de protocolos de alimentación",
+      availableFor: [],
+      includedIn: ["plan2","plan3", "plan4"],
+      hidden: false,
+    },
+    "BunkScoreCustomization": {
+      name: "Lectura de comederos personalizada",
+      description: "Sistema de personalización de la lectura de comederos y ajuste automático de entregas",
+      availableFor: ["plan2"],
+      includedIn: ["plan3", "plan4"],
+      hidden: false,
     },
     "inputTransformation": {
       name: "Premixes",
@@ -1273,7 +1302,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan4"],
       hidden: true,
     },
-    "chuteQuickStart": {
+    "ChuteQuickStart": {
       name: "Manga Inicio Rápido",
       description: "Sistema rápido de configuración de manga",
       availableFor: ["plan1"],
@@ -1491,7 +1520,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       hidden: true,
     },
     
-    "chuteQuickStart": {
+    "ChuteQuickStart": {
       name: "Manga Quick Start",
       description: "Sistema rápido de configuración de manga",
       availableFor: ["plan1", "plan2"],
@@ -1708,7 +1737,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan2","plan3"],
       hidden: false,
     },
-    "chuteQuickStart": {
+    "ChuteQuickStart": {
       name: "Manga Quick Start",
       description: "Sistema rápido de configuración de manga",
       availableFor: ["plan1", "plan2"],
@@ -1919,7 +1948,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan4"],
       hidden: true,
     },
-    "chuteQuickStart": {
+    "ChuteQuickStart": {
       name: "Manga Quick Start",
       description: "Sistema rápido de configuración de manga",
       availableFor: [],
@@ -2130,7 +2159,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan4"],
       hidden: true,
     },
-    "chuteQuickStart": {
+    "ChuteQuickStart": {
       name: "Manga Quick Start",
       description: "Sistema rápido de configuración de manga",
       availableFor: [],
@@ -2342,7 +2371,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
       includedIn: ["plan4"],
       hidden: true,
     },
-    "chuteQuickStart": {
+    "ChuteQuickStart": {
       name: "Chute Quick Start",
       description: "Quick chute setup system",
       availableFor: [],

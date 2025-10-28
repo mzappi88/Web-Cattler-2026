@@ -452,14 +452,37 @@ export function clearCountryDetectionCache() {
   console.log("🌍 Country detection cache cleared completely");
 }
 
+// Helper function to check if we're in admin mode
+function isAdminMode(): boolean {
+  if (typeof window === 'undefined') return false;
+  return localStorage.getItem("cattler-admin-mode") === "true";
+}
+
+// Helper function to save country only if not in admin mode
+function saveCountryIfNotAdmin(country: Country): void {
+  if (!isAdminMode()) {
+    const now = Date.now();
+    localStorage.setItem("cattler-country", country);
+    localStorage.setItem("cattler-country-last-detection", now.toString());
+    console.log("🌍 Country saved to localStorage:", country);
+  } else {
+    console.log("🌍 Admin mode active - NOT saving country to localStorage");
+  }
+}
+
 export function useCountryDetection() {
   const [detectedCountry, setDetectedCountry] = useState<Country | null>(null);
   const [isDetecting, setIsDetecting] = useState(true);
   const hasDetected = useRef(false);
 
   useEffect(() => {
-    // Prevent multiple detections and ensure we're on client side
-    if (hasDetected.current || typeof window === 'undefined') {
+    // Ensure we're on client side
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    // Only prevent multiple detections if we already have a result
+    if (hasDetected.current && detectedCountry) {
       return;
     }
 
@@ -517,8 +540,7 @@ export function useCountryDetection() {
         
         // Cache the result
         const now = Date.now();
-        localStorage.setItem("cattler-country", finalCountry);
-        localStorage.setItem("cattler-country-last-detection", now.toString());
+        saveCountryIfNotAdmin(finalCountry);
         return;
       }
       
@@ -532,9 +554,7 @@ export function useCountryDetection() {
         hasDetected.current = true;
         
         // Cache the iframe result
-        const now = Date.now();
-        localStorage.setItem("cattler-country", iframeCountry);
-        localStorage.setItem("cattler-country-last-detection", now.toString());
+        saveCountryIfNotAdmin(iframeCountry);
         return;
       }
       
@@ -546,9 +566,7 @@ export function useCountryDetection() {
         hasDetected.current = true;
         
         // Cache the result
-        const now = Date.now();
-        localStorage.setItem("cattler-country", finalCountry);
-        localStorage.setItem("cattler-country-last-detection", now.toString());
+        saveCountryIfNotAdmin(finalCountry);
       } else {
         console.log("🌍 No country detected, using fallback");
         const fallbackCountry = detectCountryFromBrowserLanguage();
@@ -557,9 +575,7 @@ export function useCountryDetection() {
         hasDetected.current = true;
         
         // Cache the fallback result
-        const now = Date.now();
-        localStorage.setItem("cattler-country", fallbackCountry);
-        localStorage.setItem("cattler-country-last-detection", now.toString());
+        saveCountryIfNotAdmin(fallbackCountry);
       }
     }
 

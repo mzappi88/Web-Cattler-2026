@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
-import { useCountryDetection } from "./use-country-detection"
+import { useTranslation } from "./use-translation"
 
 export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "CH" | "OT$EN" | "OT$ES"
 
@@ -1582,48 +1582,25 @@ const pricingTranslations = {
 }
 
 export function usePricingTranslation() {
-  const [selectedCountry, setSelectedCountry] = useState<Country>("US")
-  const [isHydrated, setIsHydrated] = useState(false)
-  const { detectedCountry, isDetecting } = useCountryDetection()
-
-  // Initialize from localStorage on mount
-  useEffect(() => {
-    // Ensure we're on the client side
-    if (typeof window === 'undefined') {
-      setIsHydrated(true);
-      return;
-    }
-
-    const savedCountry = localStorage.getItem("cattler-country") as Country
-    const hasBeenDetected = localStorage.getItem("cattler-country-detected") === "true"
+  console.log("💰 Pricing Hook - Starting usePricingTranslation");
+  
+  // Use the main translation hook which already has admin mode logic
+  const { selectedCountry, setSelectedCountry, isHydrated } = useTranslation();
+  
+  console.log("💰 Pricing Hook - Using translation hook:", { selectedCountry, isHydrated });
+  
+  // Debug: Check localStorage directly
+  if (typeof window !== 'undefined') {
+    const savedCountry = localStorage.getItem("cattler-country");
+    const adminMode = localStorage.getItem("cattler-admin-mode");
+    console.log("💰 Pricing Hook - localStorage debug:", { savedCountry, adminMode });
     
-    if (detectedCountry && !isDetecting) {
-      // Si es la primera vez o no hay país guardado, usar el detectado automáticamente
-      if (!hasBeenDetected || !savedCountry) {
-        setSelectedCountry(detectedCountry)
-        localStorage.setItem("cattler-country", detectedCountry)
-        localStorage.setItem("cattler-country-detected", "true")
-      } else if (savedCountry && Object.keys(countryCurrencyMap).includes(savedCountry)) {
-        // Si ya se ha detectado antes, usar el guardado
-        setSelectedCountry(savedCountry)
-      }
-    } else if (savedCountry && Object.keys(countryCurrencyMap).includes(savedCountry)) {
-      // Fallback: usar el guardado si no hay detección
-      setSelectedCountry(savedCountry)
+    // Force override if in admin mode
+    if (adminMode === "true" && savedCountry) {
+      console.log("💰 Pricing Hook - Admin mode detected, forcing country to:", savedCountry);
+      // Don't override here, let the main hook handle it
     }
-    setIsHydrated(true)
-  }, [detectedCountry, isDetecting])
-
-  // Save to localStorage when country changes
-  useEffect(() => {
-    if (isHydrated && typeof window !== 'undefined') {
-      localStorage.setItem("cattler-country", selectedCountry)
-    }
-  }, [selectedCountry, isHydrated])
-
-  const handleCountryChange = useCallback((country: Country) => {
-    setSelectedCountry(country)
-  }, [])
+  }
 
   // Memoize currency to prevent unnecessary recalculations
   const currency = useMemo(() => countryCurrencyMap[selectedCountry], [selectedCountry])
@@ -1667,7 +1644,7 @@ export function usePricingTranslation() {
 
   return {
     selectedCountry,
-    setSelectedCountry: handleCountryChange,
+    setSelectedCountry,
     currency,
     t,
     formatPrice,

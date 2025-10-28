@@ -649,6 +649,9 @@ export function useTranslation() {
   const [selectedCountry, setSelectedCountry] = useState<Country>("US")
   const [isHydrated, setIsHydrated] = useState(false)
   const { detectedCountry, isDetecting } = useCountryDetection()
+  
+  // Detect if we're in admin mode (accessed via /country-test)
+  const [isAdminMode, setIsAdminMode] = useState(false)
 
   // Initialize from localStorage on mount
   useEffect(() => {
@@ -660,19 +663,49 @@ export function useTranslation() {
 
     const savedCountry = localStorage.getItem("cattler-country") as Country
     const hasBeenDetected = localStorage.getItem("cattler-country-detected") === "true"
+    const adminMode = localStorage.getItem("cattler-admin-mode") === "true"
+    
+    // Update admin mode state
+    setIsAdminMode(adminMode)
     
     console.log("🌍 Translation - detectedCountry:", detectedCountry, "isDetecting:", isDetecting);
     console.log("🌍 Translation - savedCountry:", savedCountry, "hasBeenDetected:", hasBeenDetected);
+    console.log("🌍 Translation - isAdminMode:", adminMode);
     
+    // In admin mode, ONLY use saved country or default, NEVER auto-detect
+    if (adminMode) {
+      console.log("🌍 Translation - Admin mode: Using saved country or default, ignoring auto-detection");
+      if (savedCountry && Object.keys(countryLanguageMap).includes(savedCountry)) {
+        console.log("🌍 Translation - Admin mode: Using saved country:", savedCountry);
+        setSelectedCountry(savedCountry)
+      } else {
+        console.log("🌍 Translation - Admin mode: Using default country US");
+        setSelectedCountry("US")
+      }
+      setIsHydrated(true)
+      return; // Exit early in admin mode - don't execute any auto-detection logic
+    }
+    
+    // Only execute auto-detection logic if NOT in admin mode
     if (detectedCountry && !isDetecting) {
-      // Si es la primera vez o no hay país guardado, usar el detectado automáticamente
-      if (!hasBeenDetected || !savedCountry) {
+      // Solo ejecutar detección automática si NO estamos en modo admin
+      // Lista de países mapeados específicos que tienen prioridad sobre países guardados
+      const mappedCountries = ["CL", "BO", "PY", "UY", "AR", "MX", "BR"];
+      
+      // Si el país detectado es un país mapeado específico, siempre usarlo (sobrescribir el guardado)
+      if (mappedCountries.includes(detectedCountry)) {
+        console.log("🌍 Translation - Detected mapped country, overriding saved country:", detectedCountry);
+        setSelectedCountry(detectedCountry)
+        localStorage.setItem("cattler-country", detectedCountry)
+        localStorage.setItem("cattler-country-detected", "true")
+      } else if (!hasBeenDetected || !savedCountry) {
+        // Si es la primera vez o no hay país guardado, usar el detectado automáticamente
         console.log("🌍 Translation - Setting country to detected:", detectedCountry);
         setSelectedCountry(detectedCountry)
         localStorage.setItem("cattler-country", detectedCountry)
         localStorage.setItem("cattler-country-detected", "true")
       } else if (savedCountry && Object.keys(countryLanguageMap).includes(savedCountry)) {
-        // Si ya se ha detectado antes, usar el guardado
+        // Si ya se ha detectado antes y no es un país mapeado específico, usar el guardado
         console.log("🌍 Translation - Using saved country:", savedCountry);
         setSelectedCountry(savedCountry)
       }

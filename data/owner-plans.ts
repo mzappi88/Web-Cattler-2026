@@ -401,10 +401,10 @@ export const PRICES_BY_COUNTRY: Record<
     ChuteNewOrder: 0,
     EIDIntegration: 50,
     AdvancedFeeding: 0,
-    FeedingProtocols: 0,
-    AutoAdjust: 0,
+    FeedingProtocols: 25,
+    AutoAdjust: 25,
     BunkScoreCustomization: 25,
-    FeedingAutomation: 0,
+    FeedingAutomation: 25,
     AdvancedInventory: 100,
     InputTransformation: 25,
     Purchases: 25,
@@ -690,6 +690,8 @@ export const getComingSoonText = (selectedCountry: string) => {
 
 // Helper function to get localized pens and users text
 function getLocalizedPensUsersText(selectedCountry: string): { pens: string; users: string } {
+  console.log("🔍 getLocalizedPensUsersText called with country:", selectedCountry);
+  
   const translations: Record<string, { pens: string; users: string }> = {
     BR: { pens: "currais", users: "usuários" },
     AR: { pens: "corrales", users: "usuarios" },
@@ -704,7 +706,9 @@ function getLocalizedPensUsersText(selectedCountry: string): { pens: string; use
     "OT$ES": { pens: "corrales", users: "usuarios" },
   };
 
-  return translations[selectedCountry] ?? translations["OT$EN"];
+  const result = translations[selectedCountry] ?? translations["OT$EN"];
+  console.log("🔍 getLocalizedPensUsersText result:", result);
+  return result;
 }
 
 // Function to get owner plans for a specific country

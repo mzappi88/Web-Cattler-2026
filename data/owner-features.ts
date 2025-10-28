@@ -344,7 +344,7 @@ const FEATURE_CONFIG: FeatureConfig = {
     penRider: { plan1: true, plan2: true, plan3: true, plan4: true },
     reports: { plan1: true, plan2: true, plan3: true, plan4: true },
     advancedFeeding: { 
-      plan1: "addon", 
+      plan1: false, 
       plan2: true, 
       plan3: true, 
       plan4: true,

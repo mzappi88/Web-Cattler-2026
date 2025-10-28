@@ -6,13 +6,39 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCountryDetection } from "@/hooks/use-country-detection";
 import { useTranslation } from "@/hooks/use-translation";
 import { clearCountryDetectionCache } from "@/hooks/use-country-detection";
+import { useRouter } from "next/navigation";
 
 export function CountryDetectionTest() {
   const { detectedCountry, isDetecting } = useCountryDetection();
   const { selectedCountry, setSelectedCountry, language, isHydrated, t } =
     useTranslation();
+  const router = useRouter();
   const [debugInfo, setDebugInfo] = useState<any>(null);
   const [apiTestResult, setApiTestResult] = useState<any>(null);
+  const [isInIframe, setIsInIframe] = useState<boolean>(false);
+
+  // Detect admin mode - only on client side
+  const [isAdminMode, setIsAdminMode] = useState<boolean>(false);
+
+  // Detect admin mode and iframe - only on client side
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const adminMode = window.location.pathname === "/country-test";
+      const inIframe = window !== window.top;
+
+      setIsAdminMode(adminMode);
+      setIsInIframe(inIframe);
+
+      // Activate admin mode in localStorage when accessing /country-test
+      if (adminMode) {
+        localStorage.setItem("cattler-admin-mode", "true");
+        console.log("🔍 Admin Mode Activated");
+      }
+
+      console.log("🔍 Admin Mode Detection:", { adminMode });
+      console.log("🔍 Iframe Detection:", { inIframe });
+    }
+  }, []);
 
   useEffect(() => {
     if (isHydrated && selectedCountry) {
@@ -30,30 +56,46 @@ export function CountryDetectionTest() {
         isDetecting,
         language,
         isHydrated,
+        isInIframe,
         browserLanguage:
-          typeof window !== "undefined" ? navigator.language : "N/A",
-        userAgent: typeof window !== "undefined" ? navigator.userAgent : "N/A",
+          typeof navigator !== "undefined" ? navigator.language : "unknown",
+        userAgent:
+          typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
         translationTests,
-        localStorage: {
-          cattlerCountry:
-            typeof window !== "undefined"
-              ? localStorage.getItem("cattler-country")
-              : null,
-          cattlerCountryDetected:
-            typeof window !== "undefined"
-              ? localStorage.getItem("cattler-country-detected")
-              : null,
-          cattlerCountryLastDetection:
-            typeof window !== "undefined"
-              ? localStorage.getItem("cattler-country-last-detection")
-              : null,
-        },
+        localStorage:
+          typeof window !== "undefined"
+            ? {
+                cattlerCountry: localStorage.getItem("cattler-country"),
+                cattlerCountryDetected: localStorage.getItem(
+                  "cattler-country-detected"
+                ),
+                cattlerCountryLastDetection: localStorage.getItem(
+                  "cattler-country-last-detection"
+                ),
+              }
+            : null,
       });
     }
-  }, [selectedCountry, detectedCountry, isDetecting, isHydrated, language, t]);
+  }, [
+    selectedCountry,
+    detectedCountry,
+    isDetecting,
+    isHydrated,
+    language,
+    t,
+    isInIframe,
+  ]);
 
   const handleClearCache = () => {
     clearCountryDetectionCache();
+    window.location.reload();
+  };
+
+  const exitAdminMode = () => {
+    localStorage.removeItem("cattler-admin-mode");
+    localStorage.removeItem("cattler-country");
+    localStorage.removeItem("cattler-country-detected");
+    localStorage.removeItem("cattler-country-last-detection");
     window.location.reload();
   };
 
@@ -74,16 +116,16 @@ export function CountryDetectionTest() {
   };
 
   const logCacheInfo = () => {
-    if (typeof window === "undefined") return;
-
     const cacheInfo = {
       cattlerCountry: localStorage.getItem("cattler-country"),
       cattlerCountryDetected: localStorage.getItem("cattler-country-detected"),
       cattlerCountryLastDetection: localStorage.getItem(
         "cattler-country-last-detection"
       ),
-      browserLanguage: navigator.language,
-      userAgent: navigator.userAgent,
+      browserLanguage:
+        typeof navigator !== "undefined" ? navigator.language : "unknown",
+      userAgent:
+        typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
     };
 
     console.log("🌍 Cache Info:", cacheInfo);
@@ -108,15 +150,49 @@ export function CountryDetectionTest() {
     alert(`Translation Test: ${JSON.stringify(results, null, 2)}`);
   };
 
+  // Navigation functions - only available when not in iframe
+  const navigateToRoute = (route: string) => {
+    if (isInIframe) {
+      console.log("🚫 Navigation blocked: Page is embedded in iframe");
+      return;
+    }
+
+    console.log(`🌍 Navigating to ${route} with country: ${selectedCountry}`);
+    router.push(route);
+  };
+
+  const navigationRoutes = [
+    { path: "/", label: "Home" },
+    { path: "/pricing", label: "Pricing" },
+    { path: "/about_us", label: "About Us" },
+    { path: "/contact", label: "Contact" },
+    { path: "/demo", label: "Demo" },
+    { path: "/sale", label: "Sale" },
+  ];
+
   if (!isHydrated) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p>Loading country detection...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Country Detection Debug</CardTitle>
+          <CardTitle className="flex items-center justify-between">
+            Country Detection Debug
+            {isAdminMode && (
+              <span className="px-2 py-1 text-xs font-bold text-white bg-red-600 rounded-full">
+                ADMIN MODE
+              </span>
+            )}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -138,19 +214,27 @@ export function CountryDetectionTest() {
             </div>
             <div>
               <strong>Browser Language:</strong>{" "}
-              {typeof window !== "undefined" ? navigator.language : "N/A"}
+              {typeof navigator !== "undefined"
+                ? navigator.language
+                : "unknown"}
             </div>
             <div>
               <strong>Timezone:</strong>{" "}
-              {typeof window !== "undefined"
+              {typeof Intl !== "undefined"
                 ? Intl.DateTimeFormat().resolvedOptions().timeZone
-                : "N/A"}
+                : "unknown"}
             </div>
             <div>
               <strong>User Agent:</strong>{" "}
-              {typeof window !== "undefined"
+              {typeof navigator !== "undefined"
                 ? navigator.userAgent.substring(0, 50) + "..."
-                : "N/A"}
+                : "unknown"}
+            </div>
+            <div>
+              <strong>In Iframe:</strong> {isInIframe ? "Yes" : "No"}
+            </div>
+            <div>
+              <strong>Admin Mode:</strong> {isAdminMode ? "Yes" : "No"}
             </div>
           </div>
 
@@ -185,6 +269,11 @@ export function CountryDetectionTest() {
             <Button onClick={testTranslation} variant="outline">
               Test Translations
             </Button>
+            {isAdminMode && (
+              <Button onClick={exitAdminMode} variant="destructive">
+                Salir del Modo Admin
+              </Button>
+            )}
           </div>
 
           <div className="mt-4">
@@ -214,6 +303,57 @@ export function CountryDetectionTest() {
               ))}
             </div>
           </div>
+
+          {/* Navigation Section - Only show when not in iframe */}
+          {!isInIframe && (
+            <div className="mt-6">
+              <h3 className="font-bold mb-2">
+                Navigate to Routes with Current Country:
+              </h3>
+              <p className="text-sm text-gray-600 mb-3">
+                Current country: <strong>{selectedCountry}</strong> ({language})
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {navigationRoutes.map((route) => (
+                  <Button
+                    key={route.path}
+                    onClick={() => navigateToRoute(route.path)}
+                    variant="secondary"
+                    size="sm"
+                  >
+                    {route.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Admin Mode Info */}
+          {isAdminMode && (
+            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <h3 className="font-bold text-blue-800 mb-2">
+                🔧 Admin Mode Active
+              </h3>
+              <p className="text-sm text-blue-700">
+                You're in admin mode! Auto-detection is disabled. You can
+                manually select any country and it will persist until you change
+                it. Perfect for testing different locales.
+              </p>
+            </div>
+          )}
+
+          {/* Iframe Warning */}
+          {isInIframe && (
+            <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <h3 className="font-bold text-yellow-800 mb-2">
+                ⚠️ Iframe Detected
+              </h3>
+              <p className="text-sm text-yellow-700">
+                Navigation is disabled because this page is embedded in an
+                iframe. This prevents navigation from affecting the parent page.
+              </p>
+            </div>
+          )}
 
           <div className="mt-4">
             <h3 className="font-bold mb-2">Translation Test:</h3>

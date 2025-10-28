@@ -1,4 +1,4 @@
-import { CountryDetectionTest } from "@/components/country-detection-test";
+import { ClientOnlyCountryTest } from "@/components/client-only-country-test";
 
 export default function CountryTestPage() {
   return (
@@ -6,7 +6,7 @@ export default function CountryTestPage() {
       <h1 className="text-3xl font-bold mb-8 text-center">
         Country Detection Test
       </h1>
-      <CountryDetectionTest />
+      <ClientOnlyCountryTest />
 
       <div className="mt-8 p-4 bg-gray-100 rounded-lg">
         <h2 className="text-xl font-semibold mb-4">Debugging Instructions:</h2>
