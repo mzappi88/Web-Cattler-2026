@@ -1155,14 +1155,14 @@ function getPopularPlan(country: string): number {
   const popularPlans: Record<string, number> = {
     BR: 3, // FLEX
     AR: 3, // Integral
-    US: 2, // CORE
-    CA: 2, // CORE
+    US: 3, // CORE
+    CA: 3, // CORE
     PY: 3, // Total
     UY: 2, // CORE
     BO: 2, // START
     MX: 2, // CORE
-    OT$EN: 2, // CORE
-    OT$ES: 2, // CORE
+    OT$EN: 3, // CORE
+    OT$ES: 3, // CORE
   };
 
   return popularPlans[country] ?? 2;
