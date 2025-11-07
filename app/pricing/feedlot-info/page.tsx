@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import FeedlotInfo from "@/components/pricing/feedlot-info";
 import { getPricingUrl } from "@/hooks/use-translation";
+import { safeGetItem, safeGetItemJSON } from "@/lib/storage";
 
 export default function FeedlotInfoPage() {
   const searchParams = useSearchParams();
@@ -36,11 +37,10 @@ export default function FeedlotInfoPage() {
           }
         } else {
           // Try to get from localStorage as fallback
-          const storedData = localStorage.getItem("paymentData");
+          const storedData = safeGetItemJSON<any>("paymentData");
           if (storedData) {
-            const data = JSON.parse(storedData);
             if (mounted) {
-              setPaymentData(data);
+              setPaymentData(storedData);
               setError(null);
             }
           } else {
@@ -48,9 +48,7 @@ export default function FeedlotInfoPage() {
               setError("No payment data found");
               setTimeout(() => {
                 if (mounted) {
-                  const savedCountry = localStorage.getItem(
-                    "cattler-country"
-                  ) as any;
+                  const savedCountry = safeGetItem("cattler-country") as any;
                   const pricingUrl = getPricingUrl(savedCountry || "US");
                   if (window.parent && window.parent !== window) {
                     window.parent.location.href = pricingUrl;
@@ -68,9 +66,7 @@ export default function FeedlotInfoPage() {
           setError("Invalid payment data");
           setTimeout(() => {
             if (mounted) {
-              const savedCountry = localStorage.getItem(
-                "cattler-country"
-              ) as any;
+              const savedCountry = safeGetItem("cattler-country") as any;
               const pricingUrl = getPricingUrl(savedCountry || "US");
               if (window.parent && window.parent !== window) {
                 window.parent.location.href = pricingUrl;
@@ -102,7 +98,13 @@ export default function FeedlotInfoPage() {
   const handleComplete = (feedlotData: any) => {
     // Store complete data and redirect to success
     const completeData = { ...(paymentData as any), feedlotData };
-    localStorage.setItem("completeData", JSON.stringify(completeData));
+    try {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("completeData", JSON.stringify(completeData));
+      }
+    } catch (error) {
+      console.warn("Failed to save complete data to localStorage:", error);
+    }
     router.push("/pricing/success");
   };
 

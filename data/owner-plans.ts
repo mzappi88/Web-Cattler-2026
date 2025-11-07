@@ -900,14 +900,16 @@ export function getPlanFeatures(
     AR: {
       1: [
         "Gestión completa de Alimentación",
+        "Lectura de comederos",
         "Manejo de Hacienda y Mapa de Corrales",
-        "Manejo de Inventarios",
+        "Manejo de Inventarios"
+        ,
       ],
       2: [
         "Incluye todo en Feedlot Inicial",
         "Sanidad animal (protocolos de tratamiento, registros de eventos y analytics)",
         "Manejo sanitario individual de animales",
-        "Lectura de comederos personalizada",
+        
       ],
       3: [
         "Incluye todo en Feedlot Esencial",

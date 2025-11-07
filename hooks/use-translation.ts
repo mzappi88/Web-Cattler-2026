@@ -645,6 +645,28 @@ const translations = {
   }
 }
 
+// Safe localStorage helpers for Safari incognito mode
+function safeGetItem(key: string): string | null {
+  try {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem(key);
+  } catch (error) {
+    console.warn(`Failed to get localStorage item "${key}":`, error);
+    return null;
+  }
+}
+
+function safeSetItem(key: string, value: string): boolean {
+  try {
+    if (typeof window === 'undefined') return false;
+    localStorage.setItem(key, value);
+    return true;
+  } catch (error) {
+    console.warn(`Failed to set localStorage item "${key}":`, error);
+    return false;
+  }
+}
+
 export function useTranslation() {
   const [selectedCountry, setSelectedCountry] = useState<Country>("US")
   const [isHydrated, setIsHydrated] = useState(false)
@@ -661,9 +683,9 @@ export function useTranslation() {
       return;
     }
 
-    const savedCountry = localStorage.getItem("cattler-country") as Country
-    const hasBeenDetected = localStorage.getItem("cattler-country-detected") === "true"
-    const adminMode = localStorage.getItem("cattler-admin-mode") === "true"
+    const savedCountry = safeGetItem("cattler-country") as Country
+    const hasBeenDetected = safeGetItem("cattler-country-detected") === "true"
+    const adminMode = safeGetItem("cattler-admin-mode") === "true"
     
     // Update admin mode state
     setIsAdminMode(adminMode)
@@ -696,14 +718,14 @@ export function useTranslation() {
       if (mappedCountries.includes(detectedCountry)) {
         console.log("🌍 Translation - Detected mapped country, overriding saved country:", detectedCountry);
         setSelectedCountry(detectedCountry)
-        localStorage.setItem("cattler-country", detectedCountry)
-        localStorage.setItem("cattler-country-detected", "true")
+        safeSetItem("cattler-country", detectedCountry)
+        safeSetItem("cattler-country-detected", "true")
       } else if (!hasBeenDetected || !savedCountry) {
         // Si es la primera vez o no hay país guardado, usar el detectado automáticamente
         console.log("🌍 Translation - Setting country to detected:", detectedCountry);
         setSelectedCountry(detectedCountry)
-        localStorage.setItem("cattler-country", detectedCountry)
-        localStorage.setItem("cattler-country-detected", "true")
+        safeSetItem("cattler-country", detectedCountry)
+        safeSetItem("cattler-country-detected", "true")
       } else if (savedCountry && Object.keys(countryLanguageMap).includes(savedCountry)) {
         // Si ya se ha detectado antes y no es un país mapeado específico, usar el guardado
         console.log("🌍 Translation - Using saved country:", savedCountry);
@@ -720,7 +742,7 @@ export function useTranslation() {
   // Save to localStorage when country changes
   useEffect(() => {
     if (isHydrated && typeof window !== 'undefined') {
-      localStorage.setItem("cattler-country", selectedCountry)
+      safeSetItem("cattler-country", selectedCountry)
     }
   }, [selectedCountry, isHydrated])
 

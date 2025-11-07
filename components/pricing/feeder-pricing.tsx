@@ -1390,7 +1390,7 @@ export default function Component() {
                 ? "Compará Todos los Planes"
                 : "Compare All Plans"}
             </h2>
-            <div className="overflow-x-auto max-h-80 overflow-y-auto border border-cattler-teal/20 rounded-lg">
+            <div className="overflow-x-auto max-h-80 md:max-h-[640px] overflow-y-auto border border-cattler-teal/20 rounded-lg">
               <table className="w-full">
                 <thead className="sticky top-0 bg-white z-10 border-b-2 border-cattler-teal/30">
                   <tr>

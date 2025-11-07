@@ -1589,16 +1589,20 @@ export function usePricingTranslation() {
   
   console.log("💰 Pricing Hook - Using translation hook:", { selectedCountry, isHydrated });
   
-  // Debug: Check localStorage directly
+  // Debug: Check localStorage directly (with safe access for Safari incognito)
   if (typeof window !== 'undefined') {
-    const savedCountry = localStorage.getItem("cattler-country");
-    const adminMode = localStorage.getItem("cattler-admin-mode");
-    console.log("💰 Pricing Hook - localStorage debug:", { savedCountry, adminMode });
-    
-    // Force override if in admin mode
-    if (adminMode === "true" && savedCountry) {
-      console.log("💰 Pricing Hook - Admin mode detected, forcing country to:", savedCountry);
-      // Don't override here, let the main hook handle it
+    try {
+      const savedCountry = localStorage.getItem("cattler-country");
+      const adminMode = localStorage.getItem("cattler-admin-mode");
+      console.log("💰 Pricing Hook - localStorage debug:", { savedCountry, adminMode });
+      
+      // Force override if in admin mode
+      if (adminMode === "true" && savedCountry) {
+        console.log("💰 Pricing Hook - Admin mode detected, forcing country to:", savedCountry);
+        // Don't override here, let the main hook handle it
+      }
+    } catch (error) {
+      console.warn("💰 Pricing Hook - Failed to access localStorage:", error);
     }
   }
 
