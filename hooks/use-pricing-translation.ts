@@ -8,7 +8,7 @@ export type Country = "US" | "CA" | "AR" | "PY" | "UY" | "BO" | "BR" | "MX" | "C
 const countryCurrencyMap: Record<Country, string> = {
   US: "$",
   CA: "US$",
-  AR: "kg",
+  AR: "US$",
   PY: "US$",
   UY: "US$",
   BO: "US$",
@@ -1638,12 +1638,9 @@ export function usePricingTranslation() {
       if (price === undefined || price === null || isNaN(price)) {
         return "N/A";
       }
-      if (selectedCountry === "AR") {
-        return `${price.toLocaleString()} ${currency}`;
-      }
       return `${currency} ${price.toLocaleString()}`;
     },
-    [currency, selectedCountry],
+    [currency],
   );
 
   return {
@@ -1661,9 +1658,6 @@ export function formatPrice(price: number, country: Country = "US") {
   const currency = countryCurrencyMap[country];
   if (price === undefined || price === null || isNaN(price)) {
     return "N/A";
-  }
-  if (country === "AR") {
-    return `${price.toLocaleString()} ${currency}`;
   }
   return `${currency} ${price.toLocaleString()}`;
 }
