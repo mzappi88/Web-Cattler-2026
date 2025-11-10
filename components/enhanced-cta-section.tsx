@@ -114,20 +114,22 @@ export default function EnhancedCtaSection() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center">
-            <Button
-              onClick={() => {
-                const pricingUrl = getPricingUrl(selectedCountry);
-                if (window.parent && window.parent !== window) {
-                  window.parent.location.href = pricingUrl;
-                } else {
-                  window.location.href = pricingUrl;
-                }
-              }}
-              className="bg-gradient-to-r from-[#15B674] to-[#12a066] hover:from-[#12a066] hover:to-[#0f8a56] text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-sm md:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl border-0 w-full sm:w-auto"
-            >
-              {t("explorePlansAndPrices")}
-              <ArrowRight className="ml-2 w-4 h-4 md:w-5 md:h-5" />
-            </Button>
+            {selectedCountry !== "AR" && (
+              <Button
+                onClick={() => {
+                  const pricingUrl = getPricingUrl(selectedCountry);
+                  if (window.parent && window.parent !== window) {
+                    window.parent.location.href = pricingUrl;
+                  } else {
+                    window.location.href = pricingUrl;
+                  }
+                }}
+                className="bg-gradient-to-r from-[#15B674] to-[#12a066] hover:from-[#12a066] hover:to-[#0f8a56] text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-sm md:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl border-0 w-full sm:w-auto"
+              >
+                {t("explorePlansAndPrices")}
+                <ArrowRight className="ml-2 w-4 h-4 md:w-5 md:h-5" />
+              </Button>
+            )}
 
             <Button
               onClick={() => {

@@ -273,32 +273,34 @@ export default function CattlerFeatures() {
             <p className="text-base md:text-lg mb-6 md:mb-8 opacity-90">
               {t("pricingCtaSubtitle")}
             </p>
-            <button
-              onClick={() => {
-                const pricingUrl = getPricingUrl(selectedCountry);
-                if (window.parent && window.parent !== window) {
-                  window.parent.location.href = pricingUrl;
-                } else {
-                  window.location.href = pricingUrl;
-                }
-              }}
-              className="bg-white text-[#15B674] font-bold text-base md:text-lg py-3 px-6 md:py-4 md:px-8 rounded-full hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center gap-2 md:gap-3"
-            >
-              <span>{t("viewPlansAndPrices")}</span>
-              <svg
-                className="w-4 h-4 md:w-5 md:h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {selectedCountry !== "AR" && (
+              <button
+                onClick={() => {
+                  const pricingUrl = getPricingUrl(selectedCountry);
+                  if (window.parent && window.parent !== window) {
+                    window.parent.location.href = pricingUrl;
+                  } else {
+                    window.location.href = pricingUrl;
+                  }
+                }}
+                className="bg-white text-[#15B674] font-bold text-base md:text-lg py-3 px-6 md:py-4 md:px-8 rounded-full hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center gap-2 md:gap-3"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
-            </button>
+                <span>{t("viewPlansAndPrices")}</span>
+                <svg
+                  className="w-4 h-4 md:w-5 md:h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       </section>

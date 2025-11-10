@@ -30,9 +30,13 @@ export default function Form1AnnualAR() {
   } | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [hubspotFormReady, setHubspotFormReady] = useState(false);
+  const [hubspotScriptLoaded, setHubspotScriptLoaded] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
+  const formContainerRef = useRef<HTMLDivElement>(null);
+  const hubspotFormRef = useRef<any>(null);
 
   // Coordenadas por defecto de Argentina (Buenos Aires)
   const defaultCenter = { lat: -34.6037, lng: -58.3816 };
@@ -77,7 +81,6 @@ export default function Form1AnnualAR() {
           const lat = position.lat();
           const lng = position.lng();
           setCoordinates({ lat, lng });
-          updateHubSpotForm(lat, lng);
         }
       });
 
@@ -88,7 +91,6 @@ export default function Form1AnnualAR() {
 
         marker.setPosition({ lat, lng });
         setCoordinates({ lat, lng });
-        updateHubSpotForm(lat, lng);
       });
 
       setMapLoaded(true);
@@ -101,19 +103,28 @@ export default function Form1AnnualAR() {
       lng,
     });
 
-    // Esperar a que el formulario de HubSpot esté listo
-    setTimeout(() => {
-      if (typeof window !== "undefined" && window.hbspt) {
-        // Buscar todos los campos de entrada en el formulario de HubSpot
-        const allInputs = document.querySelectorAll(
-          'input[type="text"], input[type="number"], input[type="hidden"]'
-        );
-        console.log(
-          "🔍 Campos encontrados en el formulario:",
-          allInputs.length
-        );
+    if (!hubspotFormReady) {
+      console.log("⏳ Formulario de HubSpot aún no está listo, guardando coordenadas...");
+      return;
+    }
 
-        // Buscar campos por diferentes nombres posibles
+    // Función para intentar actualizar los campos
+    const tryUpdateFields = (attempt: number = 1, maxAttempts: number = 10) => {
+      if (attempt > maxAttempts) {
+        console.log("❌ No se pudieron actualizar los campos después de múltiples intentos");
+        return;
+      }
+
+      try {
+        // Buscar en el contenedor del formulario
+        const container = document.getElementById("hubspot-form-container");
+        if (!container) {
+          console.log(`⏳ Intento ${attempt}: Contenedor no encontrado, reintentando...`);
+          setTimeout(() => tryUpdateFields(attempt + 1, maxAttempts), 500);
+          return;
+        }
+
+        // Lista más completa de posibles nombres de campos
         const possibleLatNames = [
           "feedyard_geolocation",
           "feedyard_geolocation_latitude",
@@ -121,6 +132,10 @@ export default function Form1AnnualAR() {
           "lat",
           "geolocation_lat",
           "feedlot_latitude",
+          "latitud",
+          "coordenada_lat",
+          "ubicacion_lat",
+          "geolocation",
         ];
 
         const possibleLngNames = [
@@ -128,99 +143,260 @@ export default function Form1AnnualAR() {
           "feedyard_geolocation_longitude",
           "longitude",
           "lng",
-          "lng",
+          "long",
           "geolocation_lng",
           "feedlot_longitude",
+          "longitud",
+          "coordenada_lng",
+          "ubicacion_lng",
         ];
 
+        // Buscar campos en el contenedor y en iframes
         let latField: HTMLInputElement | null = null;
         let lngField: HTMLInputElement | null = null;
 
-        // Buscar campos por nombre
-        allInputs.forEach((input) => {
-          const inputElement = input as HTMLInputElement;
-          const name = inputElement.name || inputElement.id || "";
-          const placeholder = inputElement.placeholder || "";
+        // Buscar en el contenedor principal
+        const allInputs = container.querySelectorAll('input, textarea, select');
+        console.log(`🔍 Intento ${attempt}: ${allInputs.length} campos encontrados en contenedor`);
 
-          console.log("🔍 Campo encontrado:", {
-            name,
-            placeholder,
-            type: inputElement.type,
-          });
+        allInputs.forEach((field: any) => {
+          const name = (field.name || field.id || "").toLowerCase();
+          const label = field.closest("label")?.textContent?.toLowerCase() || "";
+          const placeholder = (field.placeholder || "").toLowerCase();
+          const ariaLabel = (field.getAttribute("aria-label") || "").toLowerCase();
+          const allText = `${name} ${label} ${placeholder} ${ariaLabel}`;
 
-          // Buscar campo de latitud
-          if (
-            possibleLatNames.some(
-              (latName) =>
-                name.toLowerCase().includes(latName.toLowerCase()) ||
-                placeholder.toLowerCase().includes("latitud") ||
-                placeholder.toLowerCase().includes("latitude")
-            )
-          ) {
-            latField = inputElement;
-            console.log("✅ Campo de latitud encontrado:", name);
+          if (!latField && possibleLatNames.some((latName) => 
+            allText.includes(latName.toLowerCase())
+          )) {
+            latField = field;
+            console.log("✅ Campo de latitud encontrado:", { name, id: field.id, label });
           }
 
-          // Buscar campo de longitud
-          if (
-            possibleLngNames.some(
-              (lngName) =>
-                name.toLowerCase().includes(lngName.toLowerCase()) ||
-                placeholder.toLowerCase().includes("longitud") ||
-                placeholder.toLowerCase().includes("longitude")
-            )
-          ) {
-            lngField = inputElement;
-            console.log("✅ Campo de longitud encontrado:", name);
+          if (!lngField && possibleLngNames.some((lngName) => 
+            allText.includes(lngName.toLowerCase())
+          )) {
+            lngField = field;
+            console.log("✅ Campo de longitud encontrado:", { name, id: field.id, label });
           }
         });
 
+        // Si no se encontraron, buscar en iframes
+        if ((!latField || !lngField) && container.querySelectorAll("iframe").length > 0) {
+          console.log("🔍 Buscando campos en iframes...");
+          const iframes = container.querySelectorAll("iframe");
+          iframes.forEach((iframe) => {
+            try {
+              const iframeDoc = (iframe as HTMLIFrameElement).contentDocument || 
+                              (iframe as HTMLIFrameElement).contentWindow?.document;
+              if (iframeDoc) {
+                const iframeInputs = iframeDoc.querySelectorAll('input, textarea, select');
+                iframeInputs.forEach((field: any) => {
+                  const name = (field.name || field.id || "").toLowerCase();
+                  const label = field.closest("label")?.textContent?.toLowerCase() || "";
+                  const allText = `${name} ${label}`;
+
+                  if (!latField && possibleLatNames.some((latName) => 
+                    allText.includes(latName.toLowerCase())
+                  )) {
+                    latField = field;
+                    console.log("✅ Campo de latitud encontrado en iframe:", name);
+                  }
+
+                  if (!lngField && possibleLngNames.some((lngName) => 
+                    allText.includes(lngName.toLowerCase())
+                  )) {
+                    lngField = field;
+                    console.log("✅ Campo de longitud encontrado en iframe:", name);
+                  }
+                });
+              }
+            } catch (e) {
+              // Ignorar errores de CORS
+            }
+          });
+        }
+
         // Actualizar campos encontrados
+        let updated = false;
+
         if (latField) {
-          (latField as HTMLInputElement).value = lat.toString();
-          (latField as HTMLInputElement).dispatchEvent(
-            new Event("change", { bubbles: true })
-          );
-          (latField as HTMLInputElement).dispatchEvent(
-            new Event("input", { bubbles: true })
-          );
+          latField.value = lat.toString();
+          // Disparar múltiples eventos
+          ["input", "change", "blur", "keyup"].forEach((eventType) => {
+            latField?.dispatchEvent(new Event(eventType, { bubbles: true, cancelable: true }));
+          });
+          // También usar setAttribute
+          if (latField.setAttribute) {
+            latField.setAttribute("value", lat.toString());
+          }
           console.log("✅ Latitud actualizada:", lat);
-        } else {
-          console.log("❌ Campo de latitud no encontrado");
+          updated = true;
         }
 
         if (lngField) {
-          (lngField as HTMLInputElement).value = lng.toString();
-          (lngField as HTMLInputElement).dispatchEvent(
-            new Event("change", { bubbles: true })
-          );
-          (lngField as HTMLInputElement).dispatchEvent(
-            new Event("input", { bubbles: true })
-          );
+          lngField.value = lng.toString();
+          // Disparar múltiples eventos
+          ["input", "change", "blur", "keyup"].forEach((eventType) => {
+            lngField?.dispatchEvent(new Event(eventType, { bubbles: true, cancelable: true }));
+          });
+          // También usar setAttribute
+          if (lngField.setAttribute) {
+            lngField.setAttribute("value", lng.toString());
+          }
           console.log("✅ Longitud actualizada:", lng);
-        } else {
-          console.log("❌ Campo de longitud no encontrado");
+          updated = true;
         }
 
-        // Si no se encontraron campos, mostrar todos los campos disponibles
-        if (!latField && !lngField) {
-          console.log("🔍 Todos los campos disponibles:");
-          allInputs.forEach((input, index) => {
-            const inputElement = input as HTMLInputElement;
-            console.log(
-              `${index + 1}. Name: "${inputElement.name}", ID: "${
-                inputElement.id
-              }", Placeholder: "${inputElement.placeholder}"`
-            );
+        if (!updated && attempt < maxAttempts) {
+          console.log(`⏳ Reintentando en ${attempt * 500}ms...`);
+          setTimeout(() => tryUpdateFields(attempt + 1, maxAttempts), attempt * 500);
+        } else if (!updated) {
+          // Mostrar todos los campos para debugging
+          console.log("⚠️ No se encontraron los campos de coordenadas. Listando todos los campos:");
+          allInputs.forEach((field: any, index: number) => {
+            console.log(`${index + 1}. Name: "${field.name}", ID: "${field.id}", Type: "${field.type}", Label: "${field.closest('label')?.textContent}"`);
           });
         }
+      } catch (error) {
+        console.error("❌ Error al actualizar formulario HubSpot:", error);
+        if (attempt < maxAttempts) {
+          setTimeout(() => tryUpdateFields(attempt + 1, maxAttempts), attempt * 500);
+        }
       }
-    }, 2000); // Aumentar el tiempo de espera
+    };
+
+    // Intentar actualizar inmediatamente y con delays
+    tryUpdateFields(1, 10);
+    setTimeout(() => tryUpdateFields(1, 5), 1000);
+    setTimeout(() => tryUpdateFields(1, 5), 3000);
   };
 
   const handleScriptLoad = () => {
     setScriptLoaded(true);
   };
+
+  // Cargar formulario de HubSpot cuando el script esté listo
+  useEffect(() => {
+    if (!hubspotScriptLoaded || hubspotFormReady) {
+      return;
+    }
+
+    const loadHubSpotForm = () => {
+      if (
+        typeof window !== "undefined" &&
+        window.hbspt &&
+        formContainerRef.current &&
+        !hubspotFormReady
+      ) {
+        console.log("📝 Creando formulario de HubSpot...");
+
+        try {
+          console.log("📝 Configuración del formulario:", {
+            region: "na1",
+            portalId: "21027761",
+            formId: "ea7db311-17cb-4c33-868d-a1b30739551d",
+            target: "#hubspot-form-container",
+          });
+
+          window.hbspt.forms.create({
+            region: "na1",
+            portalId: "21027761",
+            formId: "ea7db311-17cb-4c33-868d-a1b30739551d",
+            target: "#hubspot-form-container",
+            onFormReady: ($form: any) => {
+              console.log("✅ Formulario de HubSpot listo!", $form);
+              if ($form && $form.length > 0) {
+                hubspotFormRef.current = $form[0];
+                setHubspotFormReady(true);
+
+                // Si ya hay coordenadas, actualizarlas
+                if (coordinates) {
+                  setTimeout(() => {
+                    updateHubSpotForm(coordinates.lat, coordinates.lng);
+                  }, 500);
+                }
+              } else {
+                console.error("❌ El formulario no se creó correctamente, $form está vacío");
+              }
+            },
+            onFormSubmitted: () => {
+              console.log("✅ Formulario enviado exitosamente");
+            },
+            onFormError: (error: any) => {
+              console.error("❌ Error en formulario HubSpot:", error);
+              console.error("❌ Detalles del error:", {
+                message: error?.message,
+                error: error,
+                portalId: "21027761",
+                formId: "ea7db311-17cb-4c33-868d-a1b30739551d",
+              });
+              // Mostrar mensaje al usuario
+              if (formContainerRef.current) {
+                formContainerRef.current.innerHTML = `
+                  <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <p class="text-yellow-800 font-semibold mb-2">Error al cargar el formulario</p>
+                    <p class="text-yellow-700 text-sm">
+                      No se pudo cargar el formulario de HubSpot. Por favor, verifica que el formulario esté configurado correctamente.
+                    </p>
+                    <p class="text-yellow-600 text-xs mt-2">
+                      Error: ${error?.message || "Error desconocido"}
+                    </p>
+                  </div>
+                `;
+              }
+            },
+          });
+        } catch (error: any) {
+          console.error("❌ Error al crear formulario HubSpot:", error);
+          console.error("❌ Stack trace:", error?.stack);
+          if (formContainerRef.current) {
+            formContainerRef.current.innerHTML = `
+              <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p class="text-red-800 font-semibold mb-2">Error al cargar el formulario</p>
+                <p class="text-red-700 text-sm">
+                  Hubo un error al intentar cargar el formulario. Por favor, recarga la página.
+                </p>
+              </div>
+            `;
+          }
+        }
+      } else {
+        if (typeof window === "undefined") {
+          console.log("⏳ Esperando window...");
+        } else if (!window.hbspt) {
+          console.log("⏳ Esperando script de HubSpot...");
+        } else if (!formContainerRef.current) {
+          console.log("⏳ Esperando contenedor del formulario...");
+        } else if (hubspotFormReady) {
+          console.log("✅ Formulario ya está listo");
+        }
+      }
+    };
+
+    // Intentar cargar inmediatamente
+    loadHubSpotForm();
+
+    // Intentar múltiples veces con delays progresivos
+    const timeouts = [
+      setTimeout(loadHubSpotForm, 500),
+      setTimeout(loadHubSpotForm, 1000),
+      setTimeout(loadHubSpotForm, 2000),
+    ];
+
+    return () => {
+      timeouts.forEach(clearTimeout);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hubspotScriptLoaded, hubspotFormReady]);
+
+  // Actualizar coordenadas en el formulario cuando cambien
+  useEffect(() => {
+    if (hubspotFormReady && coordinates) {
+      updateHubSpotForm(coordinates.lat, coordinates.lng);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coordinates, hubspotFormReady]);
 
   // Verificar si la API key está configurada
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -330,12 +506,7 @@ export default function Form1AnnualAR() {
                 llenarán automáticamente desde el mapa.
               </p>
 
-              <div
-                className="hs-form-frame"
-                data-region="na1"
-                data-form-id="ea7db311-17cb-4c33-868d-a1b30739551d"
-                data-portal-id="21027761"
-              />
+              <div ref={formContainerRef} id="hubspot-form-container" />
             </div>
           </div>
         </div>
@@ -350,8 +521,15 @@ export default function Form1AnnualAR() {
         />
       )}
       <Script
-        src="https://js.hsforms.net/forms/embed/21027761.js"
+        src="//js.hsforms.net/forms/embed/v2.js"
         strategy="afterInteractive"
+        onLoad={() => {
+          console.log("✅ Script de HubSpot cargado");
+          setHubspotScriptLoaded(true);
+        }}
+        onError={(e) => {
+          console.error("❌ Error al cargar script de HubSpot:", e);
+        }}
       />
     </div>
   );
