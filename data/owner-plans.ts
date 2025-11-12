@@ -37,9 +37,9 @@ export const PLAN_NAME_BY_COUNTRY: Record<
     plan4: "Feeder MAX",
   },
   UY: {
-    plan1: "Feedlot START",
-    plan2: "Feedlot CORE",
-    plan3: "Feedlot MAX",
+    plan1: "Feedlot INICIAL",
+    plan2: "Feedlot INTERMEDIO",
+    plan3: "Feedlot AVANZADO",
     plan4: "",
   },
   PY: {
