@@ -494,22 +494,23 @@ const FEATURE_CONFIG: FeatureConfig = {
       isExpandable: true,
       expandedByDefault: true,
       subFeatures: [
+        { name: "BunkScoreCustomization", plan1: true, plan2: true, plan3: true, plan4: true },
         { name: "feedingProtocols", plan1: false, plan2: true, plan3: true, plan4: false },
         { name: "FeedingAutomation", plan1: false, plan2: "addon", plan3: true, plan4: false },
-        { name: "BunkScoreCustomization", plan1: false, plan2: "addon", plan3: true, plan4: false },
         { name: "AutoAdjust", plan1: false, plan2: true, plan3: true, plan4: false }
       ]
     },
-    AnimalHealthChute: { plan1: false, plan2: true, plan3: true, plan4: false, isExpandable: true, expandedByDefault: false,
+    animalHealth: { plan1: "addon", plan2: true, plan3: true, plan4: false },
+    chute: { plan1: "addon", plan2: true, plan3: true, plan4: false, isExpandable: true, expandedByDefault: false,
       subFeatures: [
-        {name: "animalHealth",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "EIDIntegration",plan1: "", plan2: "", plan3: "", plan4: "" },
         {name: "chuteCattleIn",plan1: "", plan2: "", plan3:"",plan4:""},
         {name: "chuteNewOrder",plan1: "", plan2: "", plan3:"",plan4:""},
         {name: "chuteQuickStart",plan1: "", plan2: "", plan3:"",plan4:""},
+
         
       ]
-    },    
-    EIDIntegration: { plan1: "addon", plan2: true, plan3: true, plan4: false },
+    },      
     customFeeder: { 
       plan1: "addon", 
       plan2: "addon", 
