@@ -193,45 +193,44 @@ const FEATURE_CONFIG: FeatureConfig = {
   },
   AR: {
     feeding: { plan1: true, plan2: true, plan3: true, plan4: true },
+    BunkScoreCustomization: { plan1:true, plan2: true , plan3: true, plan4: true },
     yardsheet: { plan1: true, plan2: true, plan3: true, plan4: true },
     cattleManagement: { plan1: true, plan2: true, plan3: true, plan4: true },
-    suppliesInventory: { plan1: true, plan2: true, plan3: true, plan4: true, isExpandable: true,
+    suppliesInventory: { plan1: true, plan2: true, plan3: true, plan4: true,
+      isExpandable: true,
       subFeatures: [
         { name: "suppliesQuantity", plan1: "Unlimited", plan2: "Unlimited", plan3: "Unlimited", plan4: "Unlimited" },
       ]
-    },    
+    },
+  
     rationManagement: { plan1: true, plan2: true, plan3: true, plan4: true, isExpandable: true,
       subFeatures: [
         { name: "rationQuantity", plan1: "Unlimited", plan2: "Unlimited", plan3: "Unlimited", plan4: "Unlimited" },
       ]
     },
-  
     penRider: { plan1: true, plan2: true, plan3: true, plan4: true },
     reports: { plan1: true, plan2: true, plan3: true, plan4: true },
-    animalHealth: { plan1: false, plan2: true, plan3: true, plan4: true},
-    chute: { plan1: "addon", plan2: "addon", plan3: true, plan4: true, isExpandable: true, expandedByDefault: true, 
-      subFeatures:[
+    FeedingAutomation: { plan1:true, plan2: true , plan3: true, plan4: true },
+    
+    AutoAdjust: { plan1:true, plan2: true , plan3: true, plan4: true },
+    animalHealth: { plan1: "addon", plan2: true, plan3: true, plan4: true },  
+    chute: { plan1: "addon", plan2: true, plan3: true, plan4: true, isExpandable: true, expandedByDefault: false,
+      subFeatures: [
+        {name: "EIDIntegration",plan1: "", plan2: "", plan3: "", plan4: "" },
         {name: "chuteCattleIn",plan1: "", plan2: "", plan3:"",plan4:""},
         {name: "chuteNewOrder",plan1: "", plan2: "", plan3:"",plan4:""},
-        {name: "chuteQuickStart",plan1: "", plan2: "", plan3:"",plan4:""},
-        {name: "EIDIntegration",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteQuickStart",plan1: "", plan2: "", plan3:"",plan4:""},        
       ]
-    },
-    advancedFeeding: { plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
+    },      
+    feedingProtocols: { plan1: "addon", plan2: "addon", plan3: true, plan4: true },
+    AdvancedInventory: { plan1: "addon", plan2: "addon", plan3: true, plan4: true, isExpandable: true, expandedByDefault: true,
       subFeatures: [
-        { name: "BunkScoreCustomization", plan1: "addon", plan2: true, plan3: true, plan4: true },
-        { name: "AutoAdjust", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
-        { name: "feedingProtocols", plan1: "addon", plan2: "addon", plan3: "addon", plan4: true },
-        { name: "FeedingAutomation", plan1: "addon", plan2: "addon", plan3: "addon", plan4: true },               
+        {name: "purchases", plan1: "", plan2: "", plan3: "", plan4: "" },
+        {name: "inputTransformation", plan1: "", plan2: "", plan3: "", plan4: "" },
       ]
     },
-    AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4:"",isExpandable: true, expandedByDefault: true,
-      subFeatures: [
-        { name: "purchases", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
-        {name: "inputTransformation", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
-      ]
-    },
-    informeCuota481: { plan1: "addon", plan2: "addon", plan3: "addon", plan4: true },
+    
+    
     customFeeder: { 
       plan1: "addon", 
       plan2: "addon", 
@@ -241,19 +240,12 @@ const FEATURE_CONFIG: FeatureConfig = {
       isCustomFeeder: true,
       isExpandable: true,
       subFeatures: [
-        { name: "billing", plan1: "", plan2: "", plan3: "", plan4: "" },
-        { name: "accountManagement", plan1: "", plan2: "", plan3: "", plan4: "" },
-        { name: "marginsReport", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "billing", plan1: false, plan2: false, plan3: false, plan4: false },
+        { name: "accountManagement", plan1: false, plan2: false, plan3: false, plan4: false },
+        { name: "marginsReport", plan1: false, plan2: false, plan3: false, plan4: false },
         { name: "clientUsers", plan1: "addon", plan2: "addon", plan3: "addon", plan4: "addon" },
       ]
     },
-    pastureManagementBasic: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
-    pastureManagementAdvanced:{plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
-    cowCalfBasic:{plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
-    cowCalfAdvanced: {plan1: "comingSoon", plan2:"comingSoon", plan3: "comingSoon",plan4:"comingSoon"},
-    analytics: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },  
-    truckScalesIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
-    dumpBoxIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
     
   },
   BR: {
@@ -501,7 +493,7 @@ const FEATURE_CONFIG: FeatureConfig = {
       ]
     },
     animalHealth: { plan1: "addon", plan2: true, plan3: true, plan4: false },
-    chute: { plan1: "addon", plan2: true, plan3: true, plan4: false, isExpandable: true, expandedByDefault: false,
+    chute: { plan1: "addon", plan2: true, plan3: true, plan4: false, isExpandable: true, expandedByDefault: true,
       subFeatures: [
         {name: "EIDIntegration",plan1: "", plan2: "", plan3: "", plan4: "" },
         {name: "chuteCattleIn",plan1: "", plan2: "", plan3:"",plan4:""},
@@ -769,34 +761,27 @@ const FEATURE_CONFIG: FeatureConfig = {
     },
     penRider: { plan1: true, plan2: true, plan3: true, plan4: true },
     reports: { plan1: true, plan2: true, plan3: true, plan4: true },
-    AnimalHealthbasic: { plan1: false, plan2: true, plan3: true, plan4: true },
-    AnimalHealthadvanced: { plan1: false, plan2: false , plan3: true, plan4: true },   
-    chuteQuickStart: { plan1: false, plan2:true, plan3: true, plan4: true },
-    chuteCattleIn: { plan1: false, plan2: false, plan3: true, plan4: true },
-    chuteNewOrder: { plan1: false, plan2: false, plan3: true, plan4: true },
-    EIDIntegration: { plan1: false, plan2: "addon", plan3: true, plan4: true },    
-     advancedFeeding: { 
-      plan1: "addon", 
-      plan2: "addon", 
-      plan3: "addon", 
-      plan4: true,
-      isExpandable: true,
+    FeedingAutomation: { plan1:true, plan2: true , plan3: true, plan4: true },
+    BunkScoreCustomization: { plan1:true, plan2: true , plan3: true, plan4: true },
+    AutoAdjust: { plan1:true, plan2: true , plan3: true, plan4: true },
+    animalHealth: { plan1: "addon", plan2: true, plan3: true, plan4: true },  
+    chute: { plan1: "addon", plan2: true, plan3: true, plan4: true, isExpandable: true, expandedByDefault: true,
       subFeatures: [
-        { name: "feedingProtocols", plan1: "", plan2: "", plan3: "", plan4: "" },
-        { name: "FeedingAutomation", plan1: "", plan2: "", plan3: "", plan4: "" },
-        { name: "BunkScoreCustomization", plan1: "", plan2: "", plan3: "", plan4: "" },
-        { name: "AutoAdjust", plan1: "", plan2: "", plan3: "", plan4: "" }
+        {name: "EIDIntegration",plan1: "", plan2: "", plan3: "", plan4: "" },
+        {name: "chuteCattleIn",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteNewOrder",plan1: "", plan2: "", plan3:"",plan4:""},
+        {name: "chuteQuickStart",plan1: "", plan2: "", plan3:"",plan4:""},        
+      ]
+    },      
+    feedingProtocols: { plan1: "addon", plan2: "addon", plan3: true, plan4: true },
+            AdvancedInventory: { plan1: "addon", plan2: "addon", plan3: true, plan4: true, isExpandable: true, expandedByDefault: true,
+      subFeatures: [
+        {name: "purchases", plan1: "", plan2: "", plan3: "", plan4: "" },
+        {name: "inputTransformation", plan1: "", plan2: "", plan3: "", plan4: "" },
       ]
     },
-    AdvancedInventory: {plan1: "", plan2: "", plan3: "", plan4: "", isExpandable: true, expandedByDefault: true,
-      subFeatures: [
-        {name: "purchases", plan1: "addon", plan2: "addon", plan3: true, plan4: true },
-        {name: "inputTransformation", plan1: true, plan2: "addon", plan3: true, plan4: true },
-        {name: "MicroingredientesManagement", plan1: false, plan2: false, plan3: "addon", plan4: true },
-        
-      ]
-    },
-    MicroMachineIntegration: { plan1: false, plan2: false, plan3: "addon", plan4: "addon" },    
+   
+    informeCuota481: { plan1: "addon", plan2: "addon", plan3: "addon", plan4: true },        
     truckScalesIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
     dumpBoxIntegration: { plan1: false, plan2: false, plan3: "comingSoon", plan4: "comingSoon" },
     
@@ -815,9 +800,7 @@ const FEATURE_CONFIG: FeatureConfig = {
         { name: "clientUsers", plan1: "addon", plan2: "addon", plan3: "addon", plan4: "addon" },
       ]
     },
-    GrainBank: { plan1: "addon", plan2: "addon", plan3: "addon", plan4: "addon" ,
-    isAddOn: true,
-    isCustomFeeder: true,},
+    
   },
 };
 
@@ -865,7 +848,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
     },
     yardsheet: {
       BR: "Mapa do Confinamento",
-      AR: "Mapa del Feedlot",
+      AR: "Mapa de Corrales",
       US: "Yardsheet",
       CA: "Yardsheet",
       MX: "Mapa de Confinamiento",
@@ -943,7 +926,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
     },
     feedingProtocols: {
       BR: "Protocolos de Alimentação",
-      AR: "Protocolos de Alimentación",
+      AR: "Programación de Plan de Alimentación por Lote",
       US: "Feeding Protocols",
       CA: "Feeding Protocols",
       MX: "Protocolos de Alimentación",
@@ -956,7 +939,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
     },
     FeedingAutomation: {
       BR: "Automação de Ordens de Carga/Descarga",
-      AR: "Automatización de Órdenes de Carga/Descarga",
+      AR: "Optimización de Viajes del Mixer",
       US: "Load & Drop Order Creation Automation",
       CA: "Load & Drop Order Creation Automation",
       MX: "Automatización de Órdenes de Carga/Descarga",
@@ -969,7 +952,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
     },
     BunkScoreCustomization: {
       BR: "Personalização da Leitura de Cocho",
-      AR: "Personalización de Lectura de Comederos",
+      AR: "Lectura de Comederos Configurable",
       US: "Feeder Reading Customization",
       CA: "Feeder Reading Customization",
       MX: "Personalización de Lectura de Comederos",
@@ -982,7 +965,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
     },
     inputTransformation: {
       BR: "Transformação de Insumos",
-      AR: "Transformación de Insumos",
+      AR: "Creación de Premezclas y Transformación de Suministros",
       US: "Input Transformation",
       CA: "Input Transformation",
       MX: "Transformación de Insumos",
@@ -1073,12 +1056,12 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
     },
     chute: {
       BR: "Tronco",
-      AR: "Manga",
+      AR: "Manga e Integración con Lector de Caravana",
       US: "Chute",
       CA: "Chute",
       MX: "Manga",
       PY: "Manga",
-      UY: "Manga",
+      UY: "Manga e Integración con Lector de Caravana",
       BO: "Manga",
       CH: "Manga Completa",
       OT$EN: "Chute",
@@ -1244,7 +1227,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
 
     AutoAdjust: {
       BR: "Ajuste Automático de Ordens de Entrega",
-      AR: "Auto Ajuste de Órdenes de Entrega",
+      AR: "Corrección por Desvíos de Entrega",
       US: "Drop Order auto adjust",
       CA: "Drop Order auto adjust",
       MX: "Auto Ajuste de Órdenes de Entrega",
@@ -1271,7 +1254,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
     },  
     purchases: {
       BR: "Compras",
-      AR: "Compras",
+      AR: "Registro de Compras de Insumos",
       US: "Purchases",
       CA: "Purchases",
       MX: "Compras",
