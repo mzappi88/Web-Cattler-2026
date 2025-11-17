@@ -208,6 +208,7 @@ const FEATURE_CONFIG: FeatureConfig = {
         { name: "rationQuantity", plan1: "Unlimited", plan2: "Unlimited", plan3: "Unlimited", plan4: "Unlimited" },
       ]
     },
+    billing: { plan1: true, plan2: true, plan3: true, plan4: true, isCustomFeeder: true },
     penRider: { plan1: true, plan2: true, plan3: true, plan4: true },
     reports: { plan1: true, plan2: true, plan3: true, plan4: true },
     FeedingAutomation: { plan1:true, plan2: true , plan3: true, plan4: true },
@@ -239,11 +240,12 @@ const FEATURE_CONFIG: FeatureConfig = {
       isAddOn: true,
       isCustomFeeder: true,
       isExpandable: true,
+      expandedByDefault: true,
       subFeatures: [
-        { name: "billing", plan1: false, plan2: false, plan3: false, plan4: false },
-        { name: "accountManagement", plan1: false, plan2: false, plan3: false, plan4: false },
-        { name: "marginsReport", plan1: false, plan2: false, plan3: false, plan4: false },
-        { name: "clientUsers", plan1: "addon", plan2: "addon", plan3: "addon", plan4: "addon" },
+        
+        { name: "accountManagement", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "marginsReport", plan1: "", plan2: "", plan3: "", plan4: "" },
+        { name: "clientUsers", plan1: "", plan2: "", plan3: "", plan4: ""},
       ]
     },
     
@@ -1135,7 +1137,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
 
     billing: {
       BR: "Demonstrativos",
-      AR: "Liquidación",
+      AR: "Liquidaciones",
       US: "Billing",
       CA: "Billing",
       MX: "Liquidación",
@@ -1148,7 +1150,7 @@ export function getLocalizedFeatureName(featureKey: string, country: Country): s
     },
     accountManagement: {
       BR: "Gestão de Contas",
-      AR: "Gestión de Cuentas",
+      AR: "Gestión de Cuenta Corriente",
       US: "Account Management",
       CA: "Account Management",
       MX: "Gestión de Cuentas",

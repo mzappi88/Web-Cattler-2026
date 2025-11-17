@@ -866,7 +866,7 @@ export default function Component() {
       case "BO":
       case "CH":
       case "OT$ES":
-        return "Gestión completa para operaciones de Hotelería con múltiples clientes";
+        return "Gestión completa para operaciones de Hotelería con múltiples clientes.\nIncluye cuenta corriente de clientes, reporte de márgenes y ganancias y 2 usuarios para que tus clientes puedan acceder a sus lotes.";
       case "US":
       case "CA":
       case "OT$EN":
@@ -1329,7 +1329,7 @@ export default function Component() {
                         ? "Módulo Hotelería"
                         : "Custom Feeder Add On"}
                     </h4>
-                    <p className="text-sm font-roboto text-cattler-navy/70 mb-3">
+                    <p className="text-sm font-roboto text-cattler-navy/70 mb-3 whitespace-pre-line">
                       {getCustomFeederDescription()}
                     </p>
                     <div className="text-lg font-bold font-barlow text-cattler-green mb-4">

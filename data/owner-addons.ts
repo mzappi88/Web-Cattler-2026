@@ -335,7 +335,7 @@ const ADDON_CONFIGS_BY_COUNTRY: Record<string, Record<string, {
   AR: {
     "customFeeder": {
       name: "Módulo Hotelería",
-      description: "Gestión completa para operaciones de Hotelería con múltiples clientes",
+      description: "Gestión completa para operaciones de Hotelería con múltiples clientes. Incluye cuenta corriente de clientes, reporte de márgenes y ganancias y 2 usuarios para que tus clientes puedan acceder a sus lotes",
       availableFor: ["plan1", "plan2", "plan3", "plan4"],
       includedIn:[],
       isCustomFeeder: true,

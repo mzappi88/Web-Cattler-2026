@@ -195,7 +195,7 @@ export const PRICES_BY_COUNTRY: Record<
     plan4usesr: 6,
     ExtraUsers: 20,
     ExtraPens: 5,
-    customFeeder: 100,
+    customFeeder: 75,
     billing: 0,
     grainBank: 0,
     clientUsers: 20,
@@ -901,7 +901,7 @@ export function getPlanFeatures(
       1: [
         "Gestión completa de Alimentación",
         "Lectura de comederos configurable",
-        "Manejo de Hacienda y Mapa de Corrales",
+        "Manejo de Hacienda, Mapa de Corrales y Liquidaciones",
         "Manejo de Inventarios",
         "Optimización de Viajes del Mixer",
         "Corrección por Desvíos de Entrega",

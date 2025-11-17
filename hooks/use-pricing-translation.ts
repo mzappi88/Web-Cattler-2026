@@ -485,7 +485,7 @@ const pricingTranslations = {
     addOnsTitle: "Complementos Disponibles",
     addOnsSubtitle: "Haz clic en un complemento para comprarlo para tu plan de Confinamiento existente",
     customFeeder: "Módulo Hotelería",
-    customFeederDesc: "Gestión completa para operaciones de Hotelería con múltiples clientes",
+    customFeederDesc: "Gestión completa para operaciones de Hotelería con múltiples clientes. Incluye cuenta corriente de clientes, reporte de márgenes y ganancias y 2 usuarios para que tus clientes puedan acceder a sus lotes",
     clientUsers: "Usuarios de Clientes",
     clientUsersDesc: "Usuarios adicionales para clientes específicos",
     loading: "Cargando...",
