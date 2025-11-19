@@ -1747,7 +1747,7 @@ export default function Component() {
                       )}
                     </h4>
                     <p
-                      className={`text-sm font-roboto mb-2 ${
+                      className={`text-sm font-roboto mb-2 whitespace-pre-line ${
                         addon.comingSoon
                           ? "text-gray-500"
                           : "text-cattler-navy/70"
