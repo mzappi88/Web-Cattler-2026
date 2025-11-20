@@ -54,6 +54,9 @@ const pricingTranslations = {
     monthlyBilling: "Monthly",
     annualBilling: "Annual (10% discount)",
     annualSavings: "Save with annual billing",
+    annual: "Annual",
+    upTo: "up to",
+    discount: "% discount",
 
     // Features
     feeding: "Feeding",
@@ -174,7 +177,7 @@ const pricingTranslations = {
     "promotion.freeMonths": "months free",
     "promotion.xMonths": "months for",
     "promotion.months": "months",
-    "promotion.limitedTime": "Limited time offer - Save up to 20% on selected plans and add-ons!",
+    "promotion.limitedTime": "Limited time offer - Save up to %discountFactor%% on selected plans and add-ons!",
   },
   CA: {
     // Same as US for now - copy all US translations
@@ -201,6 +204,9 @@ const pricingTranslations = {
     monthlyBilling: "Monthly",
     annualBilling: "Annual (10% discount)",
     annualSavings: "Save with annual billing",
+    annual: "Annual",
+    upTo: "up to",
+    discount: "% discount",
     feeding: "Feeding",
     cattleManagement: "Cattle Management",
     suppliesInventory: "Supplies Inventory",
@@ -302,7 +308,7 @@ const pricingTranslations = {
     "promotion.percentOff": "OFF",
     "promotion.freeMonths": "months free",
     "promotion.xMonths": "months for",
-    "promotion.limitedTime": "Limited time offer - Save up to 50% on selected plans and add-ons!",
+    "promotion.limitedTime": "Limited time offer - Save up to %discountFactor%% on selected plans and add-ons!",
   },
   "OT$EN": {
     // Same as US for now - copy all US translations
@@ -329,6 +335,9 @@ const pricingTranslations = {
     monthlyBilling: "Monthly",
     annualBilling: "Annual (10% discount)",
     annualSavings: "Save with annual billing",
+    annual: "Annual",
+    upTo: "up to",
+    discount: "% discount",
     feeding: "Feeding",
     cattleManagement: "Cattle Management",
     suppliesInventory: "Supplies Inventory",
@@ -430,7 +439,7 @@ const pricingTranslations = {
     "promotion.percentOff": "OFF",
     "promotion.freeMonths": "months free",
     "promotion.xMonths": "months for",
-    "promotion.limitedTime": "Limited time offer - Save up to 50% on selected plans and add-ons!",
+    "promotion.limitedTime": "Limited time offer - Save up to %discountFactor%% on selected plans and add-ons!",
   },
 
   // Spanish speaking countries (UY, PY, BO, MX, OT-ES)
@@ -467,6 +476,9 @@ const pricingTranslations = {
     monthlyBilling: "Mensual",
     annualBilling: "Anual (10% de descuento)",
     annualSavings: "Ahorra con facturación anual",
+    annual: "Anual",
+    upTo: "hasta",
+    discount: "% de descuento",
 
     // Features
     feeding: "Alimentación",
@@ -587,7 +599,7 @@ const pricingTranslations = {
     "promotion.freeMonths": "meses gratis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
-    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta 50% en planes y complementos seleccionados!",
+    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta %discountFactor%% en planes y complementos seleccionados!",
   },
   PY: {
     // Same as UY for now - copy all UY translations
@@ -614,6 +626,9 @@ const pricingTranslations = {
     monthlyBilling: "Mensual",
     annualBilling: "Anual (10% de descuento)",
     annualSavings: "Ahorra con facturación anual",
+    annual: "Anual",
+    upTo: "hasta",
+    discount: "% de descuento",
     feeding: "Alimentación",
     cattleManagement: "Gestión de Ganado",
     suppliesInventory: "Inventario de Suministros",
@@ -716,7 +731,7 @@ const pricingTranslations = {
     "promotion.freeMonths": "meses gratis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
-    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta 50% en planes y complementos seleccionados!",
+    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta %discountFactor%% en planes y complementos seleccionados!",
   },
   BO: {
     // Same as UY for now - copy all UY translations
@@ -743,6 +758,9 @@ const pricingTranslations = {
     monthlyBilling: "Mensual",
     annualBilling: "Anual (10% de descuento)",
     annualSavings: "Ahorra con facturación anual",
+    annual: "Anual",
+    upTo: "hasta",
+    discount: "% de descuento",
     feeding: "Alimentación",
     cattleManagement: "Gestión de Ganado",
     suppliesInventory: "Inventario de Suministros",
@@ -845,7 +863,7 @@ const pricingTranslations = {
     "promotion.freeMonths": "meses gratis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
-    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta 50% en planes y complementos seleccionados!",
+    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta %discountFactor%% en planes y complementos seleccionados!",
   },
   MX: {
     // Same as UY for now - copy all UY translations
@@ -872,6 +890,9 @@ const pricingTranslations = {
     monthlyBilling: "Mensual",
     annualBilling: "Anual (10% de descuento)",
     annualSavings: "Ahorra con facturación anual",
+    annual: "Anual",
+    upTo: "hasta",
+    discount: "% de descuento",
     feeding: "Alimentación",
     cattleManagement: "Gestión de Ganado",
     suppliesInventory: "Inventario de Suministros",
@@ -974,7 +995,7 @@ const pricingTranslations = {
     "promotion.freeMonths": "meses grátis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
-    "promotion.limitedTime": "Oferta por tempo limitado - Economize até 50% em planos e complementos selecionados!",
+    "promotion.limitedTime": "Oferta por tempo limitado - Economize até %discountFactor%% em planos e complementos selecionados!",
   },
 
   "OT$ES": {
@@ -1002,6 +1023,9 @@ const pricingTranslations = {
     monthlyBilling: "Mensual",
     annualBilling: "Anual (10% de descuento)",
     annualSavings: "Ahorra con facturación anual",
+    annual: "Anual",
+    upTo: "hasta",
+    discount: "% de descuento",
     feeding: "Alimentación",
     cattleManagement: "Gestión de Ganado",
     suppliesInventory: "Inventario de Suministros",
@@ -1104,7 +1128,7 @@ const pricingTranslations = {
     "promotion.freeMonths": "meses gratis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
-    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta 50% en planes y complementos seleccionados!",
+    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta %discountFactor%% en planes y complementos seleccionados!",
   },
 
   // Argentina (AR) - specific translations
@@ -1141,6 +1165,9 @@ const pricingTranslations = {
     monthlyBilling: "Mensual",
     annualBilling: "Anual (10% de descuento)",
     annualSavings: "Ahorra con facturación anual",
+    annual: "Anual",
+    upTo: "hasta",
+    discount: "% de descuento",
 
     // Features
     feeding: "Alimentación",
@@ -1261,7 +1288,7 @@ const pricingTranslations = {
     "promotion.freeMonths": "meses gratis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
-    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta 50% en planes y complementos seleccionados!",
+    "promotion.limitedTime": "Oferta por tiempo limitado - ¡Ahorra hasta %discountFactor%% en planes y complementos seleccionados!",
   },
 
   // Brazil (BR) - Portuguese
@@ -1298,6 +1325,9 @@ const pricingTranslations = {
     monthlyBilling: "Mensal",
     annualBilling: "Anual (10% de desconto)",
     annualSavings: "Economize com faturamento anual",
+    annual: "Anual",
+    upTo: "até",
+    discount: "% de desconto",
 
     // Features
     feeding: "Alimentação",
@@ -1418,7 +1448,7 @@ const pricingTranslations = {
     "promotion.freeMonths": "meses grátis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
-    "promotion.limitedTime": "Oferta por tempo limitado - Economize até 50% em planos e complementos selecionados!",
+    "promotion.limitedTime": "Oferta por tempo limitado - Economize até %discountFactor%% em planos e complementos selecionados!",
   },
   
 
@@ -1456,6 +1486,9 @@ const pricingTranslations = {
     monthlyBilling: "Mensual",
     annualBilling: "Anual (10% de descuento)",
     annualSavings: "Ahorra con facturación anual",
+    annual: "Anual",
+    upTo: "hasta",
+    discount: "% de descuento",
 
     // Features
     feeding: "Alimentación",
@@ -1577,11 +1610,18 @@ const pricingTranslations = {
     "promotion.freeMonths": "meses grátis",
     "promotion.xMonths": "meses por",
     "promotion.months": "meses",
-    "promotion.limitedTime": "Oferta por tempo limitado - Economize até 50% em planos e complementos selecionados!"
+    "promotion.limitedTime": "Oferta por tempo limitado - Economize até %discountFactor%% em planos e complementos selecionados!",
   }
 }
 
-export function usePricingTranslation() {
+export function usePricingTranslation(): {
+  selectedCountry: Country;
+  setSelectedCountry: (country: Country) => void;
+  currency: string;
+  t: (key: string) => any;
+  formatPrice: (price: number) => string;
+  isHydrated: boolean;
+} {
   console.log("💰 Pricing Hook - Starting usePricingTranslation");
   
   // Use the main translation hook which already has admin mode logic

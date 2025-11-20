@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
@@ -72,15 +72,15 @@ import {
 const regionalPromotions = {
   // North America: US, CA, OT$EN
   northAmerica: {
-    saleActive: false,
-    saleName: "promotion.northAmerica", // Will be translated
+    saleActive: true,
+    saleName: "Black Friday Sale", // Will be translated
     defaultIsAnnual: true,
     discounts: {
       annual: {
         plan1: { isActive: true, discountFactor: 0.2 },
         plan2: { isActive: true, discountFactor: 0.2 },
-        plan3: { isActive: true, discountFactor: 0.2 },
-        plan4: { isActive: true, discountFactor: 0.2 },
+        plan3: { isActive: true, discountFactor: 0.3 },
+        plan4: { isActive: true, discountFactor: 0.3 },
         customFeeder: { isActive: true, discountFactor: 0.2 }, // Mayor descuento para Custom Feeder
         animalHealth: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Animal Health
         Chute: { isActive: true, discountFactor: 0.2 },
@@ -148,15 +148,15 @@ const regionalPromotions = {
 
   // LATAM: AR, UY, PY, BO, CH, MX
   latam: {
-    saleActive: false,
-    saleName: "promotion.latam", // Will be translated
+    saleActive: true,
+    saleName: "Black Friday Sale", // Will be translated
     defaultIsAnnual: true,
     discounts: {
       annual: {
         plan1: { isActive: true, discountFactor: 0.2 },
         plan2: { isActive: true, discountFactor: 0.2 },
-        plan3: { isActive: true, discountFactor: 0.2 },
-        plan4: { isActive: true, discountFactor: 0.2 },
+        plan3: { isActive: true, discountFactor: 0.3 },
+        plan4: { isActive: true, discountFactor: 0.3 },
         customFeeder: { isActive: true, discountFactor: 0.2 }, // Mayor descuento para Custom Feeder
         animalHealth: { isActive: true, discountFactor: 0.2 }, // Descuento menor para Animal Health
         chute: { isActive: true, discountFactor: 0.2 },
@@ -544,6 +544,8 @@ export default function Component() {
     return discountedPrice;
   };
 
+  // Function to get maximum discount factor among all plans and addons
+
   const getPromotionBadgeText = (
     productId: string,
     billingType: "monthly" | "annual"
@@ -617,6 +619,50 @@ export default function Component() {
     // Combine them with coming soon at the end
     return [...notComingSoon, ...comingSoon];
   }, [allAddOns]);
+
+  // Function to get maximum discount factor among all plans and addons
+  const getMaxDiscountFactor = useCallback(
+    (billingType: "monthly" | "annual" = "annual") => {
+      let maxDiscountFactor = 0;
+
+      // Check plans
+      currentPlans.forEach((plan) => {
+        const promotion = getActivePromotion(plan.id, billingType);
+        if (promotion && promotion.discountFactor > maxDiscountFactor) {
+          maxDiscountFactor = promotion.discountFactor;
+        }
+      });
+
+      // Check addons
+      currentAddOns.forEach((addon) => {
+        const promotion = getActivePromotion(addon.id, billingType);
+        if (promotion && promotion.discountFactor > maxDiscountFactor) {
+          maxDiscountFactor = promotion.discountFactor;
+        }
+      });
+
+      return maxDiscountFactor;
+    },
+    [currentPlans, currentAddOns, promotionalState.saleActive]
+  );
+
+  // Function to get maximum discount factor only for add-ons
+  const getMaxDiscountFactorForAddOns = useCallback(
+    (billingType: "monthly" | "annual" = "annual") => {
+      let maxDiscountFactor = 0;
+
+      // Check only addons
+      currentAddOns.forEach((addon) => {
+        const promotion = getActivePromotion(addon.id, billingType);
+        if (promotion && promotion.discountFactor > maxDiscountFactor) {
+          maxDiscountFactor = promotion.discountFactor;
+        }
+      });
+
+      return maxDiscountFactor;
+    },
+    [currentAddOns, promotionalState.saleActive]
+  );
 
   const toggleFeatureExpansion = (featureName: string) => {
     setExpandedFeatures((prev) => {
@@ -912,7 +958,20 @@ export default function Component() {
               <span className="text-lg font-bold animate-pulse">
                 🔥 {t(promotionalState.saleName)} 🔥
               </span>
-              <span className="text-sm">{t("promotion.limitedTime")}</span>
+              <span className="text-sm">
+                {(() => {
+                  const maxDiscountFactor = getMaxDiscountFactor("annual");
+                  if (maxDiscountFactor > 0) {
+                    // Replace placeholder in translation
+                    const limitedTimeText = t("promotion.limitedTime");
+                    return limitedTimeText.replace(
+                      "%discountFactor%%",
+                      Math.round(maxDiscountFactor * 100).toString() + "%"
+                    );
+                  }
+                  return t("promotion.limitedTime");
+                })()}
+              </span>
             </div>
             {/* Debug info - Comentado para producción */}
             {/* <div className="text-xs opacity-75 mt-1">
@@ -977,15 +1036,13 @@ export default function Component() {
                         (plan) => getActivePromotion(plan.id, "annual") !== null
                       );
 
-                      if (hasAnnualPromotion) {
-                        const promotion = getActivePromotion(
-                          currentPlans[0].id,
-                          "annual"
-                        );
-                        if (promotion) {
-                          return `Annual (${Math.round(
-                            promotion.discountFactor * 100
-                          )}% discount)`;
+                      if (hasAnnualPromotion && promotionalState.saleActive) {
+                        const maxDiscountFactor =
+                          getMaxDiscountFactor("annual");
+                        if (maxDiscountFactor > 0) {
+                          return `${t("annual")} (${t("upTo")} ${Math.round(
+                            maxDiscountFactor * 100
+                          )}${t("discount")})`;
                         }
                       }
 
@@ -1642,14 +1699,12 @@ export default function Component() {
                         );
 
                         if (hasAnnualPromotion && promotionalState.saleActive) {
-                          const promotion = getActivePromotion(
-                            currentAddOns[0].id,
-                            "annual"
-                          );
-                          if (promotion) {
-                            return `Annual (${Math.round(
-                              promotion.discountFactor * 100
-                            )}% discount)`;
+                          const maxDiscountFactor =
+                            getMaxDiscountFactorForAddOns("annual");
+                          if (maxDiscountFactor > 0) {
+                            return `${t("annual")} (${t("upTo")} ${Math.round(
+                              maxDiscountFactor * 100
+                            )}${t("discount")})`;
                           }
                         }
 
