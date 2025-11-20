@@ -203,7 +203,7 @@ export default function CattlerLandingSale() {
       spanishLanguage.includes(selectedCountry)
     ) {
       return {
-        src: "/Sale/promo-primavera.png",
+        src: "/Sale/sale-banner-latam.png",
         alt: "Promoción de Primavera",
       };
     }
