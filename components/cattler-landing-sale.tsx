@@ -209,7 +209,7 @@ export default function CattlerLandingSale() {
     }
 
     return {
-      src: "/Sale/labor-day.png",
+      src: "/Sale/sale-banner-us.png",
       alt: "Labor Day Sale",
     };
   };
