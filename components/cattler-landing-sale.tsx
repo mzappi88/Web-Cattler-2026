@@ -16,6 +16,7 @@ export default function CattlerLandingSale() {
   const { selectedCountry, setSelectedCountry, language, t } = useTranslation();
   const [isWixIframe, setIsWixIframe] = useState(false);
   const [isWixMobile, setIsWixMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
   const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
 
@@ -26,9 +27,10 @@ export default function CattlerLandingSale() {
       window.location.hostname.includes("wix") ||
       window.location.hostname.includes("wixsite") ||
       document.referrer.includes("wix");
-    const isMobile = window.innerWidth <= 768;
+    const mobile = window.innerWidth <= 768;
+    setIsMobile(mobile);
     setIsWixIframe(isInIframe && isWix);
-    setIsWixMobile(isInIframe && isWix && isMobile);
+    setIsWixMobile(isInIframe && isWix && mobile);
 
     // Debug information
     console.log("🌐 Debug Info:", {
@@ -57,6 +59,8 @@ export default function CattlerLandingSale() {
   // Monitor dimensions
   useEffect(() => {
     const updateDimensions = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
       setDebugDimensions({
         width: window.innerWidth,
         height: window.innerHeight,
@@ -203,13 +207,17 @@ export default function CattlerLandingSale() {
       spanishLanguage.includes(selectedCountry)
     ) {
       return {
-        src: "/Sale/sale-banner-latam.png",
+        src: isMobile
+          ? "/sale/sale-banner-latam-mobile.png"
+          : "/Sale/sale-banner-latam.png",
         alt: "Promoción de Primavera",
       };
     }
 
     return {
-      src: "/Sale/sale-banner-us.png",
+      src: isMobile
+        ? "/sale/sale-banner-us-mobile.png"
+        : "/Sale/sale-banner-us.png",
       alt: "Labor Day Sale",
     };
   };
@@ -219,13 +227,13 @@ export default function CattlerLandingSale() {
   return (
     <div className="bg-[#499E80]">
       {/* Hero Section with Image */}
-      <div className="relative w-full bg-black">
+      <div className="relative w-full bg-[#121334]">
         {/* Mobile Hero - Full height like home */}
-        <div className="relative w-full h-[50vh] md:hidden">
+        <div className="relative w-full h-[50vh] md:hidden flex items-center justify-center bg-[#121334]">
           <img
             src={bannerImage.src}
             alt={bannerImage.alt}
-            className="absolute top-0 left-0 w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         </div>
 
