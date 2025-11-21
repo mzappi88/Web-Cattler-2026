@@ -54,7 +54,7 @@ export default function CattlerLandingSale() {
       "🌍 Zona horaria:",
       Intl.DateTimeFormat().resolvedOptions().timeZone
     );
-  }, []);
+  }, [selectedCountry]);
 
   // Monitor dimensions
   useEffect(() => {
