@@ -112,29 +112,60 @@ export default function LogoCarousel() {
               key={`${logo.id}-${index}`}
               className="flex-shrink-0 mx-3 md:mx-6 lg:mx-8 flex items-center justify-center"
             >
-              <div className="logo-item group cursor-pointer">
-                <img
-                  src={logo.logoUrl || "/placeholder.svg"}
-                  alt={logo.name}
-                  className={`${getLogoSize(logo.name)} object-contain`}
-                  loading="lazy"
-                  onError={(e) => {
-                    e.currentTarget.src =
-                      "/placeholder.svg?height=48&width=120&text=" +
-                      encodeURIComponent(logo.name);
-                  }}
-                />
+              {logo.website ? (
+                <a
+                  href={logo.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="logo-item group cursor-pointer block"
+                >
+                  <img
+                    src={logo.logoUrl || "/placeholder.svg"}
+                    alt={logo.name}
+                    className={`${getLogoSize(logo.name)} object-contain`}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src =
+                        "/placeholder.svg?height=48&width=120&text=" +
+                        encodeURIComponent(logo.name);
+                    }}
+                  />
 
-                {/* Tooltip on hover */}
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 md:px-3 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-20">
-                  {logo.name}
-                  {logo.category && (
-                    <span className="ml-1 md:ml-2 px-1 py-0.5 bg-white/20 rounded text-xs">
-                      {logo.category}
-                    </span>
-                  )}
+                  {/* Tooltip on hover */}
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 md:px-3 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-20">
+                    {logo.name}
+                    {logo.category && (
+                      <span className="ml-1 md:ml-2 px-1 py-0.5 bg-white/20 rounded text-xs">
+                        {logo.category}
+                      </span>
+                    )}
+                  </div>
+                </a>
+              ) : (
+                <div className="logo-item group">
+                  <img
+                    src={logo.logoUrl || "/placeholder.svg"}
+                    alt={logo.name}
+                    className={`${getLogoSize(logo.name)} object-contain`}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src =
+                        "/placeholder.svg?height=48&width=120&text=" +
+                        encodeURIComponent(logo.name);
+                    }}
+                  />
+
+                  {/* Tooltip on hover */}
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 md:px-3 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-20">
+                    {logo.name}
+                    {logo.category && (
+                      <span className="ml-1 md:ml-2 px-1 py-0.5 bg-white/20 rounded text-xs">
+                        {logo.category}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ))}
         </div>

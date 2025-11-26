@@ -18,47 +18,49 @@ const englishSpeakingCountries = [
 // Lista de países mapeados que deben mantener su detección normal
 const mappedCountries = ["CL", "BO", "PY", "UY", "AR", "MX", "BR"];
 
-// 0. DETECCIÓN POR IFRAME PADRE (Solo para países NO mapeados)
-function detectCountryFromIframe(): Country | null {
+// 0. DETECCIÓN POR IFRAME PADRE Y DOMINIO
+function detectIframeDomain(): "cattler.agr.br" | "cattler.com.ar" | "cattler.farm" | null {
   if (typeof window === 'undefined') return null;
   
   const referrer = document.referrer || '';
   const hostname = window.location.hostname;
+  const isInIframe = window !== window.top;
+  
+  // Check if we're in a Wix iframe
+  const isWix = 
+    hostname.includes("wix") ||
+    hostname.includes("wixsite") ||
+    referrer.includes("wix");
+  
+  if (!isInIframe || !isWix) {
+    return null;
+  }
   
   console.log("🌍 Iframe detection debug:", {
     referrer,
     hostname,
-    referrerIncludes: referrer.includes('cattler.com.ar'),
-    hostnameIncludes: hostname.includes('cattler.com.ar')
+    isInIframe,
+    isWix
   });
   
-  // Detect if we're embedded in Cattler.com.ar (Always Spanish for non-mapped countries)
-  const isCattlerComAr = 
-    hostname.includes('cattler.com.ar') ||
-    referrer.includes('cattler.com.ar');
-    
-  // Detect if we're embedded in Cattler.agr.br (Always Portuguese for non-mapped countries)
-  const isCattlerAgrBr = 
-    hostname.includes('cattler.agr.br') ||
-    referrer.includes('cattler.agr.br');
-  
-  console.log("🌍 Iframe detection results:", {
-    isCattlerComAr,
-    isCattlerAgrBr
-  });
-  
-  if (isCattlerComAr) {
-    console.log("🌍 Iframe parent detected: cattler.com.ar - forcing Spanish for non-mapped countries");
-    return "OT$ES"; // Force Spanish for cattler.com.ar (only for non-mapped countries)
+  // Check for cattler.agr.br (any URL starting with www.cattler.agr.br)
+  if (hostname.includes('cattler.agr.br') || referrer.includes('cattler.agr.br')) {
+    console.log("🌍 Iframe detected: cattler.agr.br");
+    return "cattler.agr.br";
   }
   
-  if (isCattlerAgrBr) {
-    console.log("🌍 Iframe parent detected: cattler.agr.br - forcing Portuguese for non-mapped countries");
-    return "BR"; // Force Portuguese for cattler.agr.br (only for non-mapped countries)
+  // Check for cattler.com.ar (any URL starting with www.cattler.com.ar)
+  if (hostname.includes('cattler.com.ar') || referrer.includes('cattler.com.ar')) {
+    console.log("🌍 Iframe detected: cattler.com.ar");
+    return "cattler.com.ar";
   }
   
-  // cattler.farm - No force, use normal country detection
-  console.log("🌍 No iframe parent detected or cattler.farm (use normal detection)");
+  // Check for cattler.farm
+  if (hostname.includes('cattler.farm') || referrer.includes('cattler.farm')) {
+    console.log("🌍 Iframe detected: cattler.farm");
+    return "cattler.farm";
+  }
+  
   return null;
 }
 
@@ -380,7 +382,29 @@ function detectCountryFromBrowserLanguage(): Country {
   }
 }
 
-// 4. MÚLTIPLES APIs DE IP (Más Robusto)
+// 4. DETECCIÓN POR API PROPIA (Más confiable - usa IP del servidor)
+async function detectCountryFromOwnAPI(): Promise<Country | null> {
+  try {
+    console.log("🌍 Trying own API route...");
+    const response = await fetch("/api/country", {
+      signal: AbortSignal.timeout(3000)
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      if (data.success && data.country_code) {
+        console.log("🌍 Own API detected:", data.country_code);
+        return data.country_code.toUpperCase() as Country;
+      }
+    }
+  } catch (error) {
+    console.warn("🌍 Own API failed:", error);
+  }
+  
+  return null;
+}
+
+// 5. MÚLTIPLES APIs DE IP (Más Robusto) - Ahora en paralelo
 async function detectCountryFromMultipleIPs(): Promise<Country | null> {
   const apis = [
     {
@@ -402,10 +426,22 @@ async function detectCountryFromMultipleIPs(): Promise<Country | null> {
       name: "ipgeolocation.io",
       url: "https://api.ipgeolocation.io/ipgeo?apiKey=free",
       parser: (data: any) => data.country_code2
+    },
+    {
+      name: "ipwho.is",
+      url: "https://ipwho.is/",
+      parser: (data: any) => data.success ? data.country_code : null
     }
   ];
   
-  for (const api of apis) {
+  // Try own API first (most reliable)
+  const ownApiResult = await detectCountryFromOwnAPI();
+  if (ownApiResult) {
+    return ownApiResult;
+  }
+  
+  // Try other APIs in parallel for faster detection
+  const promises = apis.map(async (api) => {
     try {
       console.log(`🌍 Trying ${api.name}...`);
       const response = await fetch(api.url, {
@@ -423,6 +459,36 @@ async function detectCountryFromMultipleIPs(): Promise<Country | null> {
       }
     } catch (error) {
       console.warn(`🌍 ${api.name} failed:`, error);
+    }
+    return null;
+  });
+  
+  const results = await Promise.allSettled(promises);
+  
+  // Get first successful result
+  for (const result of results) {
+    if (result.status === 'fulfilled' && result.value) {
+      return result.value;
+    }
+  }
+  
+  return null;
+}
+
+// 6. DETECCIÓN POR URL PARAMETER (Override manual)
+function detectCountryFromURL(): Country | null {
+  if (typeof window === 'undefined') return null;
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const countryParam = urlParams.get('country');
+  
+  if (countryParam) {
+    const validCountries: Country[] = ["US", "CA", "AR", "PY", "UY", "BO", "BR", "MX", "CH", "OT$EN", "OT$ES"];
+    const upperCountry = countryParam.toUpperCase() as Country;
+    
+    if (validCountries.includes(upperCountry)) {
+      console.log("🌍 Country from URL parameter:", upperCountry);
+      return upperCountry;
     }
   }
   
@@ -487,10 +553,151 @@ export function useCountryDetection() {
     }
 
     const detectCountry = async () => {
-      // First, try normal country detection for mapped countries
+      // First, check iframe domain detection (highest priority for Wix iframes)
+      const iframeDomain = detectIframeDomain();
+      
+      // 1. If in cattler.agr.br iframe → Always BR (PT), never EN, ES or ES-AR
+      if (iframeDomain === "cattler.agr.br") {
+        console.log("🌍 Iframe cattler.agr.br detected - forcing BR (PT)");
+        setDetectedCountry("BR");
+        setIsDetecting(false);
+        hasDetected.current = true;
+        saveCountryIfNotAdmin("BR");
+        return;
+      }
+      
+      // 2. If in cattler.com.ar iframe → ES or ES-AR based on detected country, never PT or EN
+      if (iframeDomain === "cattler.com.ar") {
+        console.log("🌍 Iframe cattler.com.ar detected - detecting country for ES/ES-AR");
+        
+        let detectedCountryForES: Country | null = null;
+        
+        // Try to detect the actual country
+        const geolocationCountry = await detectCountryFromGeolocation();
+        if (geolocationCountry) {
+          detectedCountryForES = geolocationCountry;
+        }
+        
+        if (!detectedCountryForES) {
+          const timezoneCountry = detectCountryFromTimezone();
+          if (timezoneCountry) {
+            detectedCountryForES = timezoneCountry;
+          }
+        }
+        
+        if (!detectedCountryForES) {
+          // Try own API first
+          const ownApiCountry = await detectCountryFromOwnAPI();
+          if (ownApiCountry) {
+            detectedCountryForES = ownApiCountry;
+          }
+        }
+        
+        if (!detectedCountryForES) {
+          const ipCountry = await detectCountryFromMultipleIPs();
+          if (ipCountry) {
+            detectedCountryForES = ipCountry;
+          }
+        }
+        
+        // If detected country is AR, use AR (ES-AR)
+        // Otherwise use OT$ES (Spanish)
+        if (detectedCountryForES === "AR") {
+          console.log("🌍 Detected AR in cattler.com.ar iframe - using AR (ES-AR)");
+          setDetectedCountry("AR");
+        } else {
+          console.log("🌍 Using OT$ES for cattler.com.ar iframe");
+          setDetectedCountry("OT$ES");
+        }
+        
+        setIsDetecting(false);
+        hasDetected.current = true;
+        saveCountryIfNotAdmin(detectedCountryForES === "AR" ? "AR" : "OT$ES");
+        return;
+      }
+      
+      // 3. If in cattler.farm iframe → Default US, CA→US, mapped countries use their country, Spanish-speaking non-mapped → OT$ES, others → OT$EN
+      if (iframeDomain === "cattler.farm") {
+        console.log("🌍 Iframe cattler.farm detected - detecting country");
+        
+        let finalCountry: Country | null = null;
+        
+        // Try geolocation
+        const geolocationCountry = await detectCountryFromGeolocation();
+        if (geolocationCountry) {
+          finalCountry = geolocationCountry;
+        }
+        
+        // Try timezone
+        if (!finalCountry) {
+          const timezoneCountry = detectCountryFromTimezone();
+          if (timezoneCountry) {
+            finalCountry = timezoneCountry;
+          }
+        }
+        
+        // Try own API first
+        if (!finalCountry) {
+          const ownApiCountry = await detectCountryFromOwnAPI();
+          if (ownApiCountry) {
+            finalCountry = ownApiCountry;
+          }
+        }
+        
+        // Try other IP APIs
+        if (!finalCountry) {
+          const ipCountry = await detectCountryFromMultipleIPs();
+          if (ipCountry) {
+            finalCountry = ipCountry;
+          }
+        }
+        
+        let selectedCountry: Country;
+        
+        // Default to US
+        if (!finalCountry) {
+          console.log("🌍 No country detected in cattler.farm iframe - using US (default)");
+          selectedCountry = "US";
+        } else if (finalCountry === "CA") {
+          // CA → US
+          console.log("🌍 CA detected in cattler.farm iframe - using US");
+          selectedCountry = "US";
+        } else if (mappedCountries.includes(finalCountry)) {
+          // Mapped countries use their own country
+          console.log("🌍 Mapped country detected in cattler.farm iframe:", finalCountry);
+          selectedCountry = finalCountry as Country;
+        } else if (spanishSpeakingCountries.includes(finalCountry)) {
+          // Spanish-speaking non-mapped countries → OT$ES
+          console.log("🌍 Spanish-speaking non-mapped country detected in cattler.farm iframe:", finalCountry, "- using OT$ES");
+          selectedCountry = "OT$ES";
+        } else {
+          // Other non-mapped countries → OT$EN
+          console.log("🌍 Other non-mapped country detected in cattler.farm iframe:", finalCountry, "- using OT$EN");
+          selectedCountry = "OT$EN";
+        }
+        
+        setDetectedCountry(selectedCountry);
+        setIsDetecting(false);
+        hasDetected.current = true;
+        saveCountryIfNotAdmin(selectedCountry);
+        return;
+      }
+      
+      // Normal country detection (not in Wix iframe or not in any of the above domains)
       console.log("🌍 Starting normal country detection...");
       
       let finalCountry: Country | null = null;
+      
+      // 0. Check URL parameter first (manual override - highest priority)
+      const urlCountry = detectCountryFromURL();
+      if (urlCountry) {
+        console.log("🌍 URL parameter override detected:", urlCountry);
+        setDetectedCountry(urlCountry);
+        setIsDetecting(false);
+        hasDetected.current = true;
+        saveCountryIfNotAdmin(urlCountry);
+        return;
+      }
       
       // 1. Try geolocation (most accurate for direct access)
       console.log("🌍 Step 1: Trying geolocation...");
@@ -510,7 +717,7 @@ export function useCountryDetection() {
         }
       }
       
-      // 3. Try multiple IP APIs
+      // 3. Try multiple IP APIs (includes own API and others in parallel)
       if (!finalCountry) {
         console.log("🌍 Step 3: Trying multiple IP APIs...");
         const ipCountry = await detectCountryFromMultipleIPs();
@@ -539,22 +746,7 @@ export function useCountryDetection() {
         hasDetected.current = true;
         
         // Cache the result
-        const now = Date.now();
         saveCountryIfNotAdmin(finalCountry);
-        return;
-      }
-      
-      // For non-mapped countries, check iframe detection
-      console.log("🌍 Non-mapped country, checking iframe detection...");
-      const iframeCountry = detectCountryFromIframe();
-      if (iframeCountry) {
-        console.log("🌍 Iframe parent detection success:", iframeCountry);
-        setDetectedCountry(iframeCountry);
-        setIsDetecting(false);
-        hasDetected.current = true;
-        
-        // Cache the iframe result
-        saveCountryIfNotAdmin(iframeCountry);
         return;
       }
       
