@@ -6,8 +6,6 @@ export function ClientScripts() {
   useEffect(() => {
     // Google Tag Manager - Conditional Loading
     const hostname = window.location.hostname;
-    const referrer = document.referrer || "";
-    const isInIframe = window !== window.top;
 
     // Determine which GTM container to use
     let gtmId = null;
@@ -15,33 +13,18 @@ export function ClientScripts() {
     // Case 1: Direct access to cattler.farm
     if (hostname === "cattler.farm") {
       gtmId = "GTM-MM57STLM";
-      console.log("🌍 Loading GTM for cattler.farm (direct access)");
+      console.log("🌍 Loading GTM for cattler.farm");
     }
     // Case 2: Direct access to cattler.com.ar
     else if (hostname === "cattler.com.ar") {
       gtmId = "GTM-TNCF2F2Q";
-      console.log("🌍 Loading GTM for cattler.com.ar (direct access)");
+      console.log("🌍 Loading GTM for cattler.com.ar");
     }
-    // Case 3: Iframe from cattler.com.ar
-    else if (isInIframe && referrer.includes("cattler.com.ar")) {
-      gtmId = "GTM-TNCF2F2Q";
-      console.log("🌍 Loading GTM for cattler.com.ar (iframe)");
-    }
-    // Case 4: Iframe from cattler.farm
-    else if (isInIframe && referrer.includes("cattler.farm")) {
-      gtmId = "GTM-MM57STLM";
-      console.log("🌍 Loading GTM for cattler.farm (iframe)");
-    }
-    // Case 5: Default fallback (no iframe, no specific domain)
-    else if (!isInIframe) {
-      // Use cattler.farm as default for direct access
+    // Case 3: Default fallback
+    else {
+      // Use cattler.farm as default
       gtmId = "GTM-MM57STLM";
       console.log("🌍 Loading default GTM (cattler.farm)");
-    }
-    // Case 6: Iframe from unknown source - don't load any GTM
-    else {
-      console.log("🌍 No GTM loaded (unknown iframe source)");
-      return;
     }
 
     // Load the appropriate GTM container
@@ -65,83 +48,20 @@ export function ClientScripts() {
       hostname === "cattler.com.ar" ? "m8xq8q8q8q" : "k8xq8q8q8q";
 
     if (hostname === "cattler.com.ar" || hostname === "cattler.farm") {
-      (function (c: any, l: any, a: any, r: any, i: any, t: any, y: any) {
+      (function (c: any, l: any, a: any, r: any, i: any) {
         c[a] =
           c[a] ||
           function () {
             (c[a].q = c[a].q || []).push(arguments);
           };
-        t = l.createElement(r);
+        const t = l.createElement(r);
         t.async = 1;
         t.src = "https://www.clarity.ms/tag/" + i;
-        y = l.getElementsByTagName(r)[0];
+        const y = l.getElementsByTagName(r)[0];
         y.parentNode.insertBefore(t, y);
       })(window, document, "clarity", "script", clarityId);
 
       console.log("✅ Clarity loaded:", clarityId);
-    }
-
-    // Auto-resize iframe for Wix
-    function resizeIframe() {
-      if (window.parent && window.parent !== window) {
-        const height = document.documentElement.scrollHeight;
-        window.parent.postMessage(
-          {
-            type: "resize",
-            height: height,
-          },
-          "*"
-        );
-      }
-    }
-
-    // Wait for DOM to be ready before setting up observers
-    function setupResizeObservers() {
-      if (!document.body) {
-        // If body is not ready, wait a bit and try again
-        setTimeout(setupResizeObservers, 50);
-        return;
-      }
-
-      // Resize on load and when content changes
-      window.addEventListener("load", resizeIframe);
-      window.addEventListener("resize", resizeIframe);
-
-      // Use ResizeObserver to detect content changes
-      if (window.ResizeObserver && document.body) {
-        try {
-          const resizeObserver = new ResizeObserver(() => {
-            setTimeout(resizeIframe, 100);
-          });
-          resizeObserver.observe(document.body);
-        } catch (error) {
-          console.warn("ResizeObserver error:", error);
-        }
-      }
-
-      // Also resize when DOM changes
-      try {
-        const mutationObserver = new MutationObserver(() => {
-          setTimeout(resizeIframe, 100);
-        });
-        mutationObserver.observe(document.body, {
-          childList: true,
-          subtree: true,
-          attributes: true,
-        });
-      } catch (error) {
-        console.warn("MutationObserver error:", error);
-      }
-
-      // Initial resize
-      setTimeout(resizeIframe, 100);
-    }
-
-    // Start setup when DOM is ready
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", setupResizeObservers);
-    } else {
-      setupResizeObservers();
     }
   }, []);
 

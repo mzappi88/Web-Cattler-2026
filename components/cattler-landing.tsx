@@ -5,44 +5,27 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import Script from "next/script";
 import { ClipboardList, TrendingUp, Activity, DollarSign } from "lucide-react";
-import { useTranslation, getDemoUrl } from "@/hooks/use-translation";
-import { CountrySelector } from "./country-selector";
+import { useTranslation } from "@/hooks/use-translation";
 import { useRouter } from "next/navigation";
+import { CountrySelector } from "./country-selector";
 import VideoCtaSection from "@/components/video-cta-section";
 import VideoPopup from "@/components/video-popup";
 import EnhancedCtaSection from "./enhanced-cta-section";
 
 export default function CattlerLanding() {
   const { selectedCountry, setSelectedCountry, language, t } = useTranslation();
-  const [isWixIframe, setIsWixIframe] = useState(false);
-  const [isWixMobile, setIsWixMobile] = useState(false);
   const router = useRouter();
   const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
 
   useEffect(() => {
-    // Detect if we're in a Wix iframe
-    const isInIframe = window !== window.top;
-    const isWix =
-      window.location.hostname.includes("wix") ||
-      window.location.hostname.includes("wixsite") ||
-      document.referrer.includes("wix");
-    const isMobile = window.innerWidth <= 768;
-    setIsWixIframe(isInIframe && isWix);
-    setIsWixMobile(isInIframe && isWix && isMobile);
-
     // Debug information
     console.log("🌐 Debug Info:", {
-      isInIframe,
-      isWix,
-      isWixIframe: isInIframe && isWix,
       windowHeight: window.innerHeight,
       windowWidth: window.innerWidth,
       documentHeight: document.documentElement.scrollHeight,
       userAgent: navigator.userAgent,
       hostname: window.location.hostname,
       referrer: document.referrer,
-      isMobile: window.innerWidth <= 768,
-      isWixMobile: isInIframe && isWix && window.innerWidth <= 768,
     });
 
     // Mostrar información de país en la consola
@@ -263,13 +246,7 @@ export default function CattlerLanding() {
           <button
             className="bg-[#f25f24] hover:bg-[#d14d1a] text-white font-bold py-2 px-4 md:py-4 md:px-8 rounded-full text-sm md:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             onClick={() => {
-              const cattlerUrl = getDemoUrl(selectedCountry);
-
-              if (window.parent && window.parent !== window) {
-                window.parent.location.href = cattlerUrl;
-              } else {
-                window.location.href = cattlerUrl;
-              }
+              router.push("/demo");
             }}
           >
             {t("getStarted")}

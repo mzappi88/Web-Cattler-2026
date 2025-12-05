@@ -11,7 +11,7 @@ import {
   Zap,
 } from "lucide-react";
 import Image from "next/image";
-import { useTranslation, getDemoUrl } from "@/hooks/use-translation";
+import { useTranslation } from "@/hooks/use-translation";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import EnhancedCtaSection from "@/components/enhanced-cta-section";
@@ -153,12 +153,7 @@ export default function CattlerHome() {
           <button
             className="bg-[#f25f24] hover:bg-[#d14d1a] text-white font-bold py-2 px-4 md:py-4 md:px-8 rounded-full text-sm md:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             onClick={() => {
-              const cattlerUrl = getDemoUrl(selectedCountry);
-              if (window.parent && window.parent !== window) {
-                window.parent.location.href = cattlerUrl;
-              } else {
-                window.location.href = cattlerUrl;
-              }
+              router.push("/demo");
             }}
           >
             {t("getStarted")}

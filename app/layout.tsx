@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { TranslationProvider } from "@/hooks/TranslationProvider";
+import Header from "@/components/header";
 import Footer from "@/components/footer";
-import IframeResizer from "@/components/iframe-resizer";
 import { ClientScripts } from "@/components/client-scripts";
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default function RootLayout({
       <body>
         <TranslationProvider>
           <ClientScripts />
-          <IframeResizer />
+          <Header />
           {children}
           <Footer />
         </TranslationProvider>

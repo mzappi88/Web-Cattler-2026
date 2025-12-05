@@ -3,15 +3,13 @@
 import React from "react";
 import Image from "next/image";
 import { ArrowRight, CheckCircle, Clock } from "lucide-react";
-import {
-  useTranslation,
-  getPricingUrl,
-  getDemoUrl,
-} from "@/hooks/use-translation";
+import { useTranslation } from "@/hooks/use-translation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 export default function EnhancedCtaSection() {
   const { selectedCountry, t } = useTranslation();
+  const router = useRouter();
 
   return (
     <div className="w-full bg-gradient-to-br from-[#121334] via-[#1a1a4a] to-[#121334] py-12 md:py-20 relative overflow-hidden">
@@ -117,12 +115,7 @@ export default function EnhancedCtaSection() {
             {selectedCountry !== "AR" && (
               <Button
                 onClick={() => {
-                  const pricingUrl = getPricingUrl(selectedCountry);
-                  if (window.parent && window.parent !== window) {
-                    window.parent.location.href = pricingUrl;
-                  } else {
-                    window.location.href = pricingUrl;
-                  }
+                  router.push("/pricing");
                 }}
                 className="bg-gradient-to-r from-[#15B674] to-[#12a066] hover:from-[#12a066] hover:to-[#0f8a56] text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-sm md:text-lg transition-all duration-300 transform hover:scale-105 shadow-xl border-0 w-full sm:w-auto"
               >
@@ -133,12 +126,7 @@ export default function EnhancedCtaSection() {
 
             <Button
               onClick={() => {
-                const cattlerUrl = getDemoUrl(selectedCountry);
-                if (window.parent && window.parent !== window) {
-                  window.parent.location.href = cattlerUrl;
-                } else {
-                  window.location.href = cattlerUrl;
-                }
+                router.push("/demo");
               }}
               className="bg-white text-[#121334] hover:bg-gray-100 font-semibold py-3 px-6 md:py-4 md:px-8 rounded-full text-sm md:text-lg transition-all duration-300 shadow-lg border-0 w-full sm:w-auto"
             >

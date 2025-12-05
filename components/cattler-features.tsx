@@ -2,15 +2,11 @@
 
 import { FeatureSection } from "./feature-section";
 import { Settings, Clock, Users, Info } from "lucide-react";
-import {
-  useTranslation,
-  getPricingUrl,
-  getDemoUrl,
-} from "@/hooks/use-translation";
+import { useTranslation } from "@/hooks/use-translation";
+import { useRouter } from "next/navigation";
 import { useFeatureVideos } from "@/hooks/use-feature-videos";
 import { useMemo } from "react";
 import TestimonialsCarousel from "./testimonials-carousel";
-import { useRouter } from "next/navigation";
 
 export default function CattlerFeatures() {
   const { selectedCountry, setSelectedCountry, language, t, isHydrated } =
@@ -276,12 +272,7 @@ export default function CattlerFeatures() {
             {selectedCountry !== "AR" && (
               <button
                 onClick={() => {
-                  const pricingUrl = getPricingUrl(selectedCountry);
-                  if (window.parent && window.parent !== window) {
-                    window.parent.location.href = pricingUrl;
-                  } else {
-                    window.location.href = pricingUrl;
-                  }
+                  router.push("/pricing");
                 }}
                 className="bg-white text-[#15B674] font-bold text-base md:text-lg py-3 px-6 md:py-4 md:px-8 rounded-full hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center gap-2 md:gap-3"
               >
@@ -322,12 +313,7 @@ export default function CattlerFeatures() {
         <button
           className="bg-[#f25f24] text-white font-bold text-base md:text-lg font-semibold py-2.5 px-6 md:py-3 md:px-8 border-none rounded-full cursor-pointer transition-colors hover:bg-[#d14d1a]"
           onClick={() => {
-            const cattlerUrl = getDemoUrl(selectedCountry);
-            if (window.parent && window.parent !== window) {
-              window.parent.location.href = cattlerUrl;
-            } else {
-              window.location.href = cattlerUrl;
-            }
+            router.push("/demo");
           }}
         >
           {t("requestDemo")}

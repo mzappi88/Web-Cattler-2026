@@ -2,7 +2,8 @@
 
 import type React from "react";
 import { useLearnMoreClick } from "@/hooks/use-learn-more-click";
-import { useTranslation, getDemoUrl } from "@/hooks/use-translation";
+import { useTranslation } from "@/hooks/use-translation";
+import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
 interface FeatureSectionProps {
@@ -34,6 +35,7 @@ export function FeatureSection({
 }: FeatureSectionProps) {
   const handleLearnMoreClick = useLearnMoreClick();
   const { t, selectedCountry } = useTranslation();
+  const router = useRouter();
 
   console.log(`Rendering ${title} section with video source:`, videoSrc);
 
@@ -109,12 +111,7 @@ export function FeatureSection({
       <div className="text-center md:text-left">
         <button
           onClick={() => {
-            const cattlerUrl = getDemoUrl(selectedCountry);
-            if (window.parent && window.parent !== window) {
-              window.parent.location.href = cattlerUrl;
-            } else {
-              window.location.href = cattlerUrl;
-            }
+            router.push("/demo");
           }}
           className="bg-[#15B674] hover:bg-[#12a066] text-white font-semibold py-2.5 px-5 md:py-3 md:px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center gap-2 text-sm md:text-base"
         >

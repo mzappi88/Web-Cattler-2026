@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useTranslation, getPricingUrl } from "@/hooks/use-translation";
+import { useTranslation } from "@/hooks/use-translation";
 import type { Country } from "@/hooks/use-translation";
 import { CountrySelector } from "@/components/country-selector";
 
@@ -101,12 +101,7 @@ export default function Header() {
             <Button
               className="bg-green-600 hover:bg-green-700 text-white text-xs lg:text-sm py-1 px-2 lg:py-2 lg:px-4"
               onClick={() => {
-                const pricingUrl = getPricingUrl(selectedCountry);
-                if (window.parent && window.parent !== window) {
-                  window.parent.location.href = pricingUrl;
-                } else {
-                  window.location.href = pricingUrl;
-                }
+                router.push("/pricing");
               }}
             >
               {t("navigation.getStarted")}
@@ -136,22 +131,13 @@ export default function Header() {
             >
               {t("navigation.home")}
             </Link>
-            <a
-              href="#"
+            <Link
+              href="/pricing"
               className="block py-2 px-4 text-gray-700 hover:text-green-600 font-medium text-sm"
-              onClick={(e) => {
-                e.preventDefault();
-                const pricingUrl = getPricingUrl(selectedCountry);
-                if (window.parent && window.parent !== window) {
-                  window.parent.location.href = pricingUrl;
-                } else {
-                  window.location.href = pricingUrl;
-                }
-                setIsMenuOpen(false);
-              }}
+              onClick={() => setIsMenuOpen(false)}
             >
               {t("navigation.pricing")}
-            </a>
+            </Link>
             <Link
               href="/about_us"
               className="block py-2 px-4 text-gray-700 hover:text-green-600 font-medium text-sm"
@@ -186,12 +172,7 @@ export default function Header() {
               <Button
                 className="w-full bg-green-600 hover:bg-green-700 text-white text-sm py-2"
                 onClick={() => {
-                  const pricingUrl = getPricingUrl(selectedCountry);
-                  if (window.parent && window.parent !== window) {
-                    window.parent.location.href = pricingUrl;
-                  } else {
-                    window.location.href = pricingUrl;
-                  }
+                  router.push("/pricing");
                   setIsMenuOpen(false);
                 }}
               >

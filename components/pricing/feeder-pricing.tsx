@@ -808,13 +808,7 @@ export default function Component() {
       billingCycle === "annual" ? "-annual" : ""
     }`;
 
-    // Si estamos en un iframe, cambiar la URL del padre
-    if (window.parent && window.parent !== window) {
-      window.parent.location.href = cattlerUrl;
-    } else {
-      // Si no estamos en iframe, redirigir directamente
-      window.location.href = cattlerUrl;
-    }
+    window.location.href = cattlerUrl;
   };
 
   const handleAddOnSelect = (addOn: AddOn) => {
@@ -841,13 +835,7 @@ export default function Component() {
       addOnBillingCycle === "annual" ? "-annual" : ""
     }`;
 
-    // Si estamos en un iframe, cambiar la URL del padre
-    if (window.parent && window.parent !== window) {
-      window.parent.location.href = cattlerUrl;
-    } else {
-      // Si no estamos en iframe, redirigir directamente
-      window.location.href = cattlerUrl;
-    }
+    window.location.href = cattlerUrl;
   };
 
   const toggleBillingCycle = () => {
@@ -2085,22 +2073,8 @@ export default function Component() {
                 size="lg"
                 className="bg-cattler-orange hover:bg-cattler-orange/90 text-white font-lato font-bold px-8 py-3"
                 onClick={() => {
-                  const baseUrl =
-                    selectedCountry === "BR"
-                      ? "https://www.cattler.agr.br"
-                      : ["AR", "UY", "CH", "PY", "MX", "OT$ES"].includes(
-                          selectedCountry
-                        )
-                      ? "https://www.cattler.com.ar"
-                      : "https://www.cattler.farm";
-                  const demoPath =
-                    selectedCountry === "BR" ? "/solicitar-demo" : "/demo";
-                  const cattlerUrl = `${baseUrl}${demoPath}`;
-                  if (window.parent && window.parent !== window) {
-                    window.parent.location.href = cattlerUrl;
-                  } else {
-                    window.location.href = cattlerUrl;
-                  }
+                  // Redirect to local demo page
+                  window.location.href = "/demo";
                 }}
               >
                 {selectedCountry === "BR"
@@ -2125,11 +2099,7 @@ export default function Component() {
                       ? "https://www.cattler.com.ar"
                       : "https://www.cattler.farm";
                   const cattlerUrl = `${baseUrl}/contact`;
-                  if (window.parent && window.parent !== window) {
-                    window.parent.location.href = cattlerUrl;
-                  } else {
-                    window.location.href = cattlerUrl;
-                  }
+                  window.location.href = cattlerUrl;
                 }}
               >
                 {selectedCountry === "BR"

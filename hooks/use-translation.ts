@@ -801,120 +801,12 @@ export function useTranslation() {
   }
 }
 
-// Helper function to get the appropriate pricing URL based on country
+// Helper function to get the appropriate pricing URL - now returns local route
 export function getPricingUrl(country: Country): string {
-  switch (country) {
-    case "AR":
-    case "UY":
-    case "PY":
-    case "BO":
-    case "MX":
-    case "CH":
-    case "OT$ES":
-      return "https://www.cattler.com.ar/precios";
-    case "BR":
-      return "https://cattler.agr.br/precos";
-    case "US":
-    case "CA":
-    case "OT$EN":
-      return "https://cattler.farm/getstarted";
-    default:
-      return "https://cattler.farm/getstarted"; // Default fallback
-  }
+  return "/pricing";
 }
 
-// Helper function to get the appropriate demo URL based on country
+// Helper function to get the appropriate demo URL - now returns local route
 export function getDemoUrl(country: Country): string {
-  switch (country) {
-    case "AR":
-    case "UY":
-    case "PY":
-    case "BO":
-    case "MX":
-    case "CH":
-    case "OT$ES":
-      return "https://cattler.com.ar/demo";
-    case "BR":
-      return "https://cattler.agr.br/demo";
-    case "US":
-    case "CA":
-    case "OT$EN":
-      return "https://cattler.farm/demo";
-    default:
-      return "https://cattler.farm/demo"; // Default fallback
-  }
-}
-
-// Enhanced function that considers iframe detection
-export function getDemoUrlWithIframeDetection(country: Country): string {
-  if (typeof window === 'undefined') {
-    return getDemoUrl(country);
-  }
-
-  // Check if we're in an iframe
-  const isInIframe = window !== window.top;
-  const referrer = document.referrer || '';
-  const hostname = window.location.hostname;
-
-  // Detect if we're embedded in Cattler.com.ar
-  const isCattlerComAr = 
-    hostname.includes('cattler.com.ar') ||
-    referrer.includes('cattler.com.ar');
-
-  // Detect if we're embedded in Cattler.farm
-  const isCattlerFarm = 
-    hostname.includes('cattler.farm') ||
-    referrer.includes('cattler.farm');
-
-  // If embedded in Cattler.com.ar, use Spanish URLs
-  if (isCattlerComAr) {
-    return country === 'BR' 
-      ? 'https://cattler.agr.br/demo'
-      : 'https://cattler.com.ar/demo';
-  }
-
-  // If embedded in Cattler.farm, use English URLs
-  if (isCattlerFarm) {
-    return 'https://cattler.farm/demo';
-  }
-
-  // Default country-based logic
-  return getDemoUrl(country);
-}
-
-// Enhanced function for pricing URLs that considers iframe detection
-export function getPricingUrlWithIframeDetection(country: Country): string {
-  if (typeof window === 'undefined') {
-    return getPricingUrl(country);
-  }
-
-  // Check if we're in an iframe
-  const isInIframe = window !== window.top;
-  const referrer = document.referrer || '';
-  const hostname = window.location.hostname;
-
-  // Detect if we're embedded in Cattler.com.ar
-  const isCattlerComAr = 
-    hostname.includes('cattler.com.ar') ||
-    referrer.includes('cattler.com.ar');
-
-  // Detect if we're embedded in Cattler.farm
-  const isCattlerFarm = 
-    hostname.includes('cattler.farm') ||
-    referrer.includes('cattler.farm');
-
-  // If embedded in Cattler.com.ar, use Spanish URLs
-  if (isCattlerComAr) {
-    return country === 'BR' 
-      ? 'https://cattler.agr.br/precos'
-      : 'https://www.cattler.com.ar/precios';
-  }
-
-  // If embedded in Cattler.farm, use English URLs
-  if (isCattlerFarm) {
-    return 'https://cattler.farm/getstarted';
-  }
-
-  // Default country-based logic
-  return getPricingUrl(country);
+  return "/demo";
 }

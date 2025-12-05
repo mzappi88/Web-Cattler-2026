@@ -14,29 +14,16 @@ import EnhancedCtaSection from "./enhanced-cta-section";
 
 export default function CattlerLandingSale() {
   const { selectedCountry, setSelectedCountry, language, t } = useTranslation();
-  const [isWixIframe, setIsWixIframe] = useState(false);
-  const [isWixMobile, setIsWixMobile] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
   const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
 
   useEffect(() => {
-    // Detect if we're in a Wix iframe
-    const isInIframe = window !== window.top;
-    const isWix =
-      window.location.hostname.includes("wix") ||
-      window.location.hostname.includes("wixsite") ||
-      document.referrer.includes("wix");
     const mobile = window.innerWidth <= 768;
     setIsMobile(mobile);
-    setIsWixIframe(isInIframe && isWix);
-    setIsWixMobile(isInIframe && isWix && mobile);
 
     // Debug information
     console.log("🌐 Debug Info:", {
-      isInIframe,
-      isWix,
-      isWixIframe: isInIframe && isWix,
       windowHeight: window.innerHeight,
       windowWidth: window.innerWidth,
       documentHeight: document.documentElement.scrollHeight,
@@ -44,7 +31,6 @@ export default function CattlerLandingSale() {
       hostname: window.location.hostname,
       referrer: document.referrer,
       isMobile: window.innerWidth <= 768,
-      isWixMobile: isInIframe && isWix && window.innerWidth <= 768,
     });
 
     // Mostrar información de país en la consola
