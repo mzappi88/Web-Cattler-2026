@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { TranslationProvider } from "@/hooks/TranslationProvider";
 import Header from "@/components/header";
@@ -20,6 +21,19 @@ export default function RootLayout({
     <html lang="en">
       <head></head>
       <body>
+        {/* Google tag (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17782792916"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17782792916');
+          `}
+        </Script>
         <TranslationProvider>
           <ClientScripts />
           <Header />
