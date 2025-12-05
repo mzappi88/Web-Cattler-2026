@@ -28,7 +28,16 @@ export default function DemoPage() {
 
   // HubSpot form logic
   useEffect(() => {
-    if (scriptLoaded && typeof window.hbspt !== "undefined") {
+    // Reset form loaded state when language or country changes
+    setFormLoaded(false);
+
+    // Clean up any existing form
+    const container = document.getElementById("hubspot-form-container");
+    if (container) {
+      container.innerHTML = "";
+    }
+
+    if (scriptLoaded && typeof window !== "undefined" && typeof window.hbspt !== "undefined") {
       // Determine which form to use based on language and country
       let formId = "ea412564-b4e0-4514-8d3a-2f1117acd27f"; // Default form
 
@@ -71,18 +80,33 @@ export default function DemoPage() {
         }
       }
 
-      window.hbspt.forms.create({
-        portalId: "21027761",
-        formId: formId,
-        target: "#hubspot-form-container",
-        region: "na1",
-        onFormReady: () => {
-          setFormLoaded(true);
-        },
-        onFormSubmitted: () => {
-          setSubmitted(true);
-        },
-      });
+      console.log("📝 Creating HubSpot form:", { formId, language, selectedCountry });
+
+      try {
+        window.hbspt.forms.create({
+          portalId: "21027761",
+          formId: formId,
+          target: "#hubspot-form-container",
+          region: "na1",
+          onFormReady: () => {
+            console.log("✅ HubSpot form ready");
+            setFormLoaded(true);
+          },
+          onFormSubmitted: () => {
+            console.log("✅ HubSpot form submitted");
+            setSubmitted(true);
+          },
+          onFormError: (error: any) => {
+            console.error("❌ HubSpot form error:", error);
+            setFormLoaded(false);
+          },
+        });
+      } catch (error) {
+        console.error("❌ Error creating HubSpot form:", error);
+        setFormLoaded(false);
+      }
+    } else {
+      console.log("⏳ Waiting for HubSpot script...", { scriptLoaded, hbsptAvailable: typeof window !== "undefined" && typeof window.hbspt !== "undefined" });
     }
   }, [scriptLoaded, language, selectedCountry]);
 
