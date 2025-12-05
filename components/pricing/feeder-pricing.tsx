@@ -72,7 +72,7 @@ import {
 const regionalPromotions = {
   // North America: US, CA, OT$EN
   northAmerica: {
-    saleActive: true,
+    saleActive: false,
     saleName: "Black Friday Sale", // Will be translated
     defaultIsAnnual: true,
     discounts: {
@@ -148,7 +148,7 @@ const regionalPromotions = {
 
   // LATAM: AR, UY, PY, BO, CH, MX
   latam: {
-    saleActive: true,
+    saleActive: false,
     saleName: "Black Friday Sale", // Will be translated
     defaultIsAnnual: true,
     discounts: {

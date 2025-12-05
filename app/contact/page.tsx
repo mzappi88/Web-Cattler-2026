@@ -202,7 +202,7 @@ export default function ContactPage() {
                           </h3>
                           <p className="text-gray-600">
                             {language === "es-ar"
-                              ? "Delgado 377 2o B, CABA - 1428"
+                              ? "Teniente Benjamín Matienzo 3132, CABA, Argentina - CP 1426"
                               : "2125 Transformation Drive, Suite 1000, Lincoln, NE 68508"}
                           </p>
                         </div>
@@ -236,8 +236,8 @@ export default function ContactPage() {
                             {language === "es" ||
                             language === "es-ar" ||
                             language === "pt"
-                              ? "+54 11 5929 5601"
-                              : "(531) 234-5882"}
+                              ? "+549 11 5929 5601"
+                              : "+1 (531) 234-5882"}
                           </p>
                         </div>
                       </div>

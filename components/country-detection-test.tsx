@@ -50,6 +50,13 @@ export function CountryDetectionTest() {
         privacy: t("footer.privacyPolicy"),
       };
 
+      const timezone =
+        typeof Intl !== "undefined"
+          ? Intl.DateTimeFormat().resolvedOptions().timeZone
+          : "unknown";
+      const timezoneOffset = new Date().getTimezoneOffset();
+      const timezoneOffsetHours = -timezoneOffset / 60;
+
       setDebugInfo({
         selectedCountry,
         detectedCountry,
@@ -61,6 +68,15 @@ export function CountryDetectionTest() {
           typeof navigator !== "undefined" ? navigator.language : "unknown",
         userAgent:
           typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
+        timezone: {
+          timezone,
+          offset: `${
+            timezoneOffsetHours > 0 ? "+" : ""
+          }${timezoneOffsetHours} hours`,
+          offsetMinutes: timezoneOffset,
+          dateString: new Date().toString(),
+          localeString: new Date().toLocaleString(),
+        },
         translationTests,
         localStorage:
           typeof window !== "undefined"
@@ -218,10 +234,17 @@ export function CountryDetectionTest() {
                 ? navigator.language
                 : "unknown"}
             </div>
-            <div>
+            <div className="col-span-2">
               <strong>Timezone:</strong>{" "}
               {typeof Intl !== "undefined"
-                ? Intl.DateTimeFormat().resolvedOptions().timeZone
+                ? (() => {
+                    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    const offset = new Date().getTimezoneOffset();
+                    const offsetHours = -offset / 60;
+                    return `${tz} (UTC${
+                      offsetHours > 0 ? "+" : ""
+                    }${offsetHours})`;
+                  })()
                 : "unknown"}
             </div>
             <div>

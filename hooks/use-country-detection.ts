@@ -113,7 +113,18 @@ function detectCountryFromTimezone(): Country | null {
   if (typeof window === 'undefined') return null;
   
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const timezoneOffset = new Date().getTimezoneOffset();
+  const timezoneOffsetHours = -timezoneOffset / 60; // Convert to hours (negative because offset is opposite)
+  
   console.log("🌍 Browser timezone:", timezone);
+  console.log("🌍 Timezone offset:", `${timezoneOffsetHours > 0 ? '+' : ''}${timezoneOffsetHours} hours`);
+  console.log("🌍 Full timezone info:", {
+    timezone,
+    offset: `${timezoneOffsetHours > 0 ? '+' : ''}${timezoneOffsetHours} hours`,
+    offsetMinutes: timezoneOffset,
+    dateString: new Date().toString(),
+    localeString: new Date().toLocaleString()
+  });
   
   // Mapeo de timezones a países
   const timezoneCountryMap: Record<string, Country> = {
@@ -566,53 +577,85 @@ export function useCountryDetection() {
         return;
       }
       
-      // 2. If in cattler.com.ar iframe → ES or ES-AR based on detected country, never PT or EN
+      // 2. If in cattler.com.ar iframe → Use detected LATAM country or OT$ES, never PT or EN
       if (iframeDomain === "cattler.com.ar") {
-        console.log("🌍 Iframe cattler.com.ar detected - detecting country for ES/ES-AR");
+        console.log("🌍 Iframe cattler.com.ar detected - detecting country for LATAM");
+        
+        // Lista de países mapeados de LATAM que deben usarse directamente
+        const latamMappedCountries = ["AR", "UY", "PY", "BO", "MX", "CH"];
+        
+        // Clear cache if it has BR (Brazil) - should never be BR in cattler.com.ar
+        try {
+          const savedCountry = localStorage.getItem("cattler-country") as Country;
+          if (savedCountry === "BR") {
+            console.log("🌍 Clearing BR cache for cattler.com.ar iframe");
+            localStorage.removeItem("cattler-country");
+            localStorage.removeItem("cattler-country-detected");
+            localStorage.removeItem("cattler-country-last-detection");
+          }
+        } catch (error) {
+          console.warn("🌍 Failed to check/clear cache:", error);
+        }
         
         let detectedCountryForES: Country | null = null;
         
-        // Try to detect the actual country
-        const geolocationCountry = await detectCountryFromGeolocation();
-        if (geolocationCountry) {
-          detectedCountryForES = geolocationCountry;
+        // Priority 1: Try own API first (most reliable for IP-based detection)
+        const ownApiCountry = await detectCountryFromOwnAPI();
+        if (ownApiCountry && ownApiCountry !== "BR") {
+          detectedCountryForES = ownApiCountry;
+          console.log("🌍 Own API detected in cattler.com.ar:", detectedCountryForES);
+        } else if (ownApiCountry === "BR") {
+          console.log("🌍 Ignoring BR from own API in cattler.com.ar iframe (should never be BR)");
         }
         
-        if (!detectedCountryForES) {
-          const timezoneCountry = detectCountryFromTimezone();
-          if (timezoneCountry) {
-            detectedCountryForES = timezoneCountry;
-          }
-        }
-        
-        if (!detectedCountryForES) {
-          // Try own API first
-          const ownApiCountry = await detectCountryFromOwnAPI();
-          if (ownApiCountry) {
-            detectedCountryForES = ownApiCountry;
-          }
-        }
-        
+        // Priority 2: Try IP APIs (more reliable than timezone in iframes)
         if (!detectedCountryForES) {
           const ipCountry = await detectCountryFromMultipleIPs();
-          if (ipCountry) {
+          if (ipCountry && ipCountry !== "BR") {
             detectedCountryForES = ipCountry;
+            console.log("🌍 IP API detected in cattler.com.ar:", detectedCountryForES);
+          } else if (ipCountry === "BR") {
+            console.log("🌍 Ignoring BR from IP API in cattler.com.ar iframe (should never be BR)");
           }
         }
         
-        // If detected country is AR, use AR (ES-AR)
+        // Priority 3: Try geolocation (may be blocked in iframes)
+        if (!detectedCountryForES) {
+          const geolocationCountry = await detectCountryFromGeolocation();
+          if (geolocationCountry && geolocationCountry !== "BR") {
+            detectedCountryForES = geolocationCountry;
+            console.log("🌍 Geolocation detected in cattler.com.ar:", detectedCountryForES);
+          } else if (geolocationCountry === "BR") {
+            console.log("🌍 Ignoring BR from geolocation in cattler.com.ar iframe (should never be BR)");
+          }
+        }
+        
+        // Priority 4: Try timezone (least reliable, can be wrong with VPNs)
+        // But ignore BR timezone results in cattler.com.ar iframe
+        if (!detectedCountryForES) {
+          const timezoneCountry = detectCountryFromTimezone();
+          if (timezoneCountry && timezoneCountry !== "BR") {
+            detectedCountryForES = timezoneCountry;
+            console.log("🌍 Timezone detected in cattler.com.ar:", detectedCountryForES);
+          } else if (timezoneCountry === "BR") {
+            console.log("🌍 Ignoring BR timezone result in cattler.com.ar iframe (likely incorrect)");
+          }
+        }
+        
+        // If detected country is a LATAM mapped country, use it directly
         // Otherwise use OT$ES (Spanish)
-        if (detectedCountryForES === "AR") {
-          console.log("🌍 Detected AR in cattler.com.ar iframe - using AR (ES-AR)");
-          setDetectedCountry("AR");
+        if (detectedCountryForES && latamMappedCountries.includes(detectedCountryForES)) {
+          console.log("🌍 Detected LATAM mapped country in cattler.com.ar iframe - using:", detectedCountryForES);
+          setDetectedCountry(detectedCountryForES);
+          saveCountryIfNotAdmin(detectedCountryForES);
         } else {
-          console.log("🌍 Using OT$ES for cattler.com.ar iframe");
+          console.log("🌍 No LATAM mapped country detected in cattler.com.ar iframe - using OT$ES");
           setDetectedCountry("OT$ES");
+          saveCountryIfNotAdmin("OT$ES");
         }
         
         setIsDetecting(false);
         hasDetected.current = true;
-        saveCountryIfNotAdmin(detectedCountryForES === "AR" ? "AR" : "OT$ES");
         return;
       }
       
