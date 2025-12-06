@@ -28,6 +28,11 @@ export default function DemoPage() {
 
   // HubSpot form logic
   useEffect(() => {
+    // Don't proceed if script is not loaded
+    if (!scriptLoaded) {
+      return;
+    }
+
     // Reset form loaded state when language or country changes
     setFormLoaded(false);
 
@@ -37,7 +42,14 @@ export default function DemoPage() {
       container.innerHTML = "";
     }
 
-    if (scriptLoaded && typeof window !== "undefined" && typeof window.hbspt !== "undefined") {
+    // Wait for hbspt to be available (should be quick with preconnect)
+    const createForm = () => {
+      if (typeof window === "undefined" || typeof window.hbspt === "undefined") {
+        // Retry after a short delay if API not ready
+        setTimeout(createForm, 50);
+        return;
+      }
+
       // Determine which form to use based on language and country
       let formId = "ea412564-b4e0-4514-8d3a-2f1117acd27f"; // Default form
 
@@ -105,9 +117,10 @@ export default function DemoPage() {
         console.error("❌ Error creating HubSpot form:", error);
         setFormLoaded(false);
       }
-    } else {
-      console.log("⏳ Waiting for HubSpot script...", { scriptLoaded, hbsptAvailable: typeof window !== "undefined" && typeof window.hbspt !== "undefined" });
-    }
+    };
+
+    // Start creating form immediately
+    createForm();
   }, [scriptLoaded, language, selectedCountry]);
 
   // Show loading state until hydrated
@@ -229,10 +242,17 @@ export default function DemoPage() {
         </div>
       </div>
 
-      {/* HubSpot Script */}
+      {/* HubSpot Script - Load early with afterInteractive strategy */}
       <Script
         src="//js.hsforms.net/forms/embed/v2.js"
-        onLoad={() => setScriptLoaded(true)}
+        strategy="afterInteractive"
+        onLoad={() => {
+          console.log("✅ HubSpot script loaded");
+          setScriptLoaded(true);
+        }}
+        onError={(e) => {
+          console.error("❌ Error loading HubSpot script:", e);
+        }}
       />
 
       {/* HubSpot Form Styles */}

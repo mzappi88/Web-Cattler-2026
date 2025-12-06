@@ -20,6 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Preconnect to HubSpot for faster form loading */}
+        <link rel="preconnect" href="https://js.hsforms.net" />
+        <link rel="dns-prefetch" href="https://js.hsforms.net" />
         {/* Google Tag Manager */}
         <Script id="gtm-script" strategy="afterInteractive">
           {`

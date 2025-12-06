@@ -62,7 +62,16 @@ export default function CattlerLanding() {
   useEffect(() => {
     console.log("🔍 Form Debug:", { scriptLoaded, formLoaded, submitted });
 
-    if (scriptLoaded && typeof window.hbspt !== "undefined") {
+    // Reset form loaded state when language or country changes
+    setFormLoaded(false);
+
+    // Clean up any existing form
+    const container = document.getElementById("hubspot-form-container");
+    if (container) {
+      container.innerHTML = "";
+    }
+
+    if (scriptLoaded && typeof window !== "undefined" && typeof window.hbspt !== "undefined") {
       // Determine which form to use based on language and country
       let formId = "ea412564-b4e0-4514-8d3a-2f1117acd27f"; // Default form
 
@@ -109,56 +118,92 @@ export default function CattlerLanding() {
       }
 
       console.log(
-        `Creating HubSpot form for ${language}/${selectedCountry} with formId: ${formId}`
+        `📝 Creating HubSpot form for ${language}/${selectedCountry} with formId: ${formId}`
       );
 
-      window.hbspt.forms.create({
-        portalId: "21027761",
-        formId: formId,
-        target: "#hubspot-form-container",
-        region: "na1",
-        onFormReady: () => {
-          setFormLoaded(true);
-        },
-        onFormSubmitted: () => {
-          setSubmitted(true);
-
-          console.log("🎯 Form submitted - sending conversion events to GTM");
-
-          // Google Tag Manager - Evento de conversión
-          if (typeof window !== "undefined" && (window as any).dataLayer) {
-            (window as any).dataLayer.push({
-              event: "form_submit",
-              event_category: "engagement",
-              event_label: "hubspot_form_landing",
-              form_type: "hubspot",
-              page_location: window.location.href,
-              page_title: document.title,
-              value: 1,
+      try {
+        window.hbspt.forms.create({
+          portalId: "21027761",
+          formId: formId,
+          target: "#hubspot-form-container",
+          region: "na1",
+          onFormReady: ($form: any) => {
+            console.log("✅ HubSpot form ready", $form);
+            setFormLoaded(true);
+          },
+          onBeforeFormSubmit: ($form: any) => {
+            console.log("🔄 Form submit initiated", $form);
+            // Don't prevent submission, just log
+            return true;
+          },
+          onFormSubmitted: ($form: any, data: any) => {
+            console.log("✅ HubSpot form submitted successfully", { 
+              $form, 
+              data,
+              formId: formId,
+              portalId: "21027761"
             });
-            console.log("✅ form_submit event sent to GTM");
-          }
+            
+            // Verify the form submission was successful
+            if (!$form || !data) {
+              console.warn("⚠️ Form submission data may be incomplete", { $form, data });
+            }
+            
+            // Small delay to ensure HubSpot processes the submission
+            setTimeout(() => {
+              setSubmitted(true);
+              
+              console.log("🎯 Form submitted - sending conversion events to GTM");
 
-          // Google Tag Manager - Evento de conversión específico
-          if (typeof window !== "undefined" && (window as any).dataLayer) {
-            (window as any).dataLayer.push({
-              event: "conversion",
-              conversion_type: "lead_form",
-              form_source: "landing_page",
-              country: selectedCountry,
-              language: language,
-              value: 1,
-              currency: "USD",
-            });
-            console.log("✅ conversion event sent to GTM");
-          }
+              // Google Tag Manager - Evento de conversión
+              if (typeof window !== "undefined" && (window as any).dataLayer) {
+                (window as any).dataLayer.push({
+                  event: "form_submit",
+                  event_category: "engagement",
+                  event_label: "hubspot_form_landing",
+                  form_type: "hubspot",
+                  page_location: window.location.href,
+                  page_title: document.title,
+                  value: 1,
+                });
+                console.log("✅ form_submit event sent to GTM");
+              }
 
-          // Facebook Pixel - Evento de conversión (opcional)
-          if (typeof window !== "undefined" && window.fbq) {
-            window.fbq("track", "Lead");
-            console.log("✅ Facebook Pixel event sent");
-          }
-        },
+              // Google Tag Manager - Evento de conversión específico
+              if (typeof window !== "undefined" && (window as any).dataLayer) {
+                (window as any).dataLayer.push({
+                  event: "conversion",
+                  conversion_type: "lead_form",
+                  form_source: "landing_page",
+                  country: selectedCountry,
+                  language: language,
+                  value: 1,
+                  currency: "USD",
+                });
+                console.log("✅ conversion event sent to GTM");
+              }
+
+              // Facebook Pixel - Evento de conversión (opcional)
+              if (typeof window !== "undefined" && window.fbq) {
+                window.fbq("track", "Lead");
+                console.log("✅ Facebook Pixel event sent");
+              }
+            }, 1000);
+          },
+          onFormError: (error: any) => {
+            console.error("❌ HubSpot form error:", error);
+            setFormLoaded(false);
+            alert("Hubo un error al enviar el formulario. Por favor, inténtalo de nuevo.");
+          },
+        });
+      } catch (error) {
+        console.error("❌ Error creating HubSpot form:", error);
+        setFormLoaded(false);
+      }
+    } else {
+      console.log("⏳ Waiting for HubSpot script...", { 
+        scriptLoaded, 
+        hbsptAvailable: typeof window !== "undefined" && typeof window.hbspt !== "undefined" 
       });
     }
   }, [scriptLoaded, language, selectedCountry]);
@@ -331,6 +376,7 @@ export default function CattlerLanding() {
                       <div
                         id="hubspot-form-container"
                         className={formLoaded ? "block" : "hidden"}
+                        style={{ minHeight: formLoaded ? "auto" : "0" }}
                       ></div>
                     </>
                   ) : (
